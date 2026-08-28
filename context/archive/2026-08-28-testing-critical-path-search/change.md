@@ -1,10 +1,10 @@
 ---
 change_id: testing-critical-path-search
 title: Testing critical path search
-status: impl_reviewed
+status: archived
 created: 2026-08-28
 updated: 2026-08-28
-archived_at: null
+archived_at: 2026-08-28T21:56:00Z
 ---
 
 ## Notes
