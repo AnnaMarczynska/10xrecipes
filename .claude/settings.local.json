@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills *)",
+      "Bash(curl *)",
+      "Bash(10x doctor *)",
+      "Bash(10x auth *)",
+      "Bash(npm install *)",
+      "Bash(10x --version)",
+      "Bash(10x get *)",
+      "Bash(npx *)",
+      "Bash(10x list *)",
+      "Skill(10x-shape)",
+      "Skill(10x-init)",
+      "Bash(read f *)",
+      "WebSearch",
+      "Bash(mkdir -p /Users/annama@backbase.com/Documents/IdeaProjects/devx10.2/src/main/resources)",
+      "Bash(echo \"spring.application.name=10x-recipes\")",
+      "Bash(pkill -f \"spring-boot:run\")",
+      "Bash(mvn clean *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
