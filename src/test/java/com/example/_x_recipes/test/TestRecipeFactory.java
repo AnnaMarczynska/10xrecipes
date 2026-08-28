@@ -156,4 +156,70 @@ public class TestRecipeFactory {
         }
         return filtered;
     }
+
+    /**
+     * PHASE 2 BOUNDARY-CASE HELPERS - Used by ranking unit tests
+     */
+
+    /**
+     * Returns a recipe with 100% ingredient overlap but cook time outside the user's range.
+     * User ingredients: [chicken, rice, garlic]
+     * User range: [30-60] minutes
+     * Recipe: all 3 ingredients, but cook time = 90 min (above range)
+     * Tests: score calculation with high ingredient overlap (100%) but low time score
+     */
+    public static Recipe recipeWith100PercentIngredientOutOfTimeRange() {
+        // overlap-100-long: cook time 90 min, all 3 ingredients match
+        return createRecipe("phase2-100pct-out-of-range", "Slow Cooker Chicken Garlic Rice", 90,
+            "chicken", "rice", "garlic", "herbs");
+    }
+
+    /**
+     * Returns a recipe with exactly 50% ingredient overlap and cook time at the user's max boundary.
+     * User ingredients: [chicken, rice, garlic, onion] (4 ingredients)
+     * User range: [30-60] minutes
+     * Recipe: 2 of 4 ingredients (50%), cook time exactly 60 min (at boundary)
+     * Tests: threshold boundary (50% exactly should be included) and time boundary (== max should be included)
+     */
+    public static Recipe recipeWith50PercentIngredientAtTimeThreshold() {
+        // Create a custom recipe: chicken + rice only (50% of 4 ingredients), cook time 60
+        return createRecipe("phase2-50pct-at-boundary", "Chicken Rice Quick", 60,
+            "chicken", "rice", "soy sauce", "oil");
+    }
+
+    /**
+     * Returns a recipe with 75% ingredient overlap within the user's time range.
+     * User ingredients: [chicken, rice, garlic, onion] (4 ingredients)
+     * User range: [30-60] minutes
+     * Recipe: 3 of 4 ingredients (75%), cook time 45 min (within range)
+     * Tests: mid-spectrum ranking (high ingredient overlap + good time score)
+     */
+    public static Recipe recipeWith75PercentIngredientInTimeRange() {
+        // Create a custom recipe: chicken + rice + garlic only (75% of 4 ingredients), cook time 45
+        return createRecipe("phase2-75pct-in-range", "Garlic Chicken Rice Saute", 45,
+            "chicken", "rice", "garlic", "lemon");
+    }
+
+    /**
+     * Returns a recipe with zero ingredient overlap (no matching ingredients).
+     * Tests: score calculation when ingredient component is 0%
+     */
+    public static Recipe recipeWithZeroIngredientOverlap() {
+        // no-overlap-medium-short: Beef Pasta Light, uses beef/pasta/tomato (no match for chicken/rice/garlic)
+        return createRecipe("phase2-zero-overlap", "Beef Pasta Light", 22,
+            "beef", "pasta", "tomato");
+    }
+
+    /**
+     * Returns a recipe with 100% ingredient overlap and cook time perfectly within range.
+     * User ingredients: [chicken, rice, garlic]
+     * User range: [30-60] minutes
+     * Recipe: all 3 ingredients, cook time 45 min (within range)
+     * Tests: maximum score scenario (100% ingredient overlap + 100% time fit)
+     */
+    public static Recipe recipeWith100PercentBothComponents() {
+        // overlap-100-medium-long: cook time 50 min, all 3 ingredients match
+        return createRecipe("phase2-100pct-both", "Chicken Garlic Rice Stew", 50,
+            "chicken", "rice", "garlic", "broth");
+    }
 }
