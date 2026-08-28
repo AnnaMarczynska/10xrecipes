@@ -1,7 +1,7 @@
 ---
 change_id: guest-search
 title: Guest recipe search
-status: impl_reviewed
+status: implemented
 created: 2026-08-27
 updated: 2026-08-28
 archived_at: null
