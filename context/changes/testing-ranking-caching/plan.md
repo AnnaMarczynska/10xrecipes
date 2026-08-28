@@ -268,28 +268,28 @@ Create an integration test that validates the N+1 fix: call count must be ≤21 
 
 #### Automated
 
-- [x] 1.1 TestRecipeFactory extended with Phase 2 boundary-case recipes
-- [x] 1.2 Ranking unit tests added (score calc, sorting, weights, thresholds)
-- [x] 1.3 All ranking tests pass: `mvn test -Dtest=RecipeSearchServiceTest`
+- [x] 1.1 TestRecipeFactory extended with Phase 2 boundary-case recipes — 1dddfc8
+- [x] 1.2 Ranking unit tests added (score calc, sorting, weights, thresholds) — 1dddfc8
+- [x] 1.3 All ranking tests pass: `mvn test -Dtest=RecipeSearchServiceTest` — 1dddfc8
 
 #### Manual
 
-- [x] 1.4 Review test assertions — each maps to a regression vector from research.md
-- [x] 1.5 Spot-check one test with debugger (swap weights, verify test fails)
-- [x] 1.6 Phase 1 integration tests still pass (no regressions)
+- [x] 1.4 Review test assertions — each maps to a regression vector from research.md — 1dddfc8
+- [x] 1.5 Spot-check one test with debugger (swap weights, verify test fails) — 1dddfc8
+- [x] 1.6 Phase 1 integration tests still pass (no regressions) — 1dddfc8
 
 ### Phase 2: Cache Unit Tests
 
 #### Automated
 
-- [ ] 2.1 Cache unit tests added (TTL, quota-exceeded, key collision, corruption)
-- [ ] 2.2 All cache tests pass: `npm test -- cache.test.ts`
-- [ ] 2.3 Coverage ≥ 90% for cache.ts
+- [x] 2.1 Cache unit tests added (TTL, quota-exceeded, key collision, corruption)
+- [x] 2.2 All cache tests pass: `npm test -- cache.test.ts`
+- [x] 2.3 Coverage ≥ 90% for cache.ts
 
 #### Manual
 
-- [ ] 2.4 Review test names and assertions
-- [ ] 2.5 Spot-check one test manually (corrupt cache entry, verify handling)
+- [x] 2.4 Review test names and assertions
+- [x] 2.5 Spot-check one test manually (corrupt cache entry, verify handling)
 
 ### Phase 3: N+1 Integration Test
 
