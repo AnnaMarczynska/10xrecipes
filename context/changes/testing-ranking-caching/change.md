@@ -1,7 +1,7 @@
 ---
 change_id: testing-ranking-caching
 title: Testing ranking caching
-status: implementing
+status: implemented
 created: 2026-08-28
 updated: 2026-08-28
 archived_at: null

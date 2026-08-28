@@ -282,14 +282,14 @@ Create an integration test that validates the N+1 fix: call count must be ≤21 
 
 #### Automated
 
-- [x] 2.1 Cache unit tests added (TTL, quota-exceeded, key collision, corruption)
-- [x] 2.2 All cache tests pass: `npm test -- cache.test.ts`
-- [x] 2.3 Coverage ≥ 90% for cache.ts
+- [x] 2.1 Cache unit tests added (TTL, quota-exceeded, key collision, corruption) — 706a955
+- [x] 2.2 All cache tests pass: `npm test -- cache.test.ts` — 706a955
+- [x] 2.3 Coverage ≥ 90% for cache.ts — 706a955
 
 #### Manual
 
-- [x] 2.4 Review test names and assertions
-- [x] 2.5 Spot-check one test manually (corrupt cache entry, verify handling)
+- [x] 2.4 Review test names and assertions — 706a955
+- [x] 2.5 Spot-check one test manually (corrupt cache entry, verify handling) — 706a955
 
 ### Phase 3: N+1 Integration Test
 
