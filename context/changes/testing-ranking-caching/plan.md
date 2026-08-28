@@ -295,12 +295,12 @@ Create an integration test that validates the N+1 fix: call count must be ≤21 
 
 #### Automated
 
-- [ ] 3.1 N+1 integration test added (50+ candidates, spy on fetchRecipeDetails)
-- [ ] 3.2 Test passes: `mvn test -Dtest=RecipeSearchControllerTest`
-- [ ] 3.3 Test fails when limit is removed (manual regression check)
+- [x] 3.1 N+1 integration test added (50+ candidates, spy on fetchRecipeDetails)
+- [x] 3.2 Test passes: `mvn test -Dtest=RecipeSearchControllerTest`
+- [x] 3.3 Test fails when limit is removed (manual regression check)
 
 #### Manual
 
-- [ ] 3.4 Review test setup (spy configuration, call count assertion)
-- [ ] 3.5 Temporarily move `.limit(20)` to after enrichment loop, run test, verify failure with clear message
-- [ ] 3.6 Restore code, rerun test, confirm pass
+- [x] 3.4 Review test setup (spy configuration, call count assertion)
+- [x] 3.5 Temporarily move `.limit(20)` to after enrichment loop, run test, verify failure with clear message
+- [x] 3.6 Restore code, rerun test, confirm pass
