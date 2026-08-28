@@ -645,9 +645,9 @@ Wire frontend to backend (without auth or database). Implement client-side cachi
 - [x] 3.2 Cache TTL: data >1 day is discarded, fresh data fetched
 - [x] 3.3 Cache miss: first search calls backend, caches result
 - [x] 3.4 Cache hit: second search with same params returns cached data without API call
-- [ ] 3.5 End-to-end test (load app → search → view results → click recipe → see details) passes
-- [ ] 3.6 No console errors during test run
-- [ ] 3.7 Lighthouse performance score ≥80 on desktop
+- [x] 3.5 End-to-end test (load app → search → view results → click recipe → see details) passes
+- [x] 3.6 No console errors during test run
+- [x] 3.7 Lighthouse performance score ≥80 on desktop
 
 #### Manual
 
