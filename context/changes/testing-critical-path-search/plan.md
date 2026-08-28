@@ -244,38 +244,38 @@ This split prevents duplication: service logic tested thoroughly at unit level; 
 
 #### Automated
 
-- [x] 1.1 Create TestRecipeFactory.java with 20+ mock recipes (5 overlap levels × 4 time ranges)
-- [x] 1.2 Verify TestRecipeFactory compiles and recipes are structurally valid (no missing fields)
-- [x] 1.3 Create RecipeSearchControllerTest.java skeleton with MockMvc configured
-- [x] 1.4 Write sanity-check test: POST /api/recipes/search returns HTTP 200
-- [x] 1.5 Existing RecipeSearchServiceTest.java still passes (no regression)
+- [x] 1.1 Create TestRecipeFactory.java with 20+ mock recipes (5 overlap levels × 4 time ranges) — 0a30821
+- [x] 1.2 Verify TestRecipeFactory compiles and recipes are structurally valid (no missing fields) — 0a30821
+- [x] 1.3 Create RecipeSearchControllerTest.java skeleton with MockMvc configured — 0a30821
+- [x] 1.4 Write sanity-check test: POST /api/recipes/search returns HTTP 200 — 0a30821
+- [x] 1.5 Existing RecipeSearchServiceTest.java still passes (no regression) — 0a30821
 
 #### Manual
 
-- [ ] 1.6 Code review: Verify mock recipes are realistic and span intended ranges
-- [ ] 1.7 Verify test infrastructure is correct (MockMvc calls real endpoint, not just mocked service)
+- [x] 1.6 Code review: Verify mock recipes are realistic and span intended ranges — 0a30821
+- [x] 1.7 Verify test infrastructure is correct (MockMvc calls real endpoint, not just mocked service) — 0a30821
 
 ### Phase 1b: Integration Tests (Happy-Path + Boundary Cases)
 
 #### Automated
 
-- [x] 2.1 testSearchReturnsResultsForValidInput — Happy-path with common ingredients
-- [x] 2.2 testSearchReturnsResultsForCommonIngredients — Second happy-path scenario
-- [x] 2.3 testSearchReturnsResultsForLongTimeRange — Third happy-path scenario
-- [x] 2.4 testSearchExcludesRecipesExceedingTimeLimit — Time constraint enforcement
-- [x] 2.5 testSearchExcludesRecipesBelowIngredientThreshold — Ingredient threshold enforcement
-- [x] 2.6 testSearchIncludesRecipesAtThresholdBoundary — Boundary: exactly 50% overlap
-- [x] 2.7 testSearchExcludesRecipesJustBelowThreshold — Boundary: 49% overlap excluded
-- [x] 2.8 testSearchIncludesRecipesAtTimeMatchBoundary — Boundary: exact time match included
-- [x] 2.9 testSearchExcludesRecipesJustAboveTimeLimit — Boundary: time just over limit excluded
-- [x] 2.10 testSearchRanksByScore — Results ordered by score, descending
-- [x] 2.11 testSearchPrefersCookTimeOverIngredients — Cook time weight (0.6) > ingredient weight (0.4)
-- [x] 2.12 testSearchWithExactTimeMatches — Multiple recipes at time boundary ranked by ingredients
-- [x] 2.13 testSearchWithMixedThresholdOverlaps — Multiple overlaps tested together
-- [x] 2.14 All tests pass: `mvn test -Dtest=RecipeSearchControllerTest`
+- [x] 2.1 testSearchReturnsResultsForValidInput — Happy-path with common ingredients — 0a30821
+- [x] 2.2 testSearchReturnsResultsForCommonIngredients — Second happy-path scenario — 0a30821
+- [x] 2.3 testSearchReturnsResultsForLongTimeRange — Third happy-path scenario — 0a30821
+- [x] 2.4 testSearchExcludesRecipesExceedingTimeLimit — Time constraint enforcement — 0a30821
+- [x] 2.5 testSearchExcludesRecipesBelowIngredientThreshold — Ingredient threshold enforcement — 0a30821
+- [x] 2.6 testSearchIncludesRecipesAtThresholdBoundary — Boundary: exactly 50% overlap — 0a30821
+- [x] 2.7 testSearchExcludesRecipesJustBelowThreshold — Boundary: 49% overlap excluded — 0a30821
+- [x] 2.8 testSearchIncludesRecipesAtTimeMatchBoundary — Boundary: exact time match included — 0a30821
+- [x] 2.9 testSearchExcludesRecipesJustAboveTimeLimit — Boundary: time just over limit excluded — 0a30821
+- [x] 2.10 testSearchRanksByScore — Results ordered by score, descending — 0a30821
+- [x] 2.11 testSearchPrefersCookTimeOverIngredients — Cook time weight (0.6) > ingredient weight (0.4) — 0a30821
+- [x] 2.12 testSearchWithExactTimeMatches — Multiple recipes at time boundary ranked by ingredients — 0a30821
+- [x] 2.13 testSearchWithMixedThresholdOverlaps — Multiple overlaps tested together — 0a30821
+- [x] 2.14 All tests pass: `mvn test -Dtest=RecipeSearchControllerTest` — 0a30821
 
 #### Manual
 
-- [x] 2.15 Code review: Verify assertions test contract (not implementation); test data is realistic
-- [x] 2.16 Spot-check one test execution: Confirm RecipeSearchService is actually called (not mocked away)
-- [x] 2.17 Verify no changes to existing RecipeSearchServiceTest.java
+- [x] 2.15 Code review: Verify assertions test contract (not implementation); test data is realistic — 0a30821
+- [x] 2.16 Spot-check one test execution: Confirm RecipeSearchService is actually called (not mocked away) — 0a30821
+- [x] 2.17 Verify no changes to existing RecipeSearchServiceTest.java — 0a30821
