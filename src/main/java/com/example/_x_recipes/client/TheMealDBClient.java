@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,11 @@ public class TheMealDBClient {
     private final ObjectMapper objectMapper;
 
     public TheMealDBClient() {
-        this.httpClient = HttpClient.newHttpClient();
+        this(HttpClient.newHttpClient());
+    }
+
+    public TheMealDBClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -73,7 +79,7 @@ public class TheMealDBClient {
 
     public Recipe fetchRecipeDetails(String mealId) throws TheMealDBException {
         try {
-            String url = THEMEALDB_API_BASE + "/lookup.php?i=" + mealId;
+            String url = THEMEALDB_API_BASE + "/lookup.php?i=" + URLEncoder.encode(mealId, StandardCharsets.UTF_8);
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(url))
                 .timeout(TIMEOUT)
