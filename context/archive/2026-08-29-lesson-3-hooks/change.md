@@ -1,8 +1,9 @@
 # lesson-3-hooks
 
-**Status:** implemented  
+**Status:** archived  
 **Created:** 2026-08-29  
 **Updated:** 2026-08-30  
+**Archived:** 2026-08-30T00:00:00Z  
 **Module:** 10xDevs Module 3, Lesson 3 — Hooks  
 **Related:** Phase 1-3 testing complete (43 passing tests)
 
