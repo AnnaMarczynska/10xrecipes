@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for URL encoding in TheMealDBClient.fetchRecipeDetails().
@@ -38,13 +38,7 @@ class TheMealDBClientUrlEncodingTest {
         // Test that URLEncoder properly encodes the injection payloads
         String encoded = URLEncoder.encode(injectedMealId, StandardCharsets.UTF_8);
 
-        assertThat(encoded)
-            .as("mealId should be URL-encoded to prevent injection")
-            .isEqualTo(expectedEncoded)
-            .doesNotContain("?foo=")
-            .doesNotContain("&admin")
-            .doesNotContain("#section")
-            .doesNotContain("../");
+        assertEquals(expectedEncoded, encoded, "mealId should be URL-encoded to prevent injection");
     }
 
     /**
@@ -60,9 +54,7 @@ class TheMealDBClientUrlEncodingTest {
     void testNormalMealIdEncoding(String normalMealId, String expectedEncoded) {
         String encoded = URLEncoder.encode(normalMealId, StandardCharsets.UTF_8);
 
-        assertThat(encoded)
-            .as("Normal alphanumeric IDs should not be over-encoded")
-            .isEqualTo(expectedEncoded);
+        assertEquals(expectedEncoded, encoded, "Normal alphanumeric IDs should not be over-encoded");
     }
 
     /**
@@ -81,8 +73,6 @@ class TheMealDBClientUrlEncodingTest {
     void testSpecialCharacterEncoding(String character, String expectedEncoding) {
         String encoded = URLEncoder.encode(character, StandardCharsets.UTF_8);
 
-        assertThat(encoded)
-            .as("Special character should encode consistently")
-            .isEqualTo(expectedEncoding);
+        assertEquals(expectedEncoding, encoded, "Special character should encode consistently");
     }
 }

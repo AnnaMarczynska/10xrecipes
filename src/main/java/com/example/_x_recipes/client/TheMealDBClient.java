@@ -48,6 +48,9 @@ public class TheMealDBClient {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
+                    if (response.statusCode() >= 500) {
+                        throw new TheMealDBException("TheMealDB service error (status " + response.statusCode() + ")");
+                    }
                     continue; // Skip this letter if not found
                 }
 
@@ -61,8 +64,12 @@ public class TheMealDBClient {
                             if (recipe != null && recipe.getId() != null) {
                                 allRecipes.add(recipe);
                             }
+                        } catch (com.fasterxml.jackson.databind.JsonMappingException e) {
+                            // Recipe JSON doesn't match schema; skip this one
+                            continue;
                         } catch (Exception e) {
-                            // Skip malformed recipes
+                            // Unexpected error parsing recipe; log and continue to avoid losing entire batch
+                            System.err.println("Unexpected error parsing recipe for letter " + c + ": " + e.getClass().getSimpleName());
                             continue;
                         }
                     }
@@ -89,7 +96,7 @@ public class TheMealDBClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new TheMealDBException("Recipe not found: " + mealId);
+                throw new TheMealDBException("Recipe not found");
             }
 
             JsonNode jsonNode = objectMapper.readTree(response.body());
@@ -99,13 +106,13 @@ public class TheMealDBClient {
                 return objectMapper.treeToValue(meals.get(0), Recipe.class);
             }
 
-            throw new TheMealDBException("Recipe not found: " + mealId);
+            throw new TheMealDBException("Recipe not found");
         } catch (java.net.http.HttpTimeoutException e) {
             throw new TheMealDBException("TheMealDB request timed out after " + TIMEOUT.toSeconds() + " seconds");
         } catch (TheMealDBException e) {
             throw e;
         } catch (Exception e) {
-            throw new TheMealDBException("Failed to fetch recipe details: " + e.getMessage());
+            throw new TheMealDBException("Failed to fetch recipe details");
         }
     }
 
