@@ -18,7 +18,17 @@
       "Bash(echo \"spring.application.name=10x-recipes\")",
       "Bash(pkill -f \"spring-boot:run\")",
       "Bash(mvn clean *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|java|kt\\)$\")",
+      "Bash(mvn test *)",
+      "Bash(git add *)",
+      "Skill(10x-new)",
+      "Bash(npm test *)",
+      "Skill(10x-impl-review)",
+      "Bash(git log *)",
+      "Bash(grep *)",
+      "Bash(brew services *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
