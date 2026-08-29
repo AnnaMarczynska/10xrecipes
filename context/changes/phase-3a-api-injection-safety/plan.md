@@ -476,19 +476,19 @@ class RecipeControllerErrorSafetyTest {
 
 #### Automated
 
-- [x] 1.1 TheMealDBClient refactored to accept HttpClient via constructor
-- [x] 1.2 URLEncoder.encode(mealId, StandardCharsets.UTF_8) added to line 76
-- [x] 1.3 Imports added (URLEncoder, StandardCharsets)
-- [x] 1.4 New test class `TheMealDBClientUrlEncodingTest.java` created with parameterized tests
-- [x] 1.5 All 3 injection payload tests pass: `mvn test -Dtest=TheMealDBClientUrlEncodingTest`
-- [x] 1.6 Existing Phase 1 & Phase 2 tests still pass: `mvn test`
-- [x] 1.7 Compile with no errors: `mvn clean compile`
+- [x] 1.1 TheMealDBClient refactored to accept HttpClient via constructor — a8c6718
+- [x] 1.2 URLEncoder.encode(mealId, StandardCharsets.UTF_8) added to line 76 — a8c6718
+- [x] 1.3 Imports added (URLEncoder, StandardCharsets) — a8c6718
+- [x] 1.4 New test class `TheMealDBClientUrlEncodingTest.java` created with parameterized tests — a8c6718
+- [x] 1.5 All 3 injection payload tests pass: `mvn test -Dtest=TheMealDBClientUrlEncodingTest` — a8c6718
+- [x] 1.6 Existing Phase 1 & Phase 2 tests still pass: `mvn test` — a8c6718
+- [x] 1.7 Compile with no errors: `mvn clean compile` — a8c6718
 
 #### Manual
 
-- [x] 1.8 Review URLEncoder output — run test with debugger, inspect captured URL
-- [x] 1.9 Verify injection fails gracefully — manually call with "123?foo=bar", confirm encoding
-- [x] 1.10 Regression check — comment out URLEncoder.encode(), run test, verify failure
+- [x] 1.8 Review URLEncoder output — run test with debugger, inspect captured URL — a8c6718
+- [x] 1.9 Verify injection fails gracefully — manually call with "123?foo=bar", confirm encoding — a8c6718
+- [x] 1.10 Regression check — comment out URLEncoder.encode(), run test, verify failure — a8c6718
 
 ### Phase 2: Timeout Enforcement (Frontend)
 
