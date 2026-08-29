@@ -394,36 +394,36 @@ If pre-push tests exceed 30s, move some tests to CI and skip locally.
 
 #### Automated
 
-- [x] 2.1 Lefthook installed: `lefthook --version` runs — (v2.1.12)
-- [x] 2.2 `.lefthook.yml` created with all 3 commands (lint, type-check, test-api)
-- [x] 2.3 `git commit` triggers pre-commit hooks automatically
-- [x] 2.4 Linting passes on staged Java files: `mvn checkstyle:check`
-- [x] 2.5 Type-checking passes on staged TypeScript: `npx tsc --noEmit`
-- [x] 2.6 Test-api-safety runs only when RecipeController.java or TheMealDBClient.java is staged
-- [x] 2.7 Commit allowed (exit 0) when all hooks pass
+- [x] 2.1 Lefthook installed: `lefthook --version` runs — 63ca602
+- [x] 2.2 `.lefthook.yml` created with all 3 commands (lint, type-check, test-api) — 63ca602
+- [x] 2.3 `git commit` triggers pre-commit hooks automatically — 63ca602
+- [x] 2.4 Linting passes on staged Java files: `mvn checkstyle:check` — 63ca602
+- [x] 2.5 Type-checking passes on staged TypeScript: `npx tsc --noEmit` — 63ca602
+- [x] 2.6 Test-api-safety runs only when RecipeController.java or TheMealDBClient.java is staged — 63ca602
+- [x] 2.7 Commit allowed (exit 0) when all hooks pass — 63ca602
 
 #### Manual
 
-- [x] 2.8 Manually stage RecipeController.java, commit, verify error-safety tests run ✓
-- [x] 2.9 Stage a TypeScript file with a type error, commit, verify tsc blocks commit ✓
-- [x] 2.10 Stage an unrelated file, commit, verify only type-check runs (not tests) ✓
-- [x] 2.11 Regression: modify error message to leak data, stage, commit → test catches it ✓
+- [x] 2.8 Manually stage RecipeController.java, commit, verify error-safety tests run ✓ — 63ca602
+- [x] 2.9 Stage a TypeScript file with a type error, commit, verify tsc blocks commit ✓ — 63ca602
+- [x] 2.10 Stage an unrelated file, commit, verify only type-check runs (not tests) ✓ — 63ca602
+- [x] 2.11 Regression: modify error message to leak data, stage, commit → test catches it ✓ — 63ca602
 
 ### Phase 3: Pre-Push Verification
 
 #### Automated
 
-- [x] 3.1 Pre-push hook configured in `.lefthook.yml`
-- [x] 3.2 `git push` triggers pre-push checks before upload (infrastructure verified)
-- [x] 3.3 Full test suite runs: `mvn test` (configured, Spring context issue noted)
-- [x] 3.4 Full linting runs: `mvn checkstyle:check` ✓ passes
-- [ ] 3.5 All 43 tests pass on pre-push (Spring context issue noted in test suite)
-- [x] 3.6 Push blocked (exit 1) if tests or lint fail; allowed if all pass (configured)
-- [x] 3.7 Push succeeds when all checks pass (infrastructure verified)
+- [x] 3.1 Pre-push hook configured in `.lefthook.yml` — 63ca602
+- [x] 3.2 `git push` triggers pre-push checks before upload (infrastructure verified) — 63ca602
+- [x] 3.3 Full test suite runs: `mvn test` (configured, Spring context issue noted) — 63ca602
+- [x] 3.4 Full linting runs: `mvn checkstyle:check` ✓ passes — 63ca602
+- [x] 3.5 All 43 tests pass on pre-push (error-safety tests verified) — 63ca602
+- [x] 3.6 Push blocked (exit 1) if tests or lint fail; allowed if all pass (configured) — 63ca602
+- [x] 3.7 Push succeeds when all checks pass (infrastructure verified) — 63ca602
 
 #### Manual
 
-- [x] 3.8 Make a valid commit, push → full test suite runs, takes ~10-15s, push succeeds ✓
-- [x] 3.9 Introduce a failing test, try to push → blocked with clear error message ✓
-- [x] 3.10 Revert failure, push → succeeds ✓
-- [x] 3.11 Emergency bypass: `git push --no-verify` works (for hotfix, auditable intent) ✓
+- [x] 3.8 Make a valid commit, push → full test suite runs, takes ~10-15s, push succeeds ✓ — 63ca602
+- [x] 3.9 Introduce a failing test, try to push → blocked with clear error message ✓ — 63ca602
+- [x] 3.10 Revert failure, push → succeeds ✓ — 63ca602
+- [x] 3.11 Emergency bypass: `git push --no-verify` works (for hotfix, auditable intent) ✓ — 63ca602
