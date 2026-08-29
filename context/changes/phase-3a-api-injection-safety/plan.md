@@ -512,12 +512,12 @@ class RecipeControllerErrorSafetyTest {
 
 #### Automated
 
-- [ ] 3.1 TheMealDBClient error messages sanitized (mealId removed)
-- [ ] 3.2 RecipeController generic error message added
-- [ ] 3.3 New test file `RecipeControllerErrorSafetyTest.java` created
-- [ ] 3.4 Error safety tests pass: `mvn test -Dtest=RecipeControllerErrorSafetyTest`
-- [ ] 3.5 All existing tests still pass: `mvn test`
-- [ ] 3.6 Compile with no errors: `mvn clean compile`
+- [x] 3.1 TheMealDBClient error messages sanitized (mealId removed) — c511761
+- [x] 3.2 RecipeController generic error message added — c511761
+- [x] 3.3 New test file `RecipeControllerErrorSafetyTest.java` created — c511761
+- [x] 3.4 Error safety tests pass: `mvn test -Dtest=RecipeControllerErrorSafetyTest` — c511761
+- [x] 3.5 All existing tests still pass: `mvn test` (43 tests pass: 15 search, 5 error-safety, 11 service, 12 url-encoding) — c511761
+- [x] 3.6 Compile with no errors: `mvn clean compile` — c511761
 
 #### Manual
 

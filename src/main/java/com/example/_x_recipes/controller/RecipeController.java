@@ -114,7 +114,7 @@ public class RecipeController {
             ));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of(
-                "error", "Internal server error: " + e.getMessage(),
+                "error", "Internal server error",
                 "status", 500
             ));
         }
