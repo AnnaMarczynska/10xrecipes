@@ -33,22 +33,36 @@ async function searchRecipes(
     return cached;
   }
 
-  const response = await fetch('/api/recipes/search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ingredients, timeRange }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    throw new Error('Search failed');
+  try {
+    const response = await fetch('/api/recipes/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ingredients, timeRange }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error('Search failed');
+    }
+
+    const data = await response.json();
+
+    // Cache the result
+    setCached(cacheKey, data);
+
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out after 5 seconds');
+    }
+    throw error;
   }
-
-  const data = await response.json();
-
-  // Cache the result
-  setCached(cacheKey, data);
-
-  return data;
 }
 
 async function getRecipeDetails(id: string): Promise<RecipeDetail> {
@@ -60,18 +74,33 @@ async function getRecipeDetails(id: string): Promise<RecipeDetail> {
     return cached;
   }
 
-  const response = await fetch(`/api/recipes/${id}/details`);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch recipe details');
+  try {
+    const response = await fetch(`/api/recipes/${id}/details`, {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch recipe details');
+    }
+
+    const data = await response.json();
+
+    // Cache the result
+    setCached(cacheKey, data);
+
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out after 5 seconds');
+    }
+    throw error;
   }
-
-  const data = await response.json();
-
-  // Cache the result
-  setCached(cacheKey, data);
-
-  return data;
 }
 
 async function getIngredients(): Promise<string[]> {
@@ -83,19 +112,34 @@ async function getIngredients(): Promise<string[]> {
     return cached;
   }
 
-  const response = await fetch('/api/ingredients');
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch ingredients');
+  try {
+    const response = await fetch('/api/ingredients', {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch ingredients');
+    }
+
+    const data = await response.json();
+    const ingredients = data.ingredients || [];
+
+    // Cache the result
+    setCached(cacheKey, ingredients);
+
+    return ingredients;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out after 5 seconds');
+    }
+    throw error;
   }
-
-  const data = await response.json();
-  const ingredients = data.ingredients || [];
-
-  // Cache the result
-  setCached(cacheKey, ingredients);
-
-  return ingredients;
 }
 
 export { searchRecipes, getRecipeDetails, getIngredients };
