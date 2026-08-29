@@ -521,5 +521,5 @@ class RecipeControllerErrorSafetyTest {
 
 #### Manual
 
-- [ ] 3.7 Trigger real 404 error, inspect HTTP response (no mealId, no exception details)
-- [ ] 3.8 Regression check — add mealId back to error, run test, verify failure
+- [x] 3.7 Trigger real 404 error, inspect HTTP response (no mealId, no exception details) — caea7c6
+- [x] 3.8 Regression check — add mealId back to error, run test, verify failure — caea7c6
