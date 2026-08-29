@@ -7,8 +7,7 @@
           "filter": "src/main/java/com/example/_x_recipes/client/TheMealDBClient.java|src/main/java/com/example/_x_recipes/controller/RecipeController.java"
         },
         "handler": "command",
-        "command": "mvn test -Dtest=RecipeControllerErrorSafetyTest -Dnet.bytebuddy.experimental=true --quiet",
-        "onBlocking": true
+        "command": "mvn test -Dtest=RecipeControllerErrorSafetyTest -Dnet.bytebuddy.experimental=true --quiet"
       },
       {
         "matcher": {
@@ -16,8 +15,7 @@
           "filter": "src/.*\\.ts$"
         },
         "handler": "command",
-        "command": "npx tsc --noEmit",
-        "onBlocking": true
+        "command": "npx tsc --noEmit"
       }
     ]
   }

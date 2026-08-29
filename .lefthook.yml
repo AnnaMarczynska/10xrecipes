@@ -1,0 +1,36 @@
+version: 2
+
+pre-commit:
+  parallel: true
+  commands:
+    # Linting Java files
+    lint-java:
+      glob: "src/**/*.java"
+      run: mvn checkstyle:check --quiet
+      stage_fixed: true
+
+    # TypeScript type-checking
+    type-check:
+      glob: "src/**/*.ts"
+      run: npx tsc --noEmit
+      skip: merge,rebase
+
+    # Scoped tests on risk files (backend API safety)
+    test-api-safety:
+      glob: "src/main/java/com/example/_x_recipes/**/{TheMealDBClient,RecipeController}.java"
+      run: mvn test -Dtest=RecipeControllerErrorSafetyTest -Dnet.bytebuddy.experimental=true --quiet
+
+pre-push:
+  commands:
+    # Full test suite
+    test-all:
+      run: mvn test --quiet
+
+    # Full linting (all Java)
+    lint-all:
+      run: mvn checkstyle:check --quiet
+
+    # Full type-checking (all TypeScript)
+    type-check-all:
+      glob: "src/**/*.ts"
+      run: npx tsc --noEmit
