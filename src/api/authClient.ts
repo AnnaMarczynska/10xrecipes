@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import axiosInstance from './interceptor';
 import { tokenStorage } from '../utils/tokenStorage';
 
@@ -5,6 +6,11 @@ export interface AuthResponse {
   token: string;
   email: string;
   message?: string;
+}
+
+export interface UserProfile {
+  email: string;
+  id?: string;
 }
 
 export interface ApiResponse<T> {
@@ -16,6 +22,14 @@ export interface ApiResponse<T> {
   };
   status: number;
 }
+
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (error instanceof AxiosError) {
+    const apiError = (error.response?.data as ApiResponse<unknown>)?.error;
+    return apiError?.message || fallback;
+  }
+  return fallback;
+};
 
 export const authClient = {
   signup: async (email: string, password: string): Promise<AuthResponse> => {
@@ -29,11 +43,8 @@ export const authClient = {
         tokenStorage.setToken(data.token);
       }
       return data;
-    } catch (error: any) {
-      const errorResponse = error.response?.data;
-      throw new Error(
-        errorResponse?.error?.message || 'Signup failed'
-      );
+    } catch (error) {
+      throw new Error(getErrorMessage(error, 'Signup failed'));
     }
   },
 
@@ -48,11 +59,8 @@ export const authClient = {
         tokenStorage.setToken(data.token);
       }
       return data;
-    } catch (error: any) {
-      const errorResponse = error.response?.data;
-      throw new Error(
-        errorResponse?.error?.message || 'Login failed'
-      );
+    } catch (error) {
+      throw new Error(getErrorMessage(error, 'Login failed'));
     }
   },
 
@@ -63,23 +71,20 @@ export const authClient = {
       );
       tokenStorage.deleteToken();
       return response.data.data;
-    } catch (error: any) {
-      tokenStorage.deleteToken(); // Delete token even if logout fails
-      const errorResponse = error.response?.data;
-      throw new Error(
-        errorResponse?.error?.message || 'Logout failed'
-      );
+    } catch (error) {
+      tokenStorage.deleteToken();
+      throw new Error(getErrorMessage(error, 'Logout failed'));
     }
   },
 
-  getProfile: async (): Promise<any> => {
+  getProfile: async (): Promise<UserProfile> => {
     try {
-      const response = await axiosInstance.get<ApiResponse<any>>(
+      const response = await axiosInstance.get<ApiResponse<UserProfile>>(
         '/auth/profile'
       );
       return response.data.data;
-    } catch (error: any) {
-      throw new Error('Failed to fetch profile');
+    } catch (error) {
+      throw new Error(getErrorMessage(error, 'Failed to fetch profile'));
     }
   },
 };
