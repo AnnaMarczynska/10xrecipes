@@ -48,7 +48,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 
 | ID    | Change ID              | Outcome (user can …)                                    | Prerequisites    | PRD refs       | Status   |
 |-------|------------------------|---------------------------------------------------------|------------------|----------------|----------|
-| F-01  | api-scaffold           | (foundation) API REST structure + TheMealDB client      | —                | FR-007, FR-008 | planning |
+| F-01  | api-scaffold           | (foundation) API REST structure + TheMealDB client      | —                | FR-007, FR-008 | done |
 | F-02  | frontend-scaffold      | (foundation) React/Vite app + API client               | —                | UI layer       | proposed |
 | F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | proposed |
 | F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | proposed |
@@ -100,7 +100,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** API is the bottleneck; if scaffolding is slow or poorly structured, all downstream slices stack up waiting. Mitigate: start with clean REST patterns, test locally with curl.
-- **Status:** planning
+- **Status:** done
 
 ### F-02: Frontend scaffolding
 
@@ -282,5 +282,6 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Done
 
+- **F-01: (foundation) API REST structure + TheMealDB client** — Archived 2026-08-31 → `context/archive/2026-08-31-api-scaffold/`. Lesson: —.
 - **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
 

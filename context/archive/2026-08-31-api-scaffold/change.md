@@ -1,9 +1,10 @@
 ---
 change_id: api-scaffold
 title: API scaffold — Spring Boot REST structure + TheMealDB client
-status: implementing
+status: archived
 created: 2026-08-31
 updated: 2026-08-31
+archived_at: 2026-08-31T14:59:27Z
 ---
 
 ## Summary
