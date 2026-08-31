@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authClient } from '../api/authClient';
 import { validateLoginForm } from '../utils/validation';
+import { useAuth } from '../context/AuthContext';
 import FormError from '../components/FormError';
 import '../styles/auth.css';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
@@ -35,10 +39,10 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      await authClient.login(email, password);
+      const response = await authClient.login(email, password);
+      login(email, response.token);
       setSuccess(true);
-      setEmail('');
-      setPassword('');
+      setTimeout(() => navigate('/'), 1500);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Login failed';
 
@@ -60,9 +64,10 @@ export default function LoginPage() {
         <div className="auth-card">
           <h1>Welcome Back!</h1>
           <p className="success-message">You are logged in.</p>
-          <a href="/" className="auth-link">
-            Go to recipes
-          </a>
+          <p className="redirecting-message">Redirecting to recipes...</p>
+          <button onClick={() => navigate('/')} className="auth-link">
+            Go to recipes now
+          </button>
         </div>
       </div>
     );

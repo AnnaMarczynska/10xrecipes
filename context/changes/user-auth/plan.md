@@ -484,12 +484,12 @@ Similar test for LoginPage.
 
 #### Automated
 
-- [ ] 3.1 Create AuthContext.tsx with user state and login/logout methods
-- [ ] 3.2 Create ProtectedRoute.tsx component for route guards
-- [ ] 3.3 Create navigation.ts with redirect helpers
-- [ ] 3.4 Update SignupPage and LoginPage to use AuthContext
-- [ ] 3.5 Add logout button to header/nav component
-- [ ] 3.6 Verify npm build succeeds, type checking passes
+- [x] 3.1 Create AuthContext.tsx with user state and login/logout methods
+- [x] 3.2 Create ProtectedRoute.tsx component for route guards
+- [x] 3.3 Create navigation.ts with redirect helpers
+- [x] 3.4 Update SignupPage and LoginPage to use AuthContext
+- [x] 3.5 Add logout button to header/nav component
+- [x] 3.6 Verify npm build succeeds, type checking passes
 
 #### Manual
 

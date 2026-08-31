@@ -1,7 +1,12 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import SearchForm from './components/SearchForm';
+import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage';
+import Header from './components/Header';
 import './App.css';
 
-export default function App() {
+function HomePage() {
   return (
     <div className="app">
       <header className="app-header">
@@ -15,5 +20,21 @@ export default function App() {
         <p>Recipes powered by TheMealDB</p>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
