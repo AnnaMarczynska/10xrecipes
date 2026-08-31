@@ -87,8 +87,9 @@ export default function SignupPage() {
               placeholder="you@example.com"
               className={errors.email ? 'input-error' : ''}
               disabled={loading}
+              aria-describedby={errors.email ? 'email-error' : undefined}
             />
-            <FormError message={errors.email} />
+            {errors.email && <FormError message={errors.email} id="email-error" />}
           </div>
 
           <div className="form-group">
@@ -101,8 +102,9 @@ export default function SignupPage() {
               placeholder="At least 6 characters"
               className={errors.password ? 'input-error' : ''}
               disabled={loading}
+              aria-describedby={errors.password ? 'password-error' : undefined}
             />
-            <FormError message={errors.password} />
+            {errors.password && <FormError message={errors.password} id="password-error" />}
           </div>
 
           <button
