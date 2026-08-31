@@ -505,18 +505,18 @@ Use `MockMvc` to test controller layer without starting full app.
 
 #### Automated
 
-- [x] 1.1 Create ApiResponse wrapper DTO with success/error factory methods
-- [x] 1.2 Create ErrorDetail DTO with code/message/details fields
-- [x] 1.3 Create GlobalExceptionHandler @RestControllerAdvice with exception handlers
-- [x] 1.4 Update RecipeController endpoints to return wrapped ApiResponse
-- [x] 1.5 Unit tests for ApiResponse and ErrorDetail construction pass
-- [x] 1.6 Integration tests verify response envelope format (200 and error responses)
-- [x] 1.7 Checkstyle and type checking pass
+- [x] 1.1 Create ApiResponse wrapper DTO with success/error factory methods — 3c072b6
+- [x] 1.2 Create ErrorDetail DTO with code/message/details fields — 3c072b6
+- [x] 1.3 Create GlobalExceptionHandler @RestControllerAdvice with exception handlers — 3c072b6
+- [x] 1.4 Update RecipeController endpoints to return wrapped ApiResponse — 3c072b6
+- [x] 1.5 Unit tests for ApiResponse and ErrorDetail construction pass — 3c072b6
+- [x] 1.6 Integration tests verify response envelope format (200 and error responses) — 3c072b6
+- [x] 1.7 Checkstyle and type checking pass — 3c072b6
 
 #### Manual
 
-- [x] 1.8 Manual curl test: POST /api/recipes/search returns envelope with data/error/status
-- [x] 1.9 Manual curl test: Invalid request returns 400 with error envelope (no stack trace)
+- [x] 1.8 Manual curl test: POST /api/recipes/search returns envelope with data/error/status — 3c072b6
+- [x] 1.9 Manual curl test: Invalid request returns 400 with error envelope (no stack trace) — 3c072b6
 
 ### Phase 2: Add Health Endpoint & Swagger Documentation
 
