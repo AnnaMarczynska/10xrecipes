@@ -50,7 +50,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 |-------|------------------------|---------------------------------------------------------|------------------|----------------|----------|
 | F-01  | api-scaffold           | (foundation) API REST structure + TheMealDB client      | —                | FR-007, FR-008 | done |
 | F-02  | frontend-scaffold      | (foundation) React/Vite app + API client               | —                | UI layer       | proposed |
-| F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | proposed |
+| F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | done |
 | F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | proposed |
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
 | S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
@@ -127,7 +127,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Should password reset ship in MVP, or defer to v1.1? — Owner: user. Block: no (not in PRD must-haves).
 - **Risk:** JWT secrets management; if secrets are hardcoded or leaked, entire auth system is compromised. Mitigate: use Google Secret Manager (already wired in cloud-sql-proxy setup; apply same pattern here).
-- **Status:** proposed
+- **Status:** done
 
 ### F-04: Data layer integration
 
@@ -283,5 +283,6 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 - **F-01: (foundation) API REST structure + TheMealDB client** — Archived 2026-08-31 → `context/archive/2026-08-31-api-scaffold/`. Lesson: —.
+- **F-03: (foundation) Spring Security + JWT auth configured** — Archived 2026-08-31 → `context/archive/2026-08-31-auth-scaffold/`. Lesson: —.
 - **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
 
