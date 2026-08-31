@@ -5,6 +5,11 @@ import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.Recipe;
 import com.example._x_recipes.model.RecipeResult;
 import com.example._x_recipes.service.RecipeSearchService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/recipes")
 @CrossOrigin(origins = "*")
+@Tag(name = "Recipes", description = "Recipe search and discovery endpoints")
 public class RecipeController {
 
     @Autowired
@@ -31,14 +37,20 @@ public class RecipeController {
     private static final long CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
     @GetMapping("/health")
-    public ResponseEntity<ApiResponse<?>> health() {
+    @Operation(summary = "Health check", description = "Check if the API is running and healthy")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "API is healthy")
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> health() {
         Map<String, String> data = new HashMap<>();
         data.put("status", "healthy");
-        return ResponseEntity.ok(ApiResponse.success(data));
+        return ResponseEntity.ok(com.example._x_recipes.model.ApiResponse.success(data));
     }
 
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<?>> searchRecipes(@RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
+    @Operation(summary = "Search recipes", description = "Search for recipes by ingredients and cooking time")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Search successful")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request parameters")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
         try {
             // Validate input
             if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
@@ -113,7 +125,7 @@ public class RecipeController {
             response.put("results", finalResults);
             response.put("total", finalResults.size());
 
-            return ResponseEntity.ok(ApiResponse.success(response));
+            return ResponseEntity.ok(com.example._x_recipes.model.ApiResponse.success(response));
         } catch (IllegalArgumentException e) {
             throw e;
         } catch (TheMealDBClient.TheMealDBException e) {
@@ -122,7 +134,11 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/details")
-    public ResponseEntity<ApiResponse<?>> getRecipeDetails(@PathVariable String id) throws TheMealDBClient.TheMealDBException {
+    @Operation(summary = "Get recipe details", description = "Retrieve detailed information about a specific recipe")
+    @Parameter(name = "id", description = "Recipe ID", required = true)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Recipe details retrieved")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> getRecipeDetails(@PathVariable String id) throws TheMealDBClient.TheMealDBException {
         try {
             Recipe recipe = theMealDBClient.fetchRecipeDetails(id);
 
@@ -141,7 +157,7 @@ public class RecipeController {
             response.put("cookTime", cookTime);
             response.put("yield", recipe.getYield());
 
-            return ResponseEntity.ok(ApiResponse.success(response));
+            return ResponseEntity.ok(com.example._x_recipes.model.ApiResponse.success(response));
         } catch (TheMealDBClient.TheMealDBException e) {
             if (e.getMessage().contains("not found")) {
                 throw new IllegalArgumentException("Recipe not found");

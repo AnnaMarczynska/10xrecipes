@@ -522,16 +522,16 @@ Use `MockMvc` to test controller layer without starting full app.
 
 #### Automated
 
-- [ ] 2.1 Add spring-boot-starter-actuator dependency to pom.xml
-- [ ] 2.2 Configure Actuator properties in application.properties
-- [ ] 2.3 Create TheMealDBHealthIndicator component
-- [ ] 2.4 Add springdoc-openapi dependency to pom.xml
-- [ ] 2.5 Configure Swagger UI properties
-- [ ] 2.6 Annotate all endpoints with @Operation/@Parameter/@ApiResponse
-- [ ] 2.7 Create OpenApiConfig bean with metadata
-- [ ] 2.8 Health endpoint tests verify db and themealdb components
-- [ ] 2.9 Swagger JSON endpoint (/v3/api-docs) returns valid OpenAPI spec
-- [ ] 2.10 Clean Maven build and type checking passes
+- [x] 2.1 Add spring-boot-starter-actuator dependency to pom.xml
+- [x] 2.2 Configure Actuator properties in application.properties
+- [x] 2.3 Create TheMealDBHealthIndicator component
+- [x] 2.4 Add springdoc-openapi dependency to pom.xml
+- [x] 2.5 Configure Swagger UI properties
+- [x] 2.6 Annotate all endpoints with @Operation/@Parameter/@ApiResponse
+- [x] 2.7 Create OpenApiConfig bean with metadata
+- [x] 2.8 Health endpoint tests verify db and themealdb components
+- [x] 2.9 Swagger JSON endpoint (/v3/api-docs) returns valid OpenAPI spec
+- [x] 2.10 Clean Maven build and type checking passes
 
 #### Manual
 
