@@ -1,6 +1,7 @@
 package com.example._x_recipes.controller;
 
 import com.example._x_recipes.client.TheMealDBClient;
+import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.Recipe;
 import com.example._x_recipes.model.RecipeResult;
 import com.example._x_recipes.service.RecipeSearchService;
@@ -29,26 +30,32 @@ public class RecipeController {
     private volatile long cacheTime = 0;
     private static final long CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
+    @GetMapping("/health")
+    public ResponseEntity<ApiResponse<?>> health() {
+        Map<String, String> data = new HashMap<>();
+        data.put("status", "healthy");
+        return ResponseEntity.ok(ApiResponse.success(data));
+    }
+
     @PostMapping("/search")
-    public ResponseEntity<?> searchRecipes(@RequestBody SearchRequest request) {
+    public ResponseEntity<ApiResponse<?>> searchRecipes(@RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
         try {
             // Validate input
             if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of(
-                    "error", "ingredients list required",
-                    "status", 400
-                ));
+                throw new IllegalArgumentException("ingredients list required");
             }
 
             if (request.getTimeRange() == null || request.getTimeRange().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of(
-                    "error", "timeRange is required",
-                    "status", 400
-                ));
+                throw new IllegalArgumentException("timeRange is required");
             }
 
             // Fetch recipes (with caching)
-            List<Recipe> allRecipes = getAllRecipes();
+            List<Recipe> allRecipes;
+            try {
+                allRecipes = getAllRecipes();
+            } catch (TheMealDBClient.TheMealDBException e) {
+                throw e;
+            }
 
             // Get recipes matching ingredients (without strict time filtering yet)
             // We need more than 10 since we'll filter by time range after enriching with cook times
@@ -106,22 +113,16 @@ public class RecipeController {
             response.put("results", finalResults);
             response.put("total", finalResults.size());
 
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (TheMealDBClient.TheMealDBException e) {
-            return ResponseEntity.status(504).body(Map.of(
-                "error", "Recipe service unavailable",
-                "status", 504
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of(
-                "error", "Internal server error",
-                "status", 500
-            ));
+            throw e;
         }
     }
 
     @GetMapping("/{id}/details")
-    public ResponseEntity<?> getRecipeDetails(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<?>> getRecipeDetails(@PathVariable String id) throws TheMealDBClient.TheMealDBException {
         try {
             Recipe recipe = theMealDBClient.fetchRecipeDetails(id);
 
@@ -140,20 +141,12 @@ public class RecipeController {
             response.put("cookTime", cookTime);
             response.put("yield", recipe.getYield());
 
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
         } catch (TheMealDBClient.TheMealDBException e) {
             if (e.getMessage().contains("not found")) {
-                return ResponseEntity.notFound().build();
+                throw new IllegalArgumentException("Recipe not found");
             }
-            return ResponseEntity.status(504).body(Map.of(
-                "error", "Recipe service unavailable",
-                "status", 504
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of(
-                "error", "Internal server error",
-                "status", 500
-            ));
+            throw e;
         }
     }
 
