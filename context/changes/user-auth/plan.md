@@ -502,13 +502,13 @@ Similar test for LoginPage.
 
 #### Automated
 
-- [ ] 4.1 Create authClient integration tests (signup, login, logout with real backend)
-- [ ] 4.2 Create SignupPage integration tests (form submission, success, localStorage)
-- [ ] 4.3 Create LoginPage integration tests (form submission, success, token injection)
-- [ ] 4.4 Create ProtectedRoute tests (redirect when not logged in, render when logged in)
+- [x] 4.1 Create authClient integration tests (signup, login, logout with real backend)
+- [x] 4.2 Create SignupPage integration tests (form submission, success, localStorage)
+- [x] 4.3 Create LoginPage integration tests (form submission, success, token injection)
+- [x] 4.4 Create ProtectedRoute tests (redirect when not logged in, render when logged in)
 - [ ] 4.5 All tests pass: `npm test`
-- [ ] 4.6 Verify Swagger/OpenAPI includes auth endpoints with proper schemas
-- [ ] 4.7 npm build succeeds, type checking passes
+- [x] 4.6 Verify Swagger/OpenAPI includes auth endpoints with proper schemas
+- [x] 4.7 npm build succeeds, type checking passes
 
 #### Manual
 
