@@ -466,12 +466,12 @@ Similar test for LoginPage.
 
 #### Automated
 
-- [x] 2.1 Create shared validation utilities (validateEmail, validatePassword, validateSignupForm, validateLoginForm)
-- [x] 2.2 Create SignupPage.tsx with form, error display, success message
-- [x] 2.3 Create LoginPage.tsx with form, error display, success message
-- [x] 2.4 Create FormError.tsx component for field-level error display
-- [x] 2.5 Add CSS styling for signup/login pages and forms
-- [x] 2.6 Verify npm build succeeds, type checking passes
+- [x] 2.1 Create shared validation utilities (validateEmail, validatePassword, validateSignupForm, validateLoginForm) — 0c96b4f
+- [x] 2.2 Create SignupPage.tsx with form, error display, success message — 0c96b4f
+- [x] 2.3 Create LoginPage.tsx with form, error display, success message — 0c96b4f
+- [x] 2.4 Create FormError.tsx component for field-level error display — 0c96b4f
+- [x] 2.5 Add CSS styling for signup/login pages and forms — 0c96b4f
+- [x] 2.6 Verify npm build succeeds, type checking passes — 0c96b4f
 
 #### Manual
 
