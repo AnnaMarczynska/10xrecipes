@@ -450,17 +450,17 @@ Similar test for LoginPage.
 
 #### Automated
 
-- [x] 1.1 Create authClient.ts with signup, login, logout functions
-- [x] 1.2 Create tokenStorage.ts with get/set/delete/validate utilities
-- [x] 1.3 Create API interceptor (axios with Bearer token injection)
-- [x] 1.4 Update recipeClient.ts to use interceptor axios instance
-- [x] 1.5 Verify npm build succeeds, no TypeScript errors
-- [x] 1.6 Verify token correctly stored/retrieved from localStorage
+- [x] 1.1 Create authClient.ts with signup, login, logout functions — 3fd076a
+- [x] 1.2 Create tokenStorage.ts with get/set/delete/validate utilities — 3fd076a
+- [x] 1.3 Create API interceptor (axios with Bearer token injection) — 3fd076a
+- [x] 1.4 Update recipeClient.ts to use interceptor axios instance — 3fd076a
+- [x] 1.5 Verify npm build succeeds, no TypeScript errors — 3fd076a
+- [x] 1.6 Verify token correctly stored/retrieved from localStorage — 3fd076a
 
 #### Manual
 
-- [x] 1.7 Verify dev server runs without CORS errors
-- [x] 1.8 Verify API interceptor adds Authorization header when token exists
+- [x] 1.7 Verify dev server runs without CORS errors — 3fd076a
+- [x] 1.8 Verify API interceptor adds Authorization header when token exists — 3fd076a
 
 ### Phase 2: Auth Pages
 
