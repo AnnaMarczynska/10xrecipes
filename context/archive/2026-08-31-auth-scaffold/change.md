@@ -1,7 +1,8 @@
 ---
 change_id: auth-scaffold
 title: Auth scaffold — Spring Security + JWT configuration + registration/login endpoints
-status: impl_reviewed
+status: archived
+archived_at: 2026-08-31T16:55:43Z
 created: 2026-08-31
 updated: 2026-08-31
 reviewed_at: 2026-08-31T18:50:00Z
