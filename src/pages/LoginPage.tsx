@@ -12,6 +12,16 @@ export default function LoginPage() {
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState('');
 
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (errors.email) setErrors({ ...errors, email: '' });
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (errors.password) setErrors({ ...errors, password: '' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError('');
@@ -75,7 +85,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => handleEmailChange(e.target.value)}
               placeholder="you@example.com"
               className={errors.email ? 'input-error' : ''}
               disabled={loading}
@@ -89,7 +99,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handlePasswordChange(e.target.value)}
               placeholder="Enter your password"
               className={errors.password ? 'input-error' : ''}
               disabled={loading}

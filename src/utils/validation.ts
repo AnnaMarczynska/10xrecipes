@@ -32,20 +32,20 @@ export const validatePassword = (password: string): ValidationResult => {
   return { valid: true };
 };
 
-export const validateSignupForm = (
+const validateAuthForm = (
   email: string,
   password: string
 ): { valid: boolean; errors: FormErrors } => {
   const errors: FormErrors = { email: '', password: '' };
 
   const emailValidation = validateEmail(email);
-  if (!emailValidation.valid) {
-    errors.email = emailValidation.error || '';
+  if (!emailValidation.valid && emailValidation.error) {
+    errors.email = emailValidation.error;
   }
 
   const passwordValidation = validatePassword(password);
-  if (!passwordValidation.valid) {
-    errors.password = passwordValidation.error || '';
+  if (!passwordValidation.valid && passwordValidation.error) {
+    errors.password = passwordValidation.error;
   }
 
   return {
@@ -54,24 +54,5 @@ export const validateSignupForm = (
   };
 };
 
-export const validateLoginForm = (
-  email: string,
-  password: string
-): { valid: boolean; errors: FormErrors } => {
-  const errors: FormErrors = { email: '', password: '' };
-
-  const emailValidation = validateEmail(email);
-  if (!emailValidation.valid) {
-    errors.email = emailValidation.error || '';
-  }
-
-  const passwordValidation = validatePassword(password);
-  if (!passwordValidation.valid) {
-    errors.password = passwordValidation.error || '';
-  }
-
-  return {
-    valid: errors.email === '' && errors.password === '',
-    errors,
-  };
-};
+export const validateSignupForm = validateAuthForm;
+export const validateLoginForm = validateAuthForm;
