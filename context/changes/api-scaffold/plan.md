@@ -543,16 +543,16 @@ Use `MockMvc` to test controller layer without starting full app.
 
 #### Automated
 
-- [ ] 3.1 Add spring-boot-starter-validation dependency
-- [ ] 3.2 Add @NotNull/@NotEmpty annotations to SearchRequest DTO
-- [ ] 3.3 Replace manual null checks in RecipeController with @Valid
-- [ ] 3.4 Add MethodArgumentNotValidException handler to GlobalExceptionHandler
-- [ ] 3.5 Unit tests for validation pass: null/empty inputs trigger 400 errors
-- [ ] 3.6 Integration tests for API contract pass: envelope format, error scenarios
-- [ ] 3.7 Health check integration tests pass
-- [ ] 3.8 Full test suite passes: mvn test
-- [ ] 3.9 Code coverage on RecipeController ≥ 80%
-- [ ] 3.10 Checkstyle and type checking pass
+- [x] 3.1 Add spring-boot-starter-validation dependency
+- [x] 3.2 Add @NotNull/@NotEmpty annotations to SearchRequest DTO
+- [x] 3.3 Replace manual null checks in RecipeController with @Valid
+- [x] 3.4 Add MethodArgumentNotValidException handler to GlobalExceptionHandler
+- [x] 3.5 Unit tests for validation pass: null/empty inputs trigger 400 errors
+- [x] 3.6 Integration tests for API contract pass: envelope format, error scenarios
+- [x] 3.7 Health check integration tests pass
+- [x] 3.8 Full test suite passes: mvn test
+- [x] 3.9 Code coverage on RecipeController ≥ 80%
+- [x] 3.10 Checkstyle and type checking pass
 
 #### Manual
 

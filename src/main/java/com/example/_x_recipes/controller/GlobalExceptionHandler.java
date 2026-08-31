@@ -5,9 +5,11 @@ import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.ErrorDetail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,6 +24,20 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
             .body(ApiResponse.error(errorDetail, 504));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        String errors = e.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .collect(Collectors.joining(", "));
+        ErrorDetail errorDetail = new ErrorDetail(
+            "VALIDATION_ERROR",
+            "Request validation failed",
+            errors
+        );
+        return ResponseEntity.badRequest()
+            .body(ApiResponse.error(errorDetail, 400));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

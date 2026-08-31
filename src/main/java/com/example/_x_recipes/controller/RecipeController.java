@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,17 +53,8 @@ public class RecipeController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Search successful")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request parameters")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
-    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@Valid @RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
         try {
-            // Validate input
-            if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
-                throw new IllegalArgumentException("ingredients list required");
-            }
-
-            if (request.getTimeRange() == null || request.getTimeRange().isEmpty()) {
-                throw new IllegalArgumentException("timeRange is required");
-            }
-
             // Fetch recipes (with caching)
             List<Recipe> allRecipes;
             try {
@@ -234,7 +228,12 @@ public class RecipeController {
     }
 
     public static class SearchRequest {
+        @NotNull(message = "ingredients cannot be null")
+        @NotEmpty(message = "ingredients list cannot be empty")
         private List<String> ingredients;
+
+        @NotNull(message = "timeRange cannot be null")
+        @NotEmpty(message = "timeRange cannot be empty")
         private String timeRange;
 
         public List<String> getIngredients() { return ingredients; }
