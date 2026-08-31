@@ -1,3 +1,4 @@
+import axiosInstance from './interceptor';
 import { getCached, setCached, getCacheKey } from './cache';
 
 interface SearchResult {
@@ -33,32 +34,21 @@ async function searchRecipes(
     return cached;
   }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
   try {
-    const response = await fetch('/api/recipes/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ingredients, timeRange }),
-      signal: controller.signal,
-    });
+    const response = await axiosInstance.post<SearchResult>(
+      '/recipes/search',
+      { ingredients, timeRange },
+      { timeout: 5000 }
+    );
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error('Search failed');
-    }
-
-    const data = await response.json();
+    const data = response.data;
 
     // Cache the result
     setCached(cacheKey, data);
 
     return data;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === 'AbortError') {
+  } catch (error: any) {
+    if (error.code === 'ECONNABORTED') {
       throw new Error('Request timed out after 5 seconds');
     }
     throw error;
@@ -74,29 +64,20 @@ async function getRecipeDetails(id: string): Promise<RecipeDetail> {
     return cached;
   }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
   try {
-    const response = await fetch(`/api/recipes/${id}/details`, {
-      signal: controller.signal,
-    });
+    const response = await axiosInstance.get<RecipeDetail>(
+      `/recipes/${id}/details`,
+      { timeout: 5000 }
+    );
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch recipe details');
-    }
-
-    const data = await response.json();
+    const data = response.data;
 
     // Cache the result
     setCached(cacheKey, data);
 
     return data;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === 'AbortError') {
+  } catch (error: any) {
+    if (error.code === 'ECONNABORTED') {
       throw new Error('Request timed out after 5 seconds');
     }
     throw error;
@@ -112,30 +93,20 @@ async function getIngredients(): Promise<string[]> {
     return cached;
   }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
   try {
-    const response = await fetch('/api/ingredients', {
-      signal: controller.signal,
-    });
+    const response = await axiosInstance.get<{ ingredients: string[] }>(
+      '/ingredients',
+      { timeout: 5000 }
+    );
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch ingredients');
-    }
-
-    const data = await response.json();
-    const ingredients = data.ingredients || [];
+    const ingredients = response.data.ingredients || [];
 
     // Cache the result
     setCached(cacheKey, ingredients);
 
     return ingredients;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === 'AbortError') {
+  } catch (error: any) {
+    if (error.code === 'ECONNABORTED') {
       throw new Error('Request timed out after 5 seconds');
     }
     throw error;
