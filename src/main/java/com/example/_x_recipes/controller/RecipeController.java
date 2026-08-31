@@ -57,6 +57,15 @@ public class RecipeController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
     public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@Valid @RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
         try {
+            // Validate input
+            if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
+                throw new IllegalArgumentException("ingredients list required");
+            }
+
+            if (request.getTimeRange() == null || request.getTimeRange().isEmpty()) {
+                throw new IllegalArgumentException("timeRange is required");
+            }
+
             // Fetch recipes (with caching)
             List<Recipe> allRecipes;
             try {
