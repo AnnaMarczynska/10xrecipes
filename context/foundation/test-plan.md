@@ -56,8 +56,8 @@ Orchestrator state table. Each row is a rollout phase; status evolves as `/10x-t
 | # | Phase name | Goal | Risks covered | Test types | Status | Change folder | Notes |
 |---|---|---|---|---|---|---|---|
 | 1 | Critical-path search | Prove guest search returns valid recipes on valid input. Catch empty-results regressions. | R1, R2 (core hypothesis) | Integration: mock TheMealDB, call /search, assert results match inputs + constraints. | complete | context/archive/2026-08-28-testing-critical-path-search/ | Archived 2026-08-28. Unlocks Phase 2. |
-| 2 | Ranking & caching | Protect against algorithm regressions and cache failures. Verify N+1 fix holds. | R3, R4, R6 (reliability + perf) | Unit + integration: algorithm score logic, TTL/LRU on mock storage, call-count assertions. | change opened | context/changes/testing-ranking-caching/ | Foundation for phase 3. Stabilizes the fragile areas (Q3 roulette zone). |
-| 3 | API resilience & security | Timeout handling, URL encoding, error messages safe. Auth layer readiness for S-02. | R5 (API edge cases), abuse scenarios (injection, token storage) | Integration: timeout/404/parsing failures mocked; URL injection tests; token in localStorage/HTTPS; no keys in bundle. | not started | — | Final phase; gates S-02 (auth) and S-03 (favorites). Readiness gate for next roadmap slice. |
+| 2 | Ranking & caching | Protect against algorithm regressions and cache failures. Verify N+1 fix holds. | R3, R4, R6 (reliability + perf) | Unit + integration: algorithm score logic, TTL/LRU on mock storage, call-count assertions. | complete | context/archive/2026-08-28-testing-ranking-caching/ | Archived 2026-08-28. Unlocks Phase 3. |
+| 3 | API resilience & security | Timeout handling, URL encoding, error messages safe. Auth layer readiness for S-02. | R5 (API edge cases), abuse scenarios (injection, token storage) | Integration: timeout/404/parsing failures mocked; URL injection tests; token in localStorage/HTTPS; no keys in bundle. | complete | context/archive/2026-08-29-phase-3a-api-injection-safety/ | Archived 2026-08-29. Complete rollout. |
 
 ---
 
