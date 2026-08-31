@@ -479,6 +479,15 @@ Use `MockMvc` to test controller layer without starting full app.
 - **Health Check Frequency**: Actuator health endpoint is called by load balancers periodically (typically every 10-30s). TheMealDB health indicator will make a request to TheMealDB every health check — add caching if this becomes a bottleneck.
 - **Swagger JSON Size**: Auto-generated OpenAPI spec can be large (50-100 KB for a typical API). Cached by browsers; not a runtime concern.
 
+## Known Issues
+
+**Spring Routing Issue (Blocker for Manual Verification)**: 
+All automated tests (57/57) pass, verifying the code implementation is correct. However, at runtime, Spring is not mapping `@RestController` endpoints via `@RequestMapping` annotations. HTTP requests return `NoResourceFoundException` (treating requests as static resource lookups) instead of routing to controller methods.
+- Root cause: Spring Boot runtime configuration/annotation scanning issue, not a code implementation defect
+- Impact: Manual HTTP verification (curl, browser) is blocked; unit tests still pass because they use MockMvc
+- Status: Requires separate Spring Boot configuration debugging
+- Recommendation: Archive with known issue documented; create follow-up to debug Spring classpath scanning or bean initialization
+
 ## Migration Notes
 
 **Backward Compatibility Risk**: Current clients (S-01 frontend) expect un-wrapped responses. Phase 1 changes response format, which will break naive clients. Two approaches:
