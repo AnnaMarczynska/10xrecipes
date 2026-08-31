@@ -1,8 +1,13 @@
 package com.example._x_recipes.service;
 
 import com.example._x_recipes.entity.User;
+import com.example._x_recipes.exception.DuplicateEmailException;
+import com.example._x_recipes.exception.InvalidCredentialsException;
+import com.example._x_recipes.exception.UserNotFoundException;
+import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.repository.UserRepository;
 import com.example._x_recipes.security.JwtTokenProvider;
+import jakarta.validation.constraints.Email;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
@@ -21,21 +26,21 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public Map<String, Object> register(String email, String password) throws Exception {
+    public ApiResponse<Map<String, Object>> register(String email, String password) {
         if (email == null || email.trim().isEmpty()) {
-            throw new Exception("Email is required");
+            throw new IllegalArgumentException("Email is required");
         }
         if (password == null || password.length() < 6) {
-            throw new Exception("Password must be at least 6 characters");
+            throw new IllegalArgumentException("Password must be at least 6 characters");
         }
         if (password.length() > 128) {
-            throw new Exception("Password must be less than 128 characters");
+            throw new IllegalArgumentException("Password must be less than 128 characters");
         }
         if (!isValidEmail(email)) {
-            throw new Exception("Invalid email format");
+            throw new IllegalArgumentException("Invalid email format");
         }
         if (userRepository.existsByEmail(email)) {
-            throw new Exception("Email already registered");
+            throw new DuplicateEmailException(email);
         }
 
         User user = new User(email, passwordEncoder.encode(password));
@@ -46,15 +51,15 @@ public class AuthService {
         response.put("token", token);
         response.put("email", email);
         response.put("message", "User registered successfully");
-        return response;
+        return ApiResponse.success(response);
     }
 
-    public Map<String, Object> login(String email, String password) throws Exception {
+    public ApiResponse<Map<String, Object>> login(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new Exception("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(email));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new Exception("Invalid password");
+            throw new InvalidCredentialsException();
         }
 
         String token = jwtTokenProvider.generateToken(email);
@@ -62,15 +67,18 @@ public class AuthService {
         response.put("token", token);
         response.put("email", email);
         response.put("message", "Login successful");
-        return response;
+        return ApiResponse.success(response);
     }
 
-    public User getUserByEmail(String email) throws Exception {
+    public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new Exception("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     private boolean isValidEmail(String email) {
+        if (email == null || email.length() > 255) {
+            return false;
+        }
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(emailRegex);
     }

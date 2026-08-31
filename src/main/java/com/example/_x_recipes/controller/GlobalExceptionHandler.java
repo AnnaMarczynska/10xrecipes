@@ -1,6 +1,9 @@
 package com.example._x_recipes.controller;
 
 import com.example._x_recipes.client.TheMealDBClient;
+import com.example._x_recipes.exception.DuplicateEmailException;
+import com.example._x_recipes.exception.InvalidCredentialsException;
+import com.example._x_recipes.exception.UserNotFoundException;
 import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.ErrorDetail;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,39 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicateEmailException(DuplicateEmailException e) {
+        ErrorDetail errorDetail = new ErrorDetail(
+            "DUPLICATE_EMAIL",
+            "Email already registered",
+            e.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ApiResponse.error(errorDetail, 409));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidCredentialsException(InvalidCredentialsException e) {
+        ErrorDetail errorDetail = new ErrorDetail(
+            "INVALID_CREDENTIALS",
+            "Invalid email or password",
+            "Authentication failed"
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ApiResponse.error(errorDetail, 401));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUserNotFoundException(UserNotFoundException e) {
+        ErrorDetail errorDetail = new ErrorDetail(
+            "USER_NOT_FOUND",
+            "User not found",
+            e.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(ApiResponse.error(errorDetail, 404));
+    }
 
     @ExceptionHandler(TheMealDBClient.TheMealDBException.class)
     public ResponseEntity<ApiResponse<Void>> handleTheMealDBException(TheMealDBClient.TheMealDBException e) {
@@ -69,11 +105,11 @@ public class GlobalExceptionHandler {
         if (e.getCause() != null) {
             logger.severe("Caused by: " + e.getCause().getClass().getName() + " - " + e.getCause().getMessage());
         }
-        e.printStackTrace();
+        logger.throwing(this.getClass().getName(), "handleException", e);
         ErrorDetail errorDetail = new ErrorDetail(
             "INTERNAL_ERROR",
-            "Internal server error",
-            e.getClass().getSimpleName() + ": " + (e.getMessage() != null ? e.getMessage() : "unknown error")
+            "An unexpected error occurred",
+            "Internal server error"
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ApiResponse.error(errorDetail, 500));

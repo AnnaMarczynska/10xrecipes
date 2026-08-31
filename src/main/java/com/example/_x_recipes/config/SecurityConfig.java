@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import jakarta.annotation.PostConstruct;
 import java.net.http.HttpClient;
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +24,28 @@ import java.util.List;
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final String corsAllowedOrigins;
+    private final String jwtSecret;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
-                          @Value("${cors.allowed-origins}") String corsAllowedOrigins) {
+                          @Value("${cors.allowed-origins}") String corsAllowedOrigins,
+                          @Value("${jwt.secret}") String jwtSecret) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.corsAllowedOrigins = corsAllowedOrigins;
+        this.jwtSecret = jwtSecret;
+    }
+
+    @PostConstruct
+    void validateConfiguration() {
+        if (jwtSecret == null || jwtSecret.trim().isEmpty()) {
+            throw new IllegalStateException(
+                "CRITICAL: JWT_SECRET environment variable is required and must not be empty"
+            );
+        }
+        if (corsAllowedOrigins == null || corsAllowedOrigins.trim().isEmpty()) {
+            throw new IllegalStateException(
+                "CRITICAL: CORS_ALLOWED_ORIGINS environment variable is required and must not be empty"
+            );
+        }
     }
 
     @Bean
