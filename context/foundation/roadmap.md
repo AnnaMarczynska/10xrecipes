@@ -3,7 +3,7 @@ project: 10xRecipes
 version: 1
 status: draft
 created: 2026-08-27
-updated: 2026-08-27
+updated: 2026-08-31
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -53,7 +53,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | proposed |
 | F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | proposed |
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
-| S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | in-progress |
+| S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
 | S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | proposed |
 | S-03  | favorites              | save recipes to favorites, view list, remove           | S-02, F-04       | FR-009, FR-010 | proposed |
 | S-04  | allergens              | add allergens to profile, see recipe warnings          | S-02, F-04       | FR-014–016     | blocked  |
@@ -173,7 +173,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - What if TheMealDB is slow or offline? — Owner: TBD. Block: no (can add timeout + error UI as mitigation).
   - Should the UI show "no results" or "try different ingredients" when search returns empty? — Owner: designer/UX. Block: no (ship with basic error message, iterate).
 - **Risk:** TheMealDB API latency; if response takes >2 seconds, user search feels slow and defeats MVP validation. Mitigate: add request timeout, cache at frontend (localStorage), measure latency from the start.
-- **Status:** in-progress (Phase 1 implementation started)
+- **Status:** done
 
 ### S-02: User registration & login
 
@@ -240,7 +240,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | F-03       | auth-scaffold          | "Auth scaffold: Spring Security + JWT" | no | Depends on F-01 REST structure |
 | F-04       | data-integration       | "Data integration: JPA + PostgreSQL + Cloud SQL" | no | Depends on F-01 application.properties |
 | F-05       | deploy-scaffold        | "Deploy scaffold: Dockerfile + Cloud Run + GitHub Actions CI/CD" | no | Depends on F-01 + F-02 build artifacts |
-| S-01       | guest-search           | "MVP: Guest recipe search (no login required)" | yes | Ready to plan! No dependencies other than scaffolds (F-01, F-02). Start here for speed goal. |
+| S-01       | guest-search           | "MVP: Guest recipe search (no login required)" | done | Archived 2026-08-28. |
 | S-02       | user-auth              | "User registration & login with JWT" | no | Depends on F-01, F-02, F-03 scaffolds |
 | S-03       | favorites              | "Save recipes to favorites" | no | Depends on S-02 (auth) + F-04 (data) |
 | S-04       | allergens              | "Allergen management & recipe warnings" | no | **BLOCKED** — awaiting allergen list + data source decisions |
@@ -282,5 +282,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Done
 
-(empty on first generation; `/10x-archive` populates this)
+- **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
 
