@@ -3,13 +3,13 @@ package com.example._x_recipes.client;
 import com.example._x_recipes.model.Recipe;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +21,16 @@ public class TheMealDBClient {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
-    public TheMealDBClient() {
-        this(HttpClient.newHttpClient());
+    @Autowired
+    public TheMealDBClient(HttpClient httpClient, ObjectMapper objectMapper) {
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
     }
 
-    public TheMealDBClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
-        this.objectMapper = new ObjectMapper();
+    private void validateHttpResponse(int statusCode) throws TheMealDBException {
+        if (statusCode >= 500) {
+            throw new TheMealDBException("TheMealDB service error (status " + statusCode + ")");
+        }
     }
 
     public List<Recipe> fetchAllRecipes() throws TheMealDBException {
@@ -38,9 +41,12 @@ public class TheMealDBClient {
         try {
             // Fetch recipes for each letter a-z
             for (char c = 'a'; c <= 'z'; c++) {
-                String url = THEMEALDB_API_BASE + "/search.php?f=" + c;
+                URI uri = UriComponentsBuilder.fromHttpUrl(THEMEALDB_API_BASE + "/search.php")
+                        .queryParam("f", c)
+                        .build()
+                        .toUri();
                 HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(url))
+                    .uri(uri)
                     .timeout(TIMEOUT)
                     .GET()
                     .build();
@@ -48,9 +54,7 @@ public class TheMealDBClient {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
-                    if (response.statusCode() >= 500) {
-                        throw new TheMealDBException("TheMealDB service error (status " + response.statusCode() + ")");
-                    }
+                    validateHttpResponse(response.statusCode());
                     continue; // Skip this letter if not found
                 }
 
@@ -64,12 +68,8 @@ public class TheMealDBClient {
                             if (recipe != null && recipe.getId() != null) {
                                 allRecipes.add(recipe);
                             }
-                        } catch (com.fasterxml.jackson.databind.JsonMappingException e) {
-                            // Recipe JSON doesn't match schema; skip this one
-                            continue;
                         } catch (Exception e) {
-                            // Unexpected error parsing recipe; log and continue to avoid losing entire batch
-                            System.err.println("Unexpected error parsing recipe for letter " + c + ": " + e.getClass().getSimpleName());
+                            // JSON parsing error; skip this recipe
                             continue;
                         }
                     }
@@ -80,15 +80,18 @@ public class TheMealDBClient {
         } catch (java.net.http.HttpTimeoutException e) {
             throw new TheMealDBException("TheMealDB request timed out after " + TIMEOUT.toSeconds() + " seconds");
         } catch (Exception e) {
-            throw new TheMealDBException("Failed to fetch recipes from TheMealDB: " + e.getMessage());
+            throw new TheMealDBException("Failed to fetch recipes from TheMealDB: " + e.getClass().getSimpleName() + " - " + e.getMessage());
         }
     }
 
     public Recipe fetchRecipeDetails(String mealId) throws TheMealDBException {
         try {
-            String url = THEMEALDB_API_BASE + "/lookup.php?i=" + URLEncoder.encode(mealId, StandardCharsets.UTF_8);
+            URI uri = UriComponentsBuilder.fromHttpUrl(THEMEALDB_API_BASE + "/lookup.php")
+                    .queryParam("i", mealId)
+                    .build()
+                    .toUri();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(uri)
                 .timeout(TIMEOUT)
                 .GET()
                 .build();
@@ -96,6 +99,7 @@ public class TheMealDBClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
+                validateHttpResponse(response.statusCode());
                 throw new TheMealDBException("Recipe not found");
             }
 
@@ -112,7 +116,7 @@ public class TheMealDBClient {
         } catch (TheMealDBException e) {
             throw e;
         } catch (Exception e) {
-            throw new TheMealDBException("Failed to fetch recipe details");
+            throw new TheMealDBException("Failed to fetch recipe details: " + e.getClass().getSimpleName() + " - " + e.getMessage());
         }
     }
 

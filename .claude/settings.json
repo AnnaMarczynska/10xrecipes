@@ -2,20 +2,22 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": {
-          "tool": "Write|Edit",
-          "filter": "src/main/java/com/example/_x_recipes/client/TheMealDBClient.java|src/main/java/com/example/_x_recipes/controller/RecipeController.java"
-        },
-        "handler": "command",
-        "command": "mvn test -Dtest=RecipeControllerErrorSafetyTest -Dnet.bytebuddy.experimental=true --quiet"
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/test-java-files.sh"
+          }
+        ]
       },
       {
-        "matcher": {
-          "tool": "Write|Edit",
-          "filter": "src/.*\\.ts$"
-        },
-        "handler": "command",
-        "command": "npx tsc --noEmit"
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/typecheck-ts.sh"
+          }
+        ]
       }
     ]
   }

@@ -1,8 +1,10 @@
 ---
+phase_1_status: ok
+phase_2_status: ok
 phase_3_status: ok
-bootstrapper_run_date: 2026-08-22
+bootstrapper_run_date: 2026-08-31
 starter_id: spring
-project_name: 10x-recipes
+project_name: 10xrecipes
 ---
 
 ## Hand-off

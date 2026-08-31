@@ -49,7 +49,12 @@
       "Bash(lefthook run *)",
       "Bash(timeout 30 mvn test --quiet)",
       "Bash(echo \"Tests completed with exit code: $?\")",
-      "Bash(mvn test *)"
+      "Bash(mvn test *)",
+      "Skill(10x-archive)",
+      "Bash(timeout 5 mvn spring-boot:run -q)",
+      "Skill(10x-tech-stack-selector)",
+      "Bash(git commit *)",
+      "Bash(mvn compile *)"
     ]
   }
 }

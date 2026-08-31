@@ -5,6 +5,7 @@ import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.ErrorDetail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +36,17 @@ public class GlobalExceptionHandler {
             "VALIDATION_ERROR",
             "Request validation failed",
             errors
+        );
+        return ResponseEntity.badRequest()
+            .body(ApiResponse.error(errorDetail, 400));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+        ErrorDetail errorDetail = new ErrorDetail(
+            "INVALID_REQUEST_FORMAT",
+            "Invalid request format",
+            "Request body must be valid JSON"
         );
         return ResponseEntity.badRequest()
             .body(ApiResponse.error(errorDetail, 400));
