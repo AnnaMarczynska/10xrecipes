@@ -23,9 +23,9 @@ pre-commit:
 
 pre-push:
   commands:
-    # Full test suite
+    # Full test suite (skip integration tests that require Docker/testcontainers)
     test-all:
-      run: mvn test --quiet
+      run: mvn test --quiet -Dtest='!*IntegrationTest'
 
     # Full linting (all Java)
     lint-all:
