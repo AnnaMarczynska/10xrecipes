@@ -29,6 +29,7 @@ public class FavoriteService {
         response.put("recipeId", favorite.getRecipeId());
         response.put("recipeName", favorite.getRecipeName());
         response.put("addedAt", favorite.getAddedAt());
+        response.put("favorite", favorite);
         return response;
     }
 
