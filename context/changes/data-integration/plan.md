@@ -701,13 +701,13 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [x] 4.1 DEPLOYMENT.md is complete and readable
-- [x] 4.2 Setup script exists and is executable
-- [x] 4.3 VALIDATION.md checklist is complete
+- [x] 4.1 DEPLOYMENT.md is complete and readable — 6d99d5f
+- [x] 4.2 Setup script exists and is executable — 6d99d5f
+- [x] 4.3 VALIDATION.md checklist is complete — 6d99d5f
 
 #### Manual
 
-- [x] 4.4 Full signup → add favorite → query database flow works end-to-end
-- [x] 4.5 Health endpoint shows database is connected
-- [x] 4.6 Error handling: database down → 503 response
-- [x] 4.7 Documentation is clear and actionable for ops
+- [x] 4.4 Full signup → add favorite → query database flow works end-to-end — 6d99d5f
+- [x] 4.5 Health endpoint shows database is connected — 6d99d5f
+- [x] 4.6 Error handling: database down → 503 response — 6d99d5f
+- [x] 4.7 Documentation is clear and actionable for ops — 6d99d5f
