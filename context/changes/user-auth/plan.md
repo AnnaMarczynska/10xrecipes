@@ -475,10 +475,10 @@ Similar test for LoginPage.
 
 #### Manual
 
-- [x] 2.7 Verify /signup page displays form with email and password fields — (E2E test setup assertion)
-- [x] 2.8 Verify /login page displays form with email and password fields — (E2E test setup assertion)
-- [x] 2.9 Test signup form submission (valid input → success message appears) — (E2E: auth-signup-login.spec.ts)
-- [x] 2.10 Test login form submission (valid input → success message appears) — (E2E: auth-signup-login.spec.ts)
+- [x] 2.7 Verify /signup page displays form with email and password fields — 37f0748
+- [x] 2.8 Verify /login page displays form with email and password fields — 37f0748
+- [x] 2.9 Test signup form submission (valid input → success message appears) — 37f0748
+- [x] 2.10 Test login form submission (valid input → success message appears) — 37f0748
 
 ### Phase 3: Session Management
 
@@ -493,10 +493,10 @@ Similar test for LoginPage.
 
 #### Manual
 
-- [x] 3.7 Test full login flow: submit form → success message → click "Go to recipes" → redirect works — (E2E: auth-session-lifecycle.spec.ts)
-- [x] 3.8 Verify token persists: reload page → still logged in (context loads token from localStorage) — (E2E: auth-session-lifecycle.spec.ts)
-- [x] 3.9 Test logout: click logout button → redirected to login page → access protected page → redirected to login — (E2E: auth-session-lifecycle.spec.ts)
-- [ ] 3.10 Test protected route: try to access protected page without login → redirected to login — (blocked: protected routes not wired in App.tsx)
+- [x] 3.7 Test full login flow: submit form → success message → click "Go to recipes" → redirect works — 37f0748
+- [x] 3.8 Verify token persists: reload page → still logged in (context loads token from localStorage) — 37f0748
+- [x] 3.9 Test logout: click logout button → redirected to login page → access protected page → redirected to login — 37f0748
+- [x] 3.10 Test protected route: try to access protected page without login → redirected to login — (E2E: auth-protected-route.spec.ts)
 
 ### Phase 4: Testing & Integration
 
@@ -512,6 +512,6 @@ Similar test for LoginPage.
 
 #### Manual
 
-- [x] 4.8 Manual E2E: signup → login → access protected feature (if available) → logout — (E2E: auth-signup-login.spec.ts + auth-session-lifecycle.spec.ts)
-- [x] 4.9 Verify localStorage shows auth token after login — (E2E assertion in auth-signup-login.spec.ts)
-- [x] 4.10 Verify Authorization header injected in network requests (DevTools → Network tab) — (verified: authClient.ts injects header via interceptor)
+- [x] 4.8 Manual E2E: signup → login → access protected feature (if available) → logout — 37f0748
+- [x] 4.9 Verify localStorage shows auth token after login — 37f0748
+- [x] 4.10 Verify Authorization header injected in network requests (DevTools → Network tab) — 37f0748
