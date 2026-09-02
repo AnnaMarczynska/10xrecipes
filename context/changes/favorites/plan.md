@@ -465,19 +465,19 @@ No database migrations needed — Favorite entity and table already exist from F
 
 #### Automated
 
-- [x] 1.1 FavoriteController returns ApiResponse envelopes for all endpoints
-- [x] 1.2 Request/response DTOs defined (FavoriteDTO, FavoritesListDTO, AddFavoriteRequest)
-- [x] 1.3 Error handling refined (specific exceptions or consistent error codes)
-- [x] 1.4 Code compiles: `mvn clean compile`
-- [x] 1.5 Type checking passes: `mvn clean compile`
-- [x] 1.6 Linting passes: `mvn checkstyle:check`
+- [x] 1.1 FavoriteController returns ApiResponse envelopes for all endpoints — 0f8da4d
+- [x] 1.2 Request/response DTOs defined (FavoriteDTO, FavoritesListDTO, AddFavoriteRequest) — 0f8da4d
+- [x] 1.3 Error handling refined (specific exceptions or consistent error codes) — 0f8da4d
+- [x] 1.4 Code compiles: `mvn clean compile` — 0f8da4d
+- [x] 1.5 Type checking passes: `mvn clean compile` — 0f8da4d
+- [x] 1.6 Linting passes: `mvn checkstyle:check` — 0f8da4d
 
 #### Manual
 
-- [ ] 1.7 Tested POST /api/favorites with valid recipe (returns ApiResponse)
-- [ ] 1.8 Tested POST with duplicate (shows "Already in favorites")
-- [ ] 1.9 Tested GET /api/favorites (returns list with total count)
-- [ ] 1.10 Tested DELETE with unauthorized access (403 Forbidden)
+- [x] 1.7 Tested POST /api/favorites with valid recipe (returns ApiResponse)
+- [x] 1.8 Tested POST with duplicate (shows "Already in favorites")
+- [x] 1.9 Tested GET /api/favorites (returns list with total count)
+- [x] 1.10 Tested DELETE with unauthorized access (403 Forbidden)
 
 ### Phase 2: Frontend Implementation
 
