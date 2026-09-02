@@ -3,7 +3,7 @@ project: 10xRecipes
 version: 1
 status: draft
 created: 2026-08-27
-updated: 2026-08-31
+updated: 2026-09-02
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -54,7 +54,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | proposed |
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
 | S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
-| S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | proposed |
+| S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | done |
 | S-03  | favorites              | save recipes to favorites, view list, remove           | S-02, F-04       | FR-009, FR-010 | proposed |
 | S-04  | allergens              | add allergens to profile, see recipe warnings          | S-02, F-04       | FR-014–016     | blocked  |
 | S-05  | favorite-notes         | add/edit/delete notes on favorite recipes              | S-03, F-04       | FR-011–013     | proposed |
@@ -187,7 +187,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Should email verification be required, or skip for MVP? — Owner: user. Block: no (skip for MVP; add in v1.1 if needed).
   - Password reset flow? — Owner: user. Block: no (not in PRD must-haves; defer to v1.1).
 - **Risk:** Auth is the unlock for all user-specific features (favorites, allergens, notes). If auth is buggy, downstream slices can't work. Mitigate: thorough local integration testing (register, login, token in request, protected route denial without token).
-- **Status:** proposed → ready once F-01, F-02, F-03 complete
+- **Status:** done
 
 ### S-03: Save recipes to favorites
 
@@ -285,4 +285,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-01: (foundation) API REST structure + TheMealDB client** — Archived 2026-08-31 → `context/archive/2026-08-31-api-scaffold/`. Lesson: —.
 - **F-03: (foundation) Spring Security + JWT auth configured** — Archived 2026-08-31 → `context/archive/2026-08-31-auth-scaffold/`. Lesson: —.
 - **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
+- **S-02: User registration & login with JWT** — Completed 2026-09-02. E2E tests (31 total), protected routes, localStorage token persistence. Manual testing verified. Ready for S-03 (favorites) and F-04 (data integration).
 
