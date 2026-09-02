@@ -4,6 +4,7 @@ version: 1
 status: draft
 created: 2026-08-27
 updated: 2026-09-02
+
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -51,7 +52,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | F-01  | api-scaffold           | (foundation) API REST structure + TheMealDB client      | —                | FR-007, FR-008 | done |
 | F-02  | frontend-scaffold      | (foundation) React/Vite app + API client               | —                | UI layer       | proposed |
 | F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | done |
-| F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | proposed |
+| F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | done |
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
 | S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
 | S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | done |
@@ -141,7 +142,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Should we hand-write schema.sql or use JPA auto-generation? — Owner: user. Block: no. Decision: use JPA `@Entity` annotations + `spring.jpa.hibernate.ddl-auto=create-drop` in dev, `validate` in prod.
 - **Risk:** Cloud SQL connection string injection; if secrets leak, user data (email, passwords, allergens) exposed. Mitigate: use Google Secret Manager; rotate secrets post-launch.
-- **Status:** proposed
+- **Status:** done
 
 ### F-05: Container & deployment scaffold
 
@@ -286,4 +287,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-03: (foundation) Spring Security + JWT auth configured** — Archived 2026-08-31 → `context/archive/2026-08-31-auth-scaffold/`. Lesson: —.
 - **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
 - **S-02: User registration & login with JWT** — Completed 2026-09-02. E2E tests (31 total), protected routes, localStorage token persistence. Manual testing verified. Ready for S-03 (favorites) and F-04 (data integration).
+- **F-04: (foundation) JPA + PostgreSQL + Cloud SQL wired** — Archived 2026-09-02 → `context/archive/2026-09-02-data-integration/`. Lesson: —.
 
