@@ -655,11 +655,11 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [x] 1.1 Type check and lint pass
-- [x] 1.2 Application starts with dev profile (H2 database)
-- [x] 1.3 Application-dev.properties is readable and separate from base
-- [x] 1.4 Application-prod.properties is unchanged
-- [x] 1.5 Startup validation prevents missing credentials
+- [x] 1.1 Type check and lint pass — d9ccacf
+- [x] 1.2 Application starts with dev profile (H2 database) — d9ccacf
+- [x] 1.3 Application-dev.properties is readable and separate from base — d9ccacf
+- [x] 1.4 Application-prod.properties is unchanged — d9ccacf
+- [x] 1.5 Startup validation prevents missing credentials — d9ccacf
 
 #### Manual
 
@@ -670,11 +670,11 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [ ] 2.1 Type check and lint pass
-- [ ] 2.2 Health endpoint returns database status (UP/DOWN)
-- [ ] 2.3 Exception handler returns 503 for database errors
-- [ ] 2.4 Correlation ID filter injects UUID into requests
-- [ ] 2.5 Logging includes correlation ID in all logs
+- [x] 2.1 Type check and lint pass
+- [x] 2.2 Health endpoint returns database status (UP/DOWN)
+- [x] 2.3 Exception handler returns 503 for database errors
+- [x] 2.4 Correlation ID filter injects UUID into requests
+- [x] 2.5 Logging includes correlation ID in all logs
 
 #### Manual
 
