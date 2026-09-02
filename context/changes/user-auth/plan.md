@@ -496,7 +496,7 @@ Similar test for LoginPage.
 - [x] 3.7 Test full login flow: submit form → success message → click "Go to recipes" → redirect works — 37f0748
 - [x] 3.8 Verify token persists: reload page → still logged in (context loads token from localStorage) — 37f0748
 - [x] 3.9 Test logout: click logout button → redirected to login page → access protected page → redirected to login — 37f0748
-- [x] 3.10 Test protected route: try to access protected page without login → redirected to login — (E2E: auth-protected-route.spec.ts)
+- [x] 3.10 Test protected route: try to access protected page without login → redirected to login — f8f2e46
 
 ### Phase 4: Testing & Integration
 
