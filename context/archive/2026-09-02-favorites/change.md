@@ -1,11 +1,11 @@
 ---
 change_id: favorites
 title: Save recipes to favorites
-status: implementing
+status: archived
 created: 2026-09-02
 updated: 2026-09-02
 
-archived_at: null
+archived_at: 2026-09-02T12:55:00Z
 ---
 
 ## Notes

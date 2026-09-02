@@ -3,7 +3,7 @@ project: 10xRecipes
 version: 1
 status: draft
 created: 2026-08-27
-updated: 2026-09-02
+updated: 2026-09-02T13:00:00Z
 
 
 prd_version: 1
@@ -57,7 +57,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
 | S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
 | S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | done |
-| S-03  | favorites              | save recipes to favorites, view list, remove           | S-02, F-04       | FR-009, FR-010 | in-progress |
+| S-03  | favorites              | save recipes to favorites, view list, remove           | S-02, F-04       | FR-009, FR-010 | done |
 | S-04  | allergens              | add allergens to profile, see recipe warnings          | S-02, F-04       | FR-014–016     | blocked  |
 | S-05  | favorite-notes         | add/edit/delete notes on favorite recipes              | S-03, F-04       | FR-011–013     | proposed |
 
@@ -203,7 +203,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Should there be a favorites count limit, or unlimited? — Owner: user. Block: no (can add quota in v1.1 if needed).
   - Should favorites be sorted by save date, recipe name, or user preference? — Owner: designer. Block: no (ship with save-date sort; iterate).
 - **Risk:** Database query inefficiency; if favorites query fetches each recipe from TheMealDB on every load (N+1 problem), user list view is slow. Mitigate: cache recipe metadata in the database when saved, don't re-fetch on every view.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-04: Allergen management
 
@@ -289,4 +289,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-01: Guest recipe search** — Archived 2026-08-28 → `context/archive/2026-08-27-guest-search/`. Lesson: —.
 - **S-02: User registration & login with JWT** — Completed 2026-09-02. E2E tests (31 total), protected routes, localStorage token persistence. Manual testing verified. Ready for S-03 (favorites) and F-04 (data integration).
 - **F-04: (foundation) JPA + PostgreSQL + Cloud SQL wired** — Archived 2026-09-02 → `context/archive/2026-09-02-data-integration/`. Lesson: —.
+- **S-03: Authenticated user can save a recipe from search results to their favorites, view a list of all saved recipes, and remove a recipe from favorites. Favorites persist across sessions.** — Archived 2026-09-02 → `context/archive/2026-09-02-favorites/`. Lesson: —.
 
