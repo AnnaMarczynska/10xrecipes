@@ -1,6 +1,7 @@
 package com.example._x_recipes.config;
 
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
     return correlationId;
   }
 
+  @JsonIgnoreProperties(ignoreUnknown = true)
   public static class ErrorResponse implements Serializable {
     private static final long serialVersionUID = 1L;
     public String message;
