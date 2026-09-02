@@ -110,7 +110,7 @@ describe('FavoritesPage', () => {
       total: 2,
     });
 
-    global.confirm = vi.fn().mockReturnValue(false);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     render(
       <BrowserRouter>
@@ -125,10 +125,10 @@ describe('FavoritesPage', () => {
     const removeButtons = screen.getAllByRole('button', { name: /Remove/ });
     fireEvent.click(removeButtons[0]);
 
-    expect(global.confirm).toHaveBeenCalledWith(
+    expect(confirmSpy).toHaveBeenCalledWith(
       'Remove this recipe from your favorites?'
     );
-    expect(global.confirm).toHaveBeenCalled();
+    confirmSpy.mockRestore();
   });
 
   it('should delete favorite when confirmed', async () => {
@@ -136,9 +136,9 @@ describe('FavoritesPage', () => {
       favorites: mockFavorites,
       total: 2,
     });
-    vi.mocked(favoriteClient.removeFavorite).mockResolvedValue({});
+    vi.mocked(favoriteClient.removeFavorite).mockResolvedValue(undefined);
 
-    global.confirm = vi.fn().mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(
       <BrowserRouter>
@@ -156,6 +156,8 @@ describe('FavoritesPage', () => {
     await waitFor(() => {
       expect(favoriteClient.removeFavorite).toHaveBeenCalledWith(1);
     });
+
+    confirmSpy.mockRestore();
   });
 
   it('should show error message on fetch failure', async () => {
