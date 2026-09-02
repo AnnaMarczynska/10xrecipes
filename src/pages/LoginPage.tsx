@@ -42,7 +42,6 @@ export default function LoginPage() {
       const response = await authClient.login(email, password);
       login(email, response.token);
       setSuccess(true);
-      setTimeout(() => navigate('/'), 1500);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Login failed';
 
@@ -64,7 +63,6 @@ export default function LoginPage() {
         <div className="auth-card">
           <h1>Welcome Back!</h1>
           <p className="success-message">You are logged in.</p>
-          <p className="redirecting-message">Redirecting to recipes...</p>
           <button onClick={() => navigate('/')} className="auth-link">
             Go to recipes now
           </button>

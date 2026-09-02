@@ -18,7 +18,8 @@ test.describe('Auth Session Lifecycle', () => {
     await page.getByRole('button', { name: /sign up/i }).click();
     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
 
-    // Wait for redirect to home
+    // Action: click "Go to recipes now" to proceed
+    await page.getByRole('link', { name: /go to recipes/i }).click();
     await page.waitForURL('/');
 
     // Assert: user is logged in (logout button visible, user email shown)
@@ -49,7 +50,8 @@ test.describe('Auth Session Lifecycle', () => {
     await page.getByRole('button', { name: /sign up/i }).click();
     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
 
-    // Wait for redirect to home
+    // Action: click "Go to recipes now" to proceed
+    await page.getByRole('link', { name: /go to recipes/i }).click();
     await page.waitForURL('/');
 
     // Assert: logout button visible

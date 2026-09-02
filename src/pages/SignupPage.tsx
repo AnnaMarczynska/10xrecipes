@@ -42,7 +42,6 @@ export default function SignupPage() {
       const response = await authClient.signup(email, password);
       login(email, response.token);
       setSuccess(true);
-      setTimeout(() => navigate('/'), 1500);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Signup failed';
 
@@ -62,7 +61,6 @@ export default function SignupPage() {
         <div className="auth-card">
           <h1>Account Created!</h1>
           <p className="success-message">You are logged in. Welcome to 10xRecipes!</p>
-          <p className="redirecting-message">Redirecting to recipes...</p>
           <button onClick={() => navigate('/')} className="auth-link">
             Go to recipes now
           </button>
