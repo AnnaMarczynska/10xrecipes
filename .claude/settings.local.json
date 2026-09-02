@@ -54,7 +54,20 @@
       "Bash(timeout 5 mvn spring-boot:run -q)",
       "Skill(10x-tech-stack-selector)",
       "Bash(git commit *)",
-      "Bash(mvn compile *)"
+      "Bash(mvn compile *)",
+      "Bash(npm exec *)",
+      "Read(//tmp/**)",
+      "Bash(chmod +x scripts/setup-cloud-sql.sh)",
+      "Bash(docker --version)",
+      "Bash(awk '/^status:|^created:|^archived_at:|^updated:/ {print}' context/changes/data-integration/change.md)",
+      "Bash(chmod +x /tmp/test_favorites.sh)",
+      "Bash(/tmp/test_favorites.sh)",
+      "Bash(mvn checkstyle:check)",
+      "Bash(mvn spring-boot:run *)",
+      "Bash(lsof -ti:9090)",
+      "Bash(xargs kill -9)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(pkill -9 -f java)"
     ]
   }
 }

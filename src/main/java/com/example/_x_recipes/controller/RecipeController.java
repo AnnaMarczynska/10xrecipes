@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/recipes")
+@RequestMapping("/recipes")
 @CrossOrigin(origins = "*")
 @Validated
 @Tag(name = "Recipes", description = "Recipe search and discovery endpoints")

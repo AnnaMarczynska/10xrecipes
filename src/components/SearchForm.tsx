@@ -26,9 +26,12 @@ export default function SearchForm() {
     setError(null);
 
     try {
+      console.log('Searching with ingredients:', ingredients, 'timeRange:', timeRange);
       const data = await searchRecipes(ingredients, timeRange);
-      setResults(data.results);
+      console.log('Search succeeded, results:', data?.results);
+      setResults(data?.results || []);
     } catch (err) {
+      console.error('Search caught error:', err);
       setError('Search failed. Try again in a moment.');
       setResults([]);
     } finally {

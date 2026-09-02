@@ -31,6 +31,9 @@ export default function Header() {
         <div className="header-actions">
           {isLoggedIn && user ? (
             <>
+              <Link to="/favorites" className="nav-link">
+                ❤️ My Favorites
+              </Link>
               <span className="user-email">{user.email}</span>
               <button
                 onClick={handleLogout}

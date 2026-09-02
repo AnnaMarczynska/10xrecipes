@@ -43,7 +43,8 @@ public class FavoriteController {
         } catch (DuplicateFavoriteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error("DUPLICATE_FAVORITE", "Recipe already in favorites", null, HttpStatus.CONFLICT.value()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("ADD_FAVORITE_ERROR", "Failed to add favorite", null, HttpStatus.BAD_REQUEST.value()));
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("ADD_FAVORITE_ERROR", "Failed to add favorite: " + e.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
 
@@ -61,7 +62,8 @@ public class FavoriteController {
             FavoritesListDTO listDto = new FavoritesListDTO(dtos, dtos.size());
             return ResponseEntity.ok(ApiResponse.success(listDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("GET_FAVORITES_ERROR", "Failed to retrieve favorites", null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("GET_FAVORITES_ERROR", "Failed to retrieve favorites: " + e.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { favoriteClient, Favorite } from '../api/favoriteClient';
+import RecipeDetail from './RecipeDetailPage';
 import '../styles/FavoritesPage.css';
 
 export default function FavoritesPage() {
@@ -8,6 +9,7 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +49,25 @@ export default function FavoritesPage() {
     }
   };
 
+  if (selectedRecipeId) {
+    return (
+      <div className="app">
+        <header className="app-header">
+          <button
+            className="back-button"
+            onClick={() => setSelectedRecipeId(null)}
+            style={{ marginBottom: '10px' }}
+          >
+            ← Back to Favorites
+          </button>
+        </header>
+        <main className="app-main">
+          <RecipeDetail recipeId={selectedRecipeId} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -74,7 +95,14 @@ export default function FavoritesPage() {
               saved
             </p>
             {favorites.map((favorite) => (
-              <div key={favorite.id} className="favorite-item">
+              <div
+                key={favorite.id}
+                className="favorite-item"
+                onClick={() => setSelectedRecipeId(favorite.recipeId)}
+                role="button"
+                tabIndex={0}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="favorite-info">
                   <h3 className="favorite-name">{favorite.recipeName}</h3>
                   {favorite.notes && (
@@ -85,7 +113,8 @@ export default function FavoritesPage() {
                   </p>
                 </div>
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (
                       window.confirm(
                         'Remove this recipe from your favorites?'

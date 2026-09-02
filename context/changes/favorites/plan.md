@@ -483,20 +483,20 @@ No database migrations needed — Favorite entity and table already exist from F
 
 #### Automated
 
-- [x] 2.1 favoriteClient.ts created with addFavorite, removeFavorite, getFavorites functions
-- [x] 2.2 FavoritesPage component built with data fetching, list display, delete confirmation
-- [x] 2.3 RecipeCard component updated with favorite button (heart icon, filled/outline)
-- [x] 2.4 TypeScript compiles: `npx tsc --noEmit`
-- [x] 2.5 Linting passes: `npm run lint`
-- [x] 2.6 Build succeeds: `npm run build`
+- [x] 2.1 favoriteClient.ts created with addFavorite, removeFavorite, getFavorites functions — acb3464
+- [x] 2.2 FavoritesPage component built with data fetching, list display, delete confirmation — acb3464
+- [x] 2.3 RecipeCard component updated with favorite button (heart icon, filled/outline) — acb3464
+- [x] 2.4 TypeScript compiles: `npx tsc --noEmit` — acb3464
+- [x] 2.5 Linting passes: `npm run lint` — acb3464
+- [x] 2.6 Build succeeds: `npm run build` — acb3464
 
 #### Manual
 
-- [ ] 2.7 Tested add favorite from search results (toast shows, icon fills)
-- [ ] 2.8 Tested view favorites page (list displays sorted by date, most recent first)
-- [ ] 2.9 Tested remove favorite (confirmation dialog, item disappears)
-- [ ] 2.10 Tested search page → favorites page → search (state stays in sync)
-- [ ] 2.11 Tested notes field visibility (displayed, read-only)
+- [x] 2.7 Tested add favorite from search results (toast shows, icon fills)
+- [x] 2.8 Tested view favorites page (list displays sorted by date, most recent first)
+- [x] 2.9 Tested remove favorite (confirmation dialog, item disappears)
+- [x] 2.10 Tested search page → favorites page → search (state stays in sync)
+- [x] 2.11 Tested notes field visibility (displayed, read-only)
 
 ### Phase 3: Testing & Integration
 

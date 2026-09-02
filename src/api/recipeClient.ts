@@ -29,25 +29,32 @@ async function searchRecipes(
   // Check cache first
   const cacheKey = getCacheKey(ingredients, timeRange);
   const cached = getCached<SearchResult>(cacheKey);
-  if (cached) {
+  if (cached && cached.results) {
     console.log('Using cached search results');
     return cached;
   }
 
   try {
-    const response = await axiosInstance.post<SearchResult>(
+    const response = await axiosInstance.post<{ data: SearchResult }>(
       '/recipes/search',
       { ingredients, timeRange },
       { timeout: 5000 }
     );
 
-    const data = response.data;
+    console.log('Search response:', response);
+    const data = response.data.data;
+    console.log('Extracted data:', data);
+
+    if (!data || !data.results) {
+      throw new Error('Invalid response: missing results data');
+    }
 
     // Cache the result
     setCached(cacheKey, data);
 
     return data;
   } catch (error: any) {
+    console.error('Search error:', error);
     if (error.code === 'ECONNABORTED') {
       throw new Error('Request timed out after 5 seconds');
     }
@@ -65,12 +72,12 @@ async function getRecipeDetails(id: string): Promise<RecipeDetail> {
   }
 
   try {
-    const response = await axiosInstance.get<RecipeDetail>(
+    const response = await axiosInstance.get<{ data: RecipeDetail }>(
       `/recipes/${id}/details`,
       { timeout: 5000 }
     );
 
-    const data = response.data;
+    const data = response.data.data;
 
     // Cache the result
     setCached(cacheKey, data);
