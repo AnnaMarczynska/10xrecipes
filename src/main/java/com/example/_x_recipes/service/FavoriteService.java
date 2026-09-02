@@ -2,6 +2,9 @@ package com.example._x_recipes.service;
 
 import com.example._x_recipes.entity.Favorite;
 import com.example._x_recipes.entity.User;
+import com.example._x_recipes.exception.DuplicateFavoriteException;
+import com.example._x_recipes.exception.FavoriteNotFoundException;
+import com.example._x_recipes.exception.UnauthorizedException;
 import com.example._x_recipes.repository.FavoriteRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,9 +19,9 @@ public class FavoriteService {
         this.favoriteRepository = favoriteRepository;
     }
 
-    public Map<String, Object> addFavorite(User user, String recipeId, String recipeName) throws Exception {
+    public Map<String, Object> addFavorite(User user, String recipeId, String recipeName) {
         if (favoriteRepository.existsByUserAndRecipeId(user, recipeId)) {
-            throw new Exception("Recipe already in favorites");
+            throw new DuplicateFavoriteException(recipeId);
         }
 
         Favorite favorite = new Favorite(user, recipeId, recipeName);
@@ -33,12 +36,12 @@ public class FavoriteService {
         return response;
     }
 
-    public void removeFavorite(User user, Long favoriteId) throws Exception {
+    public void removeFavorite(User user, Long favoriteId) {
         Favorite favorite = favoriteRepository.findById(favoriteId)
-                .orElseThrow(() -> new Exception("Favorite not found"));
+                .orElseThrow(() -> new FavoriteNotFoundException(favoriteId));
 
         if (!favorite.getUser().getId().equals(user.getId())) {
-            throw new Exception("Unauthorized");
+            throw new UnauthorizedException("You do not have permission to delete this favorite");
         }
 
         favoriteRepository.delete(favorite);
@@ -48,16 +51,16 @@ public class FavoriteService {
         return favoriteRepository.findByUser(user);
     }
 
-    public void updateFavoriteNotes(User user, Long favoriteId, String notes) throws Exception {
+    public void updateFavoriteNotes(User user, Long favoriteId, String notes) {
         if (notes != null && notes.length() > 500) {
-            throw new Exception("Notes cannot exceed 500 characters");
+            throw new IllegalArgumentException("Notes cannot exceed 500 characters");
         }
 
         Favorite favorite = favoriteRepository.findById(favoriteId)
-                .orElseThrow(() -> new Exception("Favorite not found"));
+                .orElseThrow(() -> new FavoriteNotFoundException(favoriteId));
 
         if (!favorite.getUser().getId().equals(user.getId())) {
-            throw new Exception("Unauthorized");
+            throw new UnauthorizedException("You do not have permission to update this favorite");
         }
 
         favorite.setNotes(notes);

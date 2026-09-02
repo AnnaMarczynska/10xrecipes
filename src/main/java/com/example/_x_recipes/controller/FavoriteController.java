@@ -1,10 +1,14 @@
 package com.example._x_recipes.controller;
 
 import com.example._x_recipes.entity.Favorite;
+import com.example._x_recipes.exception.DuplicateFavoriteException;
+import com.example._x_recipes.exception.FavoriteNotFoundException;
+import com.example._x_recipes.exception.UnauthorizedException;
 import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.ErrorDetail;
 import com.example._x_recipes.service.FavoriteService;
 import com.example._x_recipes.service.AuthService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/favorites")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:3000}")
 public class FavoriteController {
     private final FavoriteService favoriteService;
     private final AuthService authService;
@@ -36,11 +40,10 @@ public class FavoriteController {
             Favorite fav = (Favorite) result.get("favorite");
             FavoriteDTO dto = new FavoriteDTO(fav.getId(), fav.getRecipeId(), fav.getRecipeName(), fav.getNotes(), fav.getAddedAt());
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(dto, HttpStatus.CREATED.value()));
+        } catch (DuplicateFavoriteException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error("DUPLICATE_FAVORITE", "Recipe already in favorites", null, HttpStatus.CONFLICT.value()));
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains("already")) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error("DUPLICATE_FAVORITE", e.getMessage(), null, HttpStatus.CONFLICT.value()));
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("ADD_FAVORITE_ERROR", e.getMessage(), null, HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("ADD_FAVORITE_ERROR", "Failed to add favorite", null, HttpStatus.BAD_REQUEST.value()));
         }
     }
 
@@ -58,7 +61,7 @@ public class FavoriteController {
             FavoritesListDTO listDto = new FavoritesListDTO(dtos, dtos.size());
             return ResponseEntity.ok(ApiResponse.success(listDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("GET_FAVORITES_ERROR", e.getMessage(), null, HttpStatus.UNAUTHORIZED.value()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("GET_FAVORITES_ERROR", "Failed to retrieve favorites", null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
 
@@ -69,14 +72,12 @@ public class FavoriteController {
             var user = authService.getUserByEmail(email);
             favoriteService.removeFavorite(user, id);
             return ResponseEntity.ok(ApiResponse.success(null));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("UNAUTHORIZED_DELETE", "You do not have permission to delete this favorite", null, HttpStatus.FORBIDDEN.value()));
+        } catch (FavoriteNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("FAVORITE_NOT_FOUND", "Favorite not found", null, HttpStatus.NOT_FOUND.value()));
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains("Unauthorized")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("UNAUTHORIZED_DELETE", e.getMessage(), null, HttpStatus.FORBIDDEN.value()));
-            }
-            if (e.getMessage() != null && e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("FAVORITE_NOT_FOUND", e.getMessage(), null, HttpStatus.NOT_FOUND.value()));
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("DELETE_FAVORITE_ERROR", e.getMessage(), null, HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("DELETE_FAVORITE_ERROR", "Failed to delete favorite", null, HttpStatus.BAD_REQUEST.value()));
         }
     }
 
@@ -87,17 +88,18 @@ public class FavoriteController {
             var user = authService.getUserByEmail(email);
             favoriteService.updateFavoriteNotes(user, id, request.getNotes());
             return ResponseEntity.ok(ApiResponse.success(null));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("UNAUTHORIZED_UPDATE", "You do not have permission to update this favorite", null, HttpStatus.FORBIDDEN.value()));
+        } catch (FavoriteNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("FAVORITE_NOT_FOUND", "Favorite not found", null, HttpStatus.NOT_FOUND.value()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("INVALID_NOTES", "Notes cannot exceed 500 characters", null, HttpStatus.BAD_REQUEST.value()));
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains("Unauthorized")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("UNAUTHORIZED_UPDATE", e.getMessage(), null, HttpStatus.FORBIDDEN.value()));
-            }
-            if (e.getMessage() != null && e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("FAVORITE_NOT_FOUND", e.getMessage(), null, HttpStatus.NOT_FOUND.value()));
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("UPDATE_NOTES_ERROR", e.getMessage(), null, HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("UPDATE_NOTES_ERROR", "Failed to update favorite notes", null, HttpStatus.BAD_REQUEST.value()));
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AddFavoriteRequest {
         private String recipeId;
         private String recipeName;
@@ -109,6 +111,7 @@ public class FavoriteController {
         public void setRecipeName(String recipeName) { this.recipeName = recipeName; }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UpdateNotesRequest {
         private String notes;
 
@@ -116,6 +119,7 @@ public class FavoriteController {
         public void setNotes(String notes) { this.notes = notes; }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FavoriteDTO {
         private Long id;
         private String recipeId;
@@ -147,6 +151,7 @@ public class FavoriteController {
         public void setAddedAt(LocalDateTime addedAt) { this.addedAt = addedAt; }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FavoritesListDTO {
         private List<FavoriteDTO> favorites;
         private Integer total;
