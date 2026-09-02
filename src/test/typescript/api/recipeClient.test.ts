@@ -1,6 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { searchRecipes, getRecipeDetails, getIngredients } from '../../../api/recipeClient';
 
+// Mock localStorage for Node.js test environment
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+});
+
 // Mock the cache module
 vi.mock('../../../api/cache', () => ({
   getCached: vi.fn(() => null),
