@@ -686,11 +686,11 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [x] 3.1 Testcontainers dependencies added to pom.xml
-- [x] 3.2 Application-test.properties is readable
-- [x] 3.3 Integration tests compile without errors
-- [x] 3.4 All repository integration tests pass (schema creation, CRUD, constraints)
-- [x] 3.5 Integration tests run against PostgreSQL testcontainer
+- [x] 3.1 Testcontainers dependencies added to pom.xml — 3b5cbb8
+- [x] 3.2 Application-test.properties is readable — 3b5cbb8
+- [x] 3.3 Integration tests compile without errors — 3b5cbb8
+- [x] 3.4 All repository integration tests pass (schema creation, CRUD, constraints) — 3b5cbb8
+- [x] 3.5 Integration tests run against PostgreSQL testcontainer — 3b5cbb8
 
 #### Manual
 
