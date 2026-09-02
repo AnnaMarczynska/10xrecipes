@@ -474,21 +474,21 @@ No database migrations needed — Favorite entity and table already exist from F
 
 #### Manual
 
-- [x] 1.7 Tested POST /api/favorites with valid recipe (returns ApiResponse)
-- [x] 1.8 Tested POST with duplicate (shows "Already in favorites")
-- [x] 1.9 Tested GET /api/favorites (returns list with total count)
-- [x] 1.10 Tested DELETE with unauthorized access (403 Forbidden)
+- [x] 1.7 Tested POST /api/favorites with valid recipe (returns ApiResponse) — acc3092
+- [x] 1.8 Tested POST with duplicate (shows "Already in favorites") — acc3092
+- [x] 1.9 Tested GET /api/favorites (returns list with total count) — acc3092
+- [x] 1.10 Tested DELETE with unauthorized access (403 Forbidden) — acc3092
 
 ### Phase 2: Frontend Implementation
 
 #### Automated
 
-- [ ] 2.1 favoriteClient.ts created with addFavorite, removeFavorite, getFavorites functions
-- [ ] 2.2 FavoritesPage component built with data fetching, list display, delete confirmation
-- [ ] 2.3 RecipeCard component updated with favorite button (heart icon, filled/outline)
-- [ ] 2.4 TypeScript compiles: `npx tsc --noEmit`
-- [ ] 2.5 Linting passes: `npm run lint`
-- [ ] 2.6 Build succeeds: `npm run build`
+- [x] 2.1 favoriteClient.ts created with addFavorite, removeFavorite, getFavorites functions
+- [x] 2.2 FavoritesPage component built with data fetching, list display, delete confirmation
+- [x] 2.3 RecipeCard component updated with favorite button (heart icon, filled/outline)
+- [x] 2.4 TypeScript compiles: `npx tsc --noEmit`
+- [x] 2.5 Linting passes: `npm run lint`
+- [x] 2.6 Build succeeds: `npm run build`
 
 #### Manual
 

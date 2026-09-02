@@ -68,3 +68,28 @@
 .no-results p {
   font-size: 14px;
 }
+
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2d5016;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
