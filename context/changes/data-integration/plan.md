@@ -670,11 +670,11 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [x] 2.1 Type check and lint pass
-- [x] 2.2 Health endpoint returns database status (UP/DOWN)
-- [x] 2.3 Exception handler returns 503 for database errors
-- [x] 2.4 Correlation ID filter injects UUID into requests
-- [x] 2.5 Logging includes correlation ID in all logs
+- [x] 2.1 Type check and lint pass — 5c2dc49
+- [x] 2.2 Health endpoint returns database status (UP/DOWN) — 5c2dc49
+- [x] 2.3 Exception handler returns 503 for database errors — 5c2dc49
+- [x] 2.4 Correlation ID filter injects UUID into requests — 5c2dc49
+- [x] 2.5 Logging includes correlation ID in all logs — 5c2dc49
 
 #### Manual
 
@@ -686,11 +686,11 @@ If S-03 or S-04 shows slow queries later, add indexes or caching. For now, the R
 
 #### Automated
 
-- [ ] 3.1 Testcontainers dependencies added to pom.xml
-- [ ] 3.2 Application-test.properties is readable
-- [ ] 3.3 Integration tests compile without errors
-- [ ] 3.4 All repository integration tests pass (schema creation, CRUD, constraints)
-- [ ] 3.5 Integration tests run against PostgreSQL testcontainer
+- [x] 3.1 Testcontainers dependencies added to pom.xml
+- [x] 3.2 Application-test.properties is readable
+- [x] 3.3 Integration tests compile without errors
+- [x] 3.4 All repository integration tests pass (schema creation, CRUD, constraints)
+- [x] 3.5 Integration tests run against PostgreSQL testcontainer
 
 #### Manual
 
