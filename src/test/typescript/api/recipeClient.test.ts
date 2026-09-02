@@ -3,7 +3,7 @@ import { searchRecipes, getRecipeDetails, getIngredients } from '../../../api/re
 
 // Mock localStorage for Node.js test environment
 const localStorageMock = {
-  getItem: vi.fn(),
+  getItem: vi.fn(() => null),
   setItem: vi.fn(),
   removeItem: vi.fn(),
   clear: vi.fn(),
