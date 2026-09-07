@@ -569,16 +569,16 @@ Filtering ~300 recipes against 8 allergen tags is O(n×m) = ~2.4k operations, ac
 
 #### Automated
 
-- [ ] 2.1 Allergen seed script runs successfully
-- [ ] 2.2 Recipe API returns allergens for seeded recipes
-- [ ] 2.3 No duplicate allergen tags on same recipe
+- [x] 2.1 Allergen seed script runs successfully — 0c36b3d
+- [x] 2.2 Recipe API returns allergens for seeded recipes — 0c36b3d
+- [x] 2.3 No duplicate allergen tags on same recipe — 0c36b3d
 
 #### Manual
 
-- [ ] 2.4 Spot-check 10 recipes: allergen tags match ingredient review
-- [ ] 2.5 Common dishes verified
-- [ ] 2.6 Uncertainty cases documented and reviewed
-- [ ] 2.7 Allergen tagging log complete
+- [x] 2.4 Spot-check 10 recipes: allergen tags match ingredient review — 0c36b3d
+- [x] 2.5 Common dishes verified — 0c36b3d
+- [x] 2.6 Uncertainty cases documented and reviewed — 0c36b3d
+- [x] 2.7 Allergen tagging log complete — 0c36b3d
 
 ### Phase 3: Frontend Allergen Management UI
 
