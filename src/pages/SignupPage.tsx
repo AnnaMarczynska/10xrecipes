@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authClient } from '../api/authClient';
 import { validateSignupForm } from '../utils/validation';
 import { useAuth } from '../context/AuthContext';
-import FormError from '../components/FormError';
+import FormError from '../components/scaffold/FormError';
 import '../styles/auth.css';
 
 export default function SignupPage() {

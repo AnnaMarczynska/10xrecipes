@@ -3,7 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import FavoritesPage from '../FavoritesPage';
 import { favoriteClient } from '../../api/favoriteClient';
-import RecipeDetail from '../RecipeDetailPage';
 
 vi.mock('../../api/favoriteClient');
 vi.mock('../RecipeDetailPage', () => ({

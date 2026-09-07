@@ -14,12 +14,13 @@ export default [
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
-      globals: globals.browser,
+      globals: { ...globals.browser },
       parser: typescriptParser,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
         },
+        project: './tsconfig.json',
       },
     },
     plugins: {
@@ -42,6 +43,14 @@ export default [
           varsIgnorePattern: '^_',
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/ban-ts-comment': [
+        'warn',
+        {
+          'ts-expect-error': 'allow-with-description',
+          'ts-ignore': 'allow-with-description',
+        },
+      ],
       'no-console': [
         'warn',
         {
@@ -52,11 +61,22 @@ export default [
       'no-var': 'error',
       'prefer-const': 'warn',
       'eqeqeq': ['warn', 'always'],
+      'react/no-unescaped-entities': 'warn',
     },
     settings: {
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    files: ['**/__tests__/**/*.{ts,tsx}', '**/*.test.{ts,tsx}'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node, global: 'readonly' },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
   },
 ];

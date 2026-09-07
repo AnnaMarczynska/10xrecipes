@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authClient } from '../api/authClient';
 import { validateLoginForm } from '../utils/validation';
 import { useAuth } from '../context/AuthContext';
-import FormError from '../components/FormError';
+import FormError from '../components/scaffold/FormError';
 import '../styles/auth.css';
 
 export default function LoginPage() {
@@ -122,7 +122,7 @@ export default function LoginPage() {
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <a href="/signup">Sign up</a>
+          Don&apos;t have an account? <a href="/signup">Sign up</a>
         </div>
       </div>
     </div>

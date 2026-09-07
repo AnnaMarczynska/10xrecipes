@@ -10,7 +10,7 @@ export default function FavoritesPage() {
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -81,7 +81,7 @@ export default function FavoritesPage() {
 
         {!loading && favorites.length === 0 && !error && (
           <div className="empty-state">
-            <p>You haven't saved any recipes yet.</p>
+            <p>You haven&apos;t saved any recipes yet.</p>
             <Link to="/" className="btn btn-primary">
               Start searching
             </Link>

@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { getRecipeDetails, RecipeDetail } from '../api/recipeClient';
 import './RecipeDetailPage.css';
 
 interface RecipeDetailPageProps {
-  recipeId: string;
+  recipeId?: string;
 }
 
 export default function RecipeDetailPage({
-  recipeId,
+  recipeId: propRecipeId,
 }: RecipeDetailPageProps) {
+  const { id: routeRecipeId } = useParams<{ id: string }>();
+  const recipeId = propRecipeId || routeRecipeId;
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!recipeId) {
+      setError('No recipe ID provided');
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     getRecipeDetails(recipeId)
       .then(setRecipe)

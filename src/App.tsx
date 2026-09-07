@@ -1,14 +1,21 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import SearchForm from './components/SearchForm';
+import ProtectedRoute from './components/scaffold/ProtectedRoute';
+import SearchForm from './components/recipe-search/SearchForm';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import FavoritesPage from './pages/FavoritesPage';
-import Header from './components/Header';
+import RecipeDetailPage from './pages/RecipeDetailPage';
+import Header from './components/scaffold/Header';
 import './App.css';
 
 function HomePage() {
+  const navigate = useNavigate();
+
+  const handleSelectRecipe = (recipeId: string) => {
+    navigate(`/recipe/${recipeId}`);
+  };
+
   return (
     <div className="app">
       <header className="app-header">
@@ -16,7 +23,7 @@ function HomePage() {
         <p>Find recipes with ingredients you have</p>
       </header>
       <main className="app-main">
-        <SearchForm />
+        <SearchForm onSelectRecipe={handleSelectRecipe} />
       </main>
       <footer className="app-footer">
         <p>Recipes powered by TheMealDB</p>
@@ -32,6 +39,7 @@ export default function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/recipe/:id" element={<RecipeDetailPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/favorites" element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} />
