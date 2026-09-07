@@ -59,6 +59,43 @@ export function clearCache(key?: string): void {
 
 export function getCacheKey(ingredients: string[], timeRange: string): string {
   // Create a stable hash of ingredients and time range
+  // Sorting ensures "chicken, garlic" and "garlic, chicken" produce the same cache key
   const sorted = [...ingredients].sort().join(',');
   return `recipe_search_${sorted}_${timeRange}`;
+}
+
+/**
+ * Unified cache-check-then-fetch pattern to reduce duplication.
+ * Checks cache for key; if hit, returns cached value.
+ * If miss, calls fetch function, caches result, and returns.
+ *
+ * @param key - Cache key
+ * @param fetchFn - Async function to call if cache miss
+ * @param ttl - Optional TTL in milliseconds (defaults to CACHE_TTL)
+ * @returns Cached or fetched value
+ *
+ * @example
+ * const result = await getCachedOrFetch(
+ *   'recipe_detail_123',
+ *   () => axiosInstance.get<ApiResponse<RecipeDetail>>('/recipes/123'),
+ *   CACHE_TTL
+ * );
+ */
+export async function getCachedOrFetch<T>(
+  key: string,
+  fetchFn: () => Promise<T>,
+): Promise<T> {
+  // Check cache first
+  const cached = getCached<T>(key);
+  if (cached) {
+    return cached;
+  }
+
+  // Cache miss: call fetch function
+  const result = await fetchFn();
+
+  // Cache the result
+  setCached(key, result);
+
+  return result;
 }

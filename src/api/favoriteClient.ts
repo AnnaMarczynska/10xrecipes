@@ -1,28 +1,6 @@
 import { AxiosError } from 'axios';
 import axiosInstance from './interceptor';
-
-export interface Favorite {
-  id: number;
-  recipeId: string;
-  recipeName: string;
-  notes: string | null;
-  addedAt: string;
-}
-
-export interface FavoritesListResponse {
-  favorites: Favorite[];
-  total: number;
-}
-
-export interface ApiResponse<T> {
-  data: T;
-  error: null | {
-    code: string;
-    message: string;
-    details?: string;
-  };
-  status: number;
-}
+import { Favorite, FavoritesListResponse, ApiResponse } from './types';
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (error instanceof AxiosError) {
@@ -31,6 +9,9 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
   }
   return fallback;
 };
+
+// Re-export types for backward compatibility
+export type { Favorite, FavoritesListResponse, ApiResponse };
 
 export const favoriteClient = {
   addFavorite: async (

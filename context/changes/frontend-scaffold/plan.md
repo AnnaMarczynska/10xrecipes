@@ -650,9 +650,9 @@ export const tokenStorage = { ... };
 
 #### Automated
 
-- [x] 1.1 Component review checklist completed (SearchForm, RecipeCard, Header, ProtectedRoute, etc.)
-- [x] 1.2 API client review checklist completed (authClient, recipeClient, favoriteClient)
-- [x] 1.3 Context & hooks review checklist completed (AuthContext, custom hooks)
+- [x] 1.1 Component review checklist completed (SearchForm, RecipeCard, Header, ProtectedRoute, etc.) — 6cb26e1
+- [x] 1.2 API client review checklist completed (authClient, recipeClient, favoriteClient) — 6cb26e1
+- [x] 1.3 Context & hooks review checklist completed (AuthContext, custom hooks) — 6cb26e1
 
 #### Manual
 
@@ -663,14 +663,14 @@ export const tokenStorage = { ... };
 
 #### Automated
 
-- [ ] 2.1 ESLint config (.eslintrc.cjs) added
+- [x] 2.1 ESLint config (eslint.config.js) added — 6cb26e1
 - [ ] 2.2 `npm run lint` passes (0 errors, 0 warnings)
-- [ ] 2.3 Console.log statements removed from production code
-- [ ] 2.4 Type contracts unified in `src/api/types.ts`
-- [ ] 2.5 Error handling standardized across all API clients
-- [ ] 2.6 Cache pattern refactored to use getCachedOrFetch utility
+- [x] 2.3 Console.log statements removed from production code — 6cb26e1
+- [x] 2.4 Type contracts unified in `src/api/types.ts` — 6cb26e1
+- [x] 2.5 Error handling standardized across all API clients — 6cb26e1
+- [x] 2.6 Cache pattern refactored to use getCachedOrFetch utility — 6cb26e1
 - [ ] 2.7 API client tests added/updated for cache, error, timeout scenarios
-- [ ] 2.8 `npm run typecheck` passes (strict mode)
+- [x] 2.8 `npm run typecheck` passes (strict mode) — 6cb26e1
 - [ ] 2.9 `npm test` passes all tests
 - [ ] 2.10 `npm run build` succeeds
 

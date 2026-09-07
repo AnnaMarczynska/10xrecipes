@@ -65,8 +65,6 @@ export default function RecipeResultsList({
       setTimeout(() => setToastMessage(null), 3000);
     }
   };
-  console.log('RecipeResultsList render: loading=', loading, 'error=', error, 'results.length=', results.length);
-
   if (loading) {
     return (
       <div className="results-list">
@@ -82,12 +80,10 @@ export default function RecipeResultsList({
   }
 
   if (error) {
-    console.log('Showing error:', error);
     return <div className="error-message">{error}</div>;
   }
 
   if (results.length === 0) {
-    console.log('No results');
     return (
       <div className="no-results">
         <h2>No recipes found</h2>
@@ -96,15 +92,12 @@ export default function RecipeResultsList({
     );
   }
 
-  console.log('Rendering results:', results.length, 'recipes');
-
   return (
     <>
       {toastMessage && <div className="toast-notification">{toastMessage}</div>}
       <div className="results-list">
         {results && results.map((recipe) => {
           if (!recipe || !recipe.id) {
-            console.error('Invalid recipe object:', recipe);
             return null;
           }
           return (

@@ -1,27 +1,7 @@
 import { AxiosError } from 'axios';
 import axiosInstance from './interceptor';
 import { tokenStorage } from '../utils/tokenStorage';
-
-export interface AuthResponse {
-  token: string;
-  email: string;
-  message?: string;
-}
-
-export interface UserProfile {
-  email: string;
-  id?: string;
-}
-
-export interface ApiResponse<T> {
-  data: T;
-  error: null | {
-    code: string;
-    message: string;
-    details?: string;
-  };
-  status: number;
-}
+import { AuthResponse, UserProfile, ApiResponse } from './types';
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (error instanceof AxiosError) {
@@ -30,6 +10,9 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
   }
   return fallback;
 };
+
+// Re-export types for backward compatibility
+export type { AuthResponse, UserProfile, ApiResponse };
 
 export const authClient = {
   signup: async (email: string, password: string): Promise<AuthResponse> => {
