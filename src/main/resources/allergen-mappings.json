@@ -1,0 +1,82 @@
+{
+  "peanuts": [
+    "peanut",
+    "peanut butter",
+    "groundnut",
+    "arachis oil"
+  ],
+  "tree_nuts": [
+    "walnut",
+    "almond",
+    "cashew",
+    "pecan",
+    "pistachio",
+    "macadamia",
+    "brazil nut",
+    "hazelnut",
+    "chestnut",
+    "pine nut"
+  ],
+  "milk": [
+    "milk",
+    "cream",
+    "cheese",
+    "butter",
+    "lactose",
+    "whey",
+    "casein",
+    "sour cream",
+    "yogurt",
+    "ice cream"
+  ],
+  "eggs": [
+    "egg",
+    "eggs"
+  ],
+  "fish": [
+    "salmon",
+    "tuna",
+    "cod",
+    "trout",
+    "anchovy",
+    "sardine",
+    "haddock",
+    "herring",
+    "bass",
+    "halibut"
+  ],
+  "shellfish": [
+    "shrimp",
+    "prawn",
+    "crab",
+    "lobster",
+    "clam",
+    "mussel",
+    "oyster",
+    "scallop",
+    "squid",
+    "calamari"
+  ],
+  "soy": [
+    "soy",
+    "soybean",
+    "edamame",
+    "tofu",
+    "soy sauce",
+    "soybean paste",
+    "tempeh",
+    "miso"
+  ],
+  "wheat": [
+    "wheat",
+    "flour",
+    "bread",
+    "pasta",
+    "barley",
+    "rye",
+    "oat",
+    "semolina",
+    "couscous",
+    "bulgur"
+  ]
+}

@@ -1,5 +1,6 @@
 package com.example._x_recipes.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -65,6 +66,9 @@ public class Recipe {
     @JsonProperty("strYield")
     private String yield;
 
+    @JsonProperty("allergens")
+    private List<String> allergens = new ArrayList<>();
+
     public List<String> getIngredients() {
         List<String> ingredients = new java.util.ArrayList<>();
         if (ingredient1 != null && !ingredient1.isEmpty()) ingredients.add(ingredient1);
@@ -103,6 +107,9 @@ public class Recipe {
     public void setCookTime(Integer cookTime) { this.cookTime = cookTime; }
     public String getYield() { return yield; }
     public void setYield(String yield) { this.yield = yield; }
+
+    public List<String> getAllergens() { return allergens; }
+    public void setAllergens(List<String> allergens) { this.allergens = allergens; }
 
     public void setIngredient1(String ingredient1) { this.ingredient1 = ingredient1; }
     public void setIngredient2(String ingredient2) { this.ingredient2 = ingredient2; }

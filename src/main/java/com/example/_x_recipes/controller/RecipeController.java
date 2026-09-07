@@ -1,9 +1,14 @@
 package com.example._x_recipes.controller;
 
 import com.example._x_recipes.client.TheMealDBClient;
+import com.example._x_recipes.entity.User;
+import com.example._x_recipes.exception.UserNotFoundException;
 import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.Recipe;
 import com.example._x_recipes.model.RecipeResult;
+import com.example._x_recipes.security.JwtTokenProvider;
+import com.example._x_recipes.service.AllergenFilterService;
+import com.example._x_recipes.service.AuthService;
 import com.example._x_recipes.service.RecipeSearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,6 +41,15 @@ public class RecipeController {
     @Autowired
     private RecipeSearchService recipeSearchService;
 
+    @Autowired
+    private AllergenFilterService allergenFilterService;
+
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     // Cache for all recipes (in-memory for MVP)
     private volatile List<Recipe> cachedRecipes;
     private volatile long cacheTime = 0;
@@ -55,7 +69,9 @@ public class RecipeController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Search successful")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request parameters")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
-    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@Valid @RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(
+            @Valid @RequestBody SearchRequest request,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) throws TheMealDBClient.TheMealDBException {
         try {
             // Validate input
             if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
@@ -119,11 +135,25 @@ public class RecipeController {
                 }
             }
 
-            // Now rank with enriched recipes (strict time filtering + sort by cook time)
+            // Apply allergen filtering if user is authenticated
+            List<Recipe> filteredRecipes = enrichedRecipes;
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                try {
+                    String token = authHeader.substring(7);
+                    String email = jwtTokenProvider.getEmailFromToken(token);
+                    User user = authService.getUserByEmail(email);
+                    filteredRecipes = allergenFilterService.filterByUserAllergens(enrichedRecipes, user);
+                } catch (Exception e) {
+                    // If user lookup fails, proceed without filtering
+                    filteredRecipes = enrichedRecipes;
+                }
+            }
+
+            // Now rank with filtered recipes (strict time filtering + sort by cook time)
             List<RecipeResult> finalResults = recipeSearchService.searchRecipes(
                 request.getIngredients(),
                 request.getTimeRange(),
-                enrichedRecipes.stream().filter(r -> r != null).collect(Collectors.toList())
+                filteredRecipes.stream().filter(r -> r != null).collect(Collectors.toList())
             );
 
             Map<String, Object> response = new HashMap<>();

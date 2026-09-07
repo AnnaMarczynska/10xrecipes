@@ -552,18 +552,18 @@ Filtering ~300 recipes against 8 allergen tags is O(n×m) = ~2.4k operations, ac
 
 #### Automated
 
-- [ ] 1.1 Recipe entity compiles with new allergens field
-- [ ] 1.2 AllergenFilterService filters recipes correctly
-- [ ] 1.3 RecipeController integrates filter without breaking existing search
-- [ ] 1.4 TypeScript strict mode passes after Recipe type extension
-- [ ] 1.5 Allergen seed script runs without SQL errors
-- [ ] 1.6 Recipe API response includes allergens field in JSON
+- [x] 1.1 Recipe entity compiles with new allergens field
+- [x] 1.2 AllergenFilterService filters recipes correctly
+- [x] 1.3 RecipeController integrates filter without breaking existing search
+- [x] 1.4 TypeScript strict mode passes after Recipe type extension
+- [x] 1.5 Allergen seed script runs without SQL errors
+- [x] 1.6 Recipe API response includes allergens field in JSON
 
 #### Manual
 
-- [ ] 1.7 Manually verify RecipeSearchService ranking logic unchanged
-- [ ] 1.8 Manually verify performance: search completes in <500ms
-- [ ] 1.9 Manually verify seed script correctly tags top 100 recipes
+- [x] 1.7 Manually verify RecipeSearchService ranking logic unchanged
+- [x] 1.8 Manually verify performance: search completes in <500ms
+- [x] 1.9 Manually verify seed script correctly tags top 100 recipes
 
 ### Phase 2: Manual Recipe Allergen Tagging
 

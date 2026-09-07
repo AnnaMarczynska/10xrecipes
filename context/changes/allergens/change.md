@@ -1,7 +1,7 @@
 ---
 change_id: allergens
 title: Allergen management and recipe filtering
-status: planned
+status: implementing
 created: 2026-09-07
 updated: 2026-09-07
 archived_at: null
