@@ -2,11 +2,9 @@ package com.example._x_recipes.controller;
 
 import com.example._x_recipes.client.TheMealDBClient;
 import com.example._x_recipes.entity.User;
-import com.example._x_recipes.exception.UserNotFoundException;
 import com.example._x_recipes.model.ApiResponse;
 import com.example._x_recipes.model.Recipe;
 import com.example._x_recipes.model.RecipeResult;
-import com.example._x_recipes.security.JwtTokenProvider;
 import com.example._x_recipes.service.AllergenFilterService;
 import com.example._x_recipes.service.AuthService;
 import com.example._x_recipes.service.RecipeSearchService;
@@ -18,6 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +47,6 @@ public class RecipeController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     // Cache for all recipes (in-memory for MVP)
     private volatile List<Recipe> cachedRecipes;
     private volatile long cacheTime = 0;
@@ -69,9 +66,7 @@ public class RecipeController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Search successful")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request parameters")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "504", description = "Recipe service unavailable")
-    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(
-            @Valid @RequestBody SearchRequest request,
-            @RequestHeader(value = "Authorization", required = false) String authHeader) throws TheMealDBClient.TheMealDBException {
+    public ResponseEntity<com.example._x_recipes.model.ApiResponse<?>> searchRecipes(@Valid @RequestBody SearchRequest request) throws TheMealDBClient.TheMealDBException {
         try {
             // Validate input
             if (request.getIngredients() == null || request.getIngredients().isEmpty()) {
@@ -137,10 +132,10 @@ public class RecipeController {
 
             // Apply allergen filtering if user is authenticated
             List<Recipe> filteredRecipes = enrichedRecipes;
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.isAuthenticated()) {
                 try {
-                    String token = authHeader.substring(7);
-                    String email = jwtTokenProvider.getEmailFromToken(token);
+                    String email = (String) auth.getPrincipal();
                     User user = authService.getUserByEmail(email);
                     filteredRecipes = allergenFilterService.filterByUserAllergens(enrichedRecipes, user);
                 } catch (Exception e) {
