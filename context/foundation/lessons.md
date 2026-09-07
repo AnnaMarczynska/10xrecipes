@@ -16,3 +16,11 @@
 - Patterns: follows existing conventions (Spring, project style)
 
 **When**: After automated verification passes, before manual testing gate. When quality issues found: fix immediately, commit with `-quality` suffix, then continue to manual testing.
+
+## Error Handling & Test Synchronization
+
+**Rule**: When refactoring error handling (standardizing messages, adding wrappers, or changing error formats), update test expectations to match the new messages immediately.
+
+**Why**: Tests fail after refactoring error handling because they assert on specific error messages. If tests aren't updated, you get false negatives — the implementation is correct but tests say it's broken. Updating tests during the refactoring phase (not after) keeps the test suite green and prevents later debugging confusion.
+
+**Applies to**: Any phase that changes error messages, error wrapping, or error-handling patterns. Examples: standardizing error messages across multiple API clients, adding context wrappers, migrating from raw errors to typed errors. After Phase 2 (frontend-scaffold): test updates were deferred but should have been immediate.
