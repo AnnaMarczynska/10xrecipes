@@ -3,7 +3,7 @@ project: 10xRecipes
 version: 1
 status: draft
 created: 2026-08-27
-updated: 2026-09-02T13:00:00Z
+updated: 2026-09-07T13:00:00Z
 
 
 prd_version: 1
@@ -51,7 +51,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | ID    | Change ID              | Outcome (user can …)                                    | Prerequisites    | PRD refs       | Status   |
 |-------|------------------------|---------------------------------------------------------|------------------|----------------|----------|
 | F-01  | api-scaffold           | (foundation) API REST structure + TheMealDB client      | —                | FR-007, FR-008 | done |
-| F-02  | frontend-scaffold      | (foundation) React/Vite app + API client               | —                | UI layer       | proposed |
+| F-02  | frontend-scaffold      | (foundation) React/Vite app + API client               | —                | UI layer       | planning |
 | F-03  | auth-scaffold          | (foundation) Spring Security + JWT auth configured     | F-01             | FR-001–003     | done |
 | F-04  | data-integration       | (foundation) JPA + PostgreSQL + Cloud SQL wired        | F-01             | user persistence | done |
 | F-05  | deploy-scaffold        | (foundation) Dockerfile + Cloud Run + GitHub Actions   | F-01, F-02       | deployment     | proposed |
@@ -115,7 +115,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** React tooling complexity (build, dev server, package versions); Vite is mature but initial setup must be clean. Mitigate: use create-vite template, lock dependencies.
-- **Status:** proposed
+- **Status:** planning
 
 ### F-03: Auth scaffold
 
