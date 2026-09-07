@@ -58,7 +58,7 @@ Users struggle to find recipes from what they have in the kitchen. This friction
 | S-01  | guest-search           | search recipes by ingredient without an account        | F-01, F-02       | US-01, FR-004–008 | done |
 | S-02  | user-auth              | create account, log in with email + password           | F-01, F-02, F-03 | FR-001–003     | done |
 | S-03  | favorites              | save recipes to favorites, view list, remove           | S-02, F-04       | FR-009, FR-010 | done |
-| S-04  | allergens              | add allergens to profile, see recipe warnings          | S-02, F-04       | FR-014–016     | blocked  |
+| S-04  | allergens              | add allergens to profile, see recipe warnings          | S-02, F-04       | FR-014–016     | planning |
 | S-05  | favorite-notes         | add/edit/delete notes on favorite recipes              | S-03, F-04       | FR-011–013     | proposed |
 
 ---
@@ -217,7 +217,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - What is the authoritative allergen list (peanuts, tree nuts, shellfish, dairy, eggs, soy, wheat, sesame, fish, etc.)? — Owner: user. Block: **YES** (can't implement without knowing which allergens to offer). This is PRD Open Question #3.
   - Where does allergen data for recipes come from? (TheMealDB doesn't include allergen tags, so we'd need to source/maintain this separately.) — Owner: user. Block: **YES** (gates the entire feature).
 - **Risk:** Allergen accuracy is safety-critical. Incorrect allergen tags could lead to user allergic reaction and legal liability. Mitigation per PRD: include prominent disclaimer that users should verify allergen info independently. Mitigate: start with common 8 allergens (USDA list); update recipe allergen data manually or via crowdsourcing; re-verify quarterly.
-- **Status:** **blocked** — unresolved Open Questions #3 (allergen list) and #5 (allergen data source) gate this slice.
+- **Status:** planning — Open Questions #3 (allergen list) and #5 (allergen data source) resolved. Plan: USDA "big 8" + manual tagging of top 100 recipes, crowdsource post-launch.
 
 ### S-05: Notes on favorite recipes
 
