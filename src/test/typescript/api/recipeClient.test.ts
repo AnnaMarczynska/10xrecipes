@@ -1,184 +1,103 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { AxiosError } from 'axios';
 import { searchRecipes, getRecipeDetails, getIngredients } from '../../../api/recipeClient';
 
-// Mock localStorage for Node.js test environment
-const localStorageMock = {
-  getItem: vi.fn(() => null),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
-Object.defineProperty(globalThis, 'localStorage', {
-  value: localStorageMock,
-});
+// Mock axios interceptor
+vi.mock('../../../api/interceptor', () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(),
+  },
+}));
 
 // Mock the cache module
 vi.mock('../../../api/cache', () => ({
-  getCached: vi.fn(() => null),
-  setCached: vi.fn(),
+  getCachedOrFetch: vi.fn((key, fn) => fn()),
   getCacheKey: vi.fn((ingredients, timeRange) => `search_${ingredients.join(',')}_${timeRange}`),
 }));
 
-describe('RecipeClient Timeout Handling', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
+describe('RecipeClient Error Handling', () => {
+  let axiosInstance: any;
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const mod = await import('../../../api/interceptor');
+    axiosInstance = mod.default;
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it('should handle timeout errors with standardized message', async () => {
+    const error = new AxiosError('Request timeout');
+    error.code = 'ECONNABORTED';
+
+    vi.mocked(axiosInstance.post).mockRejectedValue(error);
+
+    await expect(searchRecipes(['chicken'], '30-60')).rejects.toThrow(
+      'Request timed out after 5 seconds'
+    );
   });
 
-  // Helper to set global fetch
-  const setGlobalFetch = (fn: any) => {
-    (globalThis as any).fetch = fn;
-  };
+  it('should handle API errors with server message', async () => {
+    const error = new AxiosError('Server error');
+    error.response = {
+      data: {
+        error: { message: 'Ingredients not found' },
+      },
+    } as any;
 
-  it('should timeout searchRecipes after 5 seconds on slow server', async () => {
-    // Mock fetch to reject when abort signal fires
-    const fetchMock = vi.fn(async (_url: string, options: any) => {
-      return new Promise((_, reject) => {
-        if (options?.signal) {
-          options.signal.addEventListener('abort', () => {
-            const error = new Error('The operation was aborted.');
-            (error as any).name = 'AbortError';
-            reject(error);
-          });
-        }
-        // Simulate never resolving (slow server)
-      });
-    });
-    setGlobalFetch(fetchMock);
+    vi.mocked(axiosInstance.post).mockRejectedValue(error);
 
-    const promise = searchRecipes(['chicken'], '30-60');
-
-    // Advance time by 5 seconds
-    vi.advanceTimersByTime(5000);
-
-    // Expect timeout error
-    await expect(promise).rejects.toThrow(/timed out after 5 seconds/i);
+    await expect(searchRecipes(['chicken'], '30-60')).rejects.toThrow('Ingredients not found');
   });
 
-  it('should timeout getRecipeDetails after 5 seconds on slow server', async () => {
-    const fetchMock = vi.fn(async (_url: string, options: any) => {
-      return new Promise((_, reject) => {
-        if (options?.signal) {
-          options.signal.addEventListener('abort', () => {
-            const error = new Error('The operation was aborted.');
-            (error as any).name = 'AbortError';
-            reject(error);
-          });
-        }
-      });
-    });
-    setGlobalFetch(fetchMock);
+  it('should handle generic network errors with fallback', async () => {
+    const error = new Error('Network error');
 
-    const promise = getRecipeDetails('123');
+    vi.mocked(axiosInstance.post).mockRejectedValue(error);
 
-    vi.advanceTimersByTime(5000);
-
-    await expect(promise).rejects.toThrow(/timed out after 5 seconds/i);
+    await expect(searchRecipes(['chicken'], '30-60')).rejects.toThrow(
+      'Failed to search recipes'
+    );
   });
 
-  it('should timeout getIngredients after 5 seconds on slow server', async () => {
-    const fetchMock = vi.fn(async (_url: string, options: any) => {
-      return new Promise((_, reject) => {
-        if (options?.signal) {
-          options.signal.addEventListener('abort', () => {
-            const error = new Error('The operation was aborted.');
-            (error as any).name = 'AbortError';
-            reject(error);
-          });
-        }
-      });
-    });
-    setGlobalFetch(fetchMock);
-
-    const promise = getIngredients();
-
-    vi.advanceTimersByTime(5000);
-
-    await expect(promise).rejects.toThrow(/timed out after 5 seconds/i);
-  });
-
-  it('should succeed on fast response (before timeout)', async () => {
+  it('should succeed on valid response', async () => {
     const mockResponse = {
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        results: [
-          { id: '1', name: 'Chicken Recipe', image: 'img.jpg', cookTime: 30, matchedIngredientCount: 1, matchPercentage: 100, score: 100 },
-        ],
-        total: 1,
-      }),
+      data: {
+        data: {
+          results: [
+            { id: '1', name: 'Chicken Recipe', image: 'img.jpg', cookTime: 30, matchedIngredientCount: 1, matchPercentage: 100, score: 100 },
+          ],
+          total: 1,
+        },
+      },
     };
 
-    const fetchMock = vi.fn().mockResolvedValue(mockResponse);
-    setGlobalFetch(fetchMock);
+    vi.mocked(axiosInstance.post).mockResolvedValue(mockResponse);
 
-    const promise = searchRecipes(['chicken'], '30-60');
-
-    // Advance time by 2 seconds (less than 5s timeout)
-    vi.advanceTimersByTime(2000);
-
-    const result = await promise;
+    const result = await searchRecipes(['chicken'], '30-60');
 
     expect(result.total).toBe(1);
     expect(result.results[0].name).toBe('Chicken Recipe');
   });
 
-  it('should clear timeout on successful response', async () => {
-    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
+  it('should handle recipe details timeout', async () => {
+    const error = new AxiosError('Timeout');
+    error.code = 'ECONNABORTED';
 
-    const mockResponse = {
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        results: [],
-        total: 0,
-      }),
-    };
+    vi.mocked(axiosInstance.get).mockRejectedValue(error);
 
-    const fetchMock = vi.fn().mockResolvedValue(mockResponse);
-    setGlobalFetch(fetchMock);
-
-    const promise = searchRecipes(['chicken'], '30-60');
-
-    vi.advanceTimersByTime(1000);
-
-    await promise;
-
-    expect(clearTimeoutSpy).toHaveBeenCalled();
+    await expect(getRecipeDetails('123')).rejects.toThrow(
+      'Request timed out after 5 seconds'
+    );
   });
 
-  it('should clear timeout on error (non-abort)', async () => {
-    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
+  it('should handle ingredients timeout', async () => {
+    const error = new AxiosError('Timeout');
+    error.code = 'ECONNABORTED';
 
-    const fetchMock = vi.fn().mockRejectedValue(new Error('Network error'));
-    setGlobalFetch(fetchMock);
+    vi.mocked(axiosInstance.get).mockRejectedValue(error);
 
-    const promise = searchRecipes(['chicken'], '30-60');
-
-    vi.advanceTimersByTime(1000);
-
-    await expect(promise).rejects.toThrow('Network error');
-
-    expect(clearTimeoutSpy).toHaveBeenCalled();
-  });
-
-  it('should pass AbortSignal to fetch call', async () => {
-    const mockResponse = {
-      ok: true,
-      json: vi.fn().mockResolvedValue({ results: [], total: 0 }),
-    };
-
-    const fetchMock = vi.fn().mockResolvedValue(mockResponse);
-    setGlobalFetch(fetchMock);
-
-    await searchRecipes(['chicken'], '30-60');
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api/recipes/search',
-      expect.objectContaining({
-        signal: expect.any(AbortSignal),
-      })
+    await expect(getIngredients()).rejects.toThrow(
+      'Request timed out after 5 seconds'
     );
   });
 });

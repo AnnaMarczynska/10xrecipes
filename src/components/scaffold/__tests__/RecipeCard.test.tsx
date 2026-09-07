@@ -27,9 +27,9 @@ describe('RecipeCard', () => {
     );
 
     expect(screen.getByText('Chicken Couscous')).toBeTruthy();
-    expect(screen.getByText('18 min')).toBeTruthy();
+    expect(screen.getByText(/18 min/)).toBeTruthy();
     expect(screen.getByText('1 ingredients matched')).toBeTruthy();
-    expect(screen.getByText('100% match')).toBeTruthy();
+    expect(screen.getByText(/100% match/)).toBeTruthy();
   });
 
   it('should show outline heart icon when not favorited', () => {

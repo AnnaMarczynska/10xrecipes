@@ -77,7 +77,7 @@ describe('FavoritesPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/recipes saved/)).toBeTruthy();
+      expect(screen.getByText(/Your saved recipes/)).toBeTruthy();
       expect(screen.getByText('Chicken Couscous')).toBeTruthy();
       expect(screen.getByText('Chicken Alfredo Primavera')).toBeTruthy();
     });

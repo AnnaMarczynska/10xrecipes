@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { AxiosError } from 'axios';
 import { authClient } from '../authClient';
 import * as tokenStorage from '../../utils/tokenStorage';
 
@@ -36,12 +37,12 @@ describe('authClient', () => {
     });
 
     it('should throw error on signup failure', async () => {
-      const error = new Error('Email already registered');
-      (error as any).response = {
+      const error = new AxiosError('Email already registered');
+      error.response = {
         data: {
           error: { message: 'Email already registered' },
         },
-      };
+      } as any;
 
       const interceptor = await import('../interceptor');
       vi.mocked(interceptor.default.post).mockRejectedValue(error);
@@ -73,12 +74,12 @@ describe('authClient', () => {
     });
 
     it('should throw error on invalid credentials', async () => {
-      const error = new Error('Invalid credentials');
-      (error as any).response = {
+      const error = new AxiosError('Invalid credentials');
+      error.response = {
         data: {
           error: { message: 'Invalid credentials' },
         },
-      };
+      } as any;
 
       const interceptor = await import('../interceptor');
       vi.mocked(interceptor.default.post).mockRejectedValue(error);
@@ -108,16 +109,15 @@ describe('authClient', () => {
     });
 
     it('should delete token even on logout error', async () => {
-      const errorResponse = {
-        response: {
-          data: {
-            error: { message: 'Logout failed' },
-          },
+      const error = new AxiosError('Logout failed');
+      error.response = {
+        data: {
+          error: { message: 'Logout failed' },
         },
-      };
+      } as any;
 
       const interceptor = await import('../interceptor');
-      vi.mocked(interceptor.default.get).mockRejectedValue(errorResponse);
+      vi.mocked(interceptor.default.get).mockRejectedValue(error);
 
       await expect(authClient.logout()).rejects.toThrow('Logout failed');
       expect(tokenStorage.tokenStorage.deleteToken).toHaveBeenCalled();
@@ -144,18 +144,17 @@ describe('authClient', () => {
     });
 
     it('should throw error if profile fetch fails', async () => {
-      const errorResponse = {
-        response: {
-          data: {
-            error: { message: 'Unauthorized' },
-          },
+      const error = new AxiosError('Unauthorized');
+      error.response = {
+        data: {
+          error: { message: 'Unauthorized' },
         },
-      };
+      } as any;
 
       const interceptor = await import('../interceptor');
-      vi.mocked(interceptor.default.get).mockRejectedValue(errorResponse);
+      vi.mocked(interceptor.default.get).mockRejectedValue(error);
 
-      await expect(authClient.getProfile()).rejects.toThrow('Failed to fetch profile');
+      await expect(authClient.getProfile()).rejects.toThrow('Unauthorized');
     });
   });
 });
