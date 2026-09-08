@@ -18,9 +18,16 @@ WORKDIR /build
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy source and build
-COPY src src
-COPY tsconfig.json eslint.config.js index.html ./
+# Copy frontend source only (TypeScript/React files)
+COPY src/api ./src/api
+COPY src/components ./src/components
+COPY src/context ./src/context
+COPY src/hooks ./src/hooks
+COPY src/pages ./src/pages
+COPY src/styles ./src/styles
+COPY src/utils ./src/utils
+COPY src/App.tsx src/App.css src/index.css src/main.tsx src/vite-env.d.ts ./src/
+COPY tsconfig.json vite.config.ts index.html ./
 RUN npm run build
 
 # Stage 3: Runtime - Spring Boot + Frontend static files
