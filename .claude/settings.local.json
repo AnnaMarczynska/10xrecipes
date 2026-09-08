@@ -104,7 +104,15 @@
       "Read(//usr/libexec/**)",
       "Bash(/usr/libexec/java_home -v 21)",
       "Bash(brew list *)",
-      "Bash(export *)"
+      "Bash(export *)",
+      "Bash(./mvnw spring-boot:run -Dspring-boot.run.arguments=\"--spring.profiles.active=dev\")",
+      "Bash(chmod +x /tmp/test_flow.sh)",
+      "Bash(/tmp/test_flow.sh)",
+      "Bash(git show *)",
+      "Bash(npm ls *)",
+      "Bash(pkill -f \"npm run dev\")",
+      "Bash(pkill -f \"python.*http.server\")",
+      "Bash(python3 -m http.server 8080)"
     ]
   }
 }

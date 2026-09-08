@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,5 +46,21 @@ public class IngredientController {
         return ResponseEntity.ok()
             .cacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic())
             .body(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchIngredients(@RequestParam String query) {
+        String searchQuery = query.toLowerCase().trim();
+        List<String> matches = COMMON_INGREDIENTS.stream()
+            .filter(ing -> ing.toLowerCase().contains(searchQuery))
+            .sorted()
+            .limit(10)
+            .toList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", Map.of("suggestions", matches));
+        response.put("status", 200);
+
+        return ResponseEntity.ok(response);
     }
 }

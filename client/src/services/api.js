@@ -93,3 +93,55 @@ export const favoriteAPI = {
     return response.json();
   },
 };
+
+export const ingredientAPI = {
+  search: async (query) => {
+    const response = await fetch(`${API_BASE}/ingredients/search?query=${encodeURIComponent(query)}`);
+    if (!response.ok) throw new Error('Failed to search ingredients');
+    return response.json();
+  },
+
+  getAll: async () => {
+    const response = await fetch(`${API_BASE}/ingredients`);
+    if (!response.ok) throw new Error('Failed to fetch ingredients');
+    return response.json();
+  },
+};
+
+export const allergenAPI = {
+  getCommon: async () => {
+    const response = await fetch(`${API_BASE}/allergens/common`);
+    if (!response.ok) throw new Error('Failed to fetch allergens');
+    return response.json();
+  },
+
+  getUserAllergens: async (token) => {
+    const response = await fetch(`${API_BASE}/allergens`, {
+      headers: getAuthHeader(token),
+    });
+    if (!response.ok) throw new Error('Failed to fetch user allergens');
+    return response.json();
+  },
+
+  add: async (allergen, token) => {
+    const response = await fetch(`${API_BASE}/allergens`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader(token),
+      },
+      body: JSON.stringify({ allergen }),
+    });
+    if (!response.ok) throw new Error('Failed to add allergen');
+    return response.json();
+  },
+
+  remove: async (allergenId, token) => {
+    const response = await fetch(`${API_BASE}/allergens/${allergenId}`, {
+      method: 'DELETE',
+      headers: getAuthHeader(token),
+    });
+    if (!response.ok) throw new Error('Failed to remove allergen');
+    return response.json();
+  },
+};

@@ -1,6 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { recipeAPI, favoriteAPI } from '../services/api';
+import { recipeAPI, favoriteAPI, ingredientAPI, allergenAPI } from '../services/api';
 import { RecipeCard } from './RecipeCard';
 
 const TIME_RANGES = ['<15', '15-30', '30-60', '60+'];
@@ -9,21 +9,84 @@ export function RecipeSearch() {
   const { token } = useContext(AuthContext);
   const [ingredients, setIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [timeRange, setTimeRange] = useState('30-60');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState(new Set());
+  const [userAllergens, setUserAllergens] = useState([]);
+  const [commonAllergens, setCommonAllergens] = useState([]);
+  const [showAllergens, setShowAllergens] = useState(false);
+
+  // Load common allergens on mount
+  useEffect(() => {
+    allergenAPI.getCommon().then(res => {
+      setCommonAllergens(res.data?.allergens || []);
+    }).catch(() => {});
+
+    if (token) {
+      allergenAPI.getUserAllergens(token).then(res => {
+        setUserAllergens((res.allergens || []).map(a => a.id));
+      }).catch(() => {});
+    }
+  }, [token]);
+
+  // Handle ingredient search with autocomplete
+  const handleIngredientChange = async (value) => {
+    setCurrentIngredient(value);
+    if (value.trim().length >= 2) {
+      try {
+        const response = await ingredientAPI.search(value);
+        setSuggestions(response.data?.suggestions || []);
+        setShowSuggestions(true);
+      } catch (err) {
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectSuggestion = (suggestion) => {
+    if (!ingredients.includes(suggestion)) {
+      setIngredients([...ingredients, suggestion]);
+    }
+    setCurrentIngredient('');
+    setSuggestions([]);
+    setShowSuggestions(false);
+  };
 
   const addIngredient = () => {
     if (currentIngredient.trim() && !ingredients.includes(currentIngredient)) {
       setIngredients([...ingredients, currentIngredient]);
       setCurrentIngredient('');
+      setSuggestions([]);
+      setShowSuggestions(false);
     }
   };
 
   const removeIngredient = (ing) => {
     setIngredients(ingredients.filter(i => i !== ing));
+  };
+
+  const handleAllergenToggle = async (allergen, isAdded) => {
+    try {
+      if (isAdded) {
+        await allergenAPI.add(allergen, token);
+        setUserAllergens([...userAllergens, allergen]);
+      } else {
+        const allergenId = userAllergens.indexOf(allergen);
+        if (allergenId >= 0) {
+          await allergenAPI.remove(allergenId, token);
+          setUserAllergens(userAllergens.filter((_, i) => i !== allergenId));
+        }
+      }
+    } catch (err) {
+      setError(`Failed to update allergen: ${err.message}`);
+    }
   };
 
   const handleSearch = async () => {
@@ -62,22 +125,58 @@ export function RecipeSearch() {
         {/* Ingredients */}
         <div style={{ marginBottom: '24px' }}>
           <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '8px' }}>Ingredients</label>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-            <input
-              type="text"
-              value={currentIngredient}
-              onChange={(e) => setCurrentIngredient(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && addIngredient()}
-              style={{
-                flex: 1,
-                padding: '10px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '14px',
-                fontFamily: 'inherit',
-              }}
-              placeholder="e.g., chicken, pasta..."
-            />
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', position: 'relative' }}>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <input
+                type="text"
+                value={currentIngredient}
+                onChange={(e) => handleIngredientChange(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addIngredient()}
+                onFocus={() => currentIngredient.length >= 2 && setShowSuggestions(true)}
+                style={{
+                  flex: 1,
+                  padding: '10px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontFamily: 'inherit',
+                  width: '100%',
+                }}
+                placeholder="e.g., chicken, pasta..."
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  backgroundColor: 'white',
+                  border: '1px solid #d1d5db',
+                  borderTop: 'none',
+                  borderRadius: '0 0 6px 6px',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  zIndex: 10,
+                }}>
+                  {suggestions.map((s) => (
+                    <div
+                      key={s}
+                      onClick={() => selectSuggestion(s)}
+                      style={{
+                        padding: '10px 16px',
+                        cursor: 'pointer',
+                        backgroundColor: '#f9fafb',
+                        borderBottom: '1px solid #e5e7eb',
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f9ff'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                    >
+                      {s}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               onClick={addIngredient}
               style={{
@@ -125,6 +224,38 @@ export function RecipeSearch() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Allergens */}
+        <div style={{ marginBottom: '16px' }}>
+          <button
+            onClick={() => setShowAllergens(!showAllergens)}
+            style={{
+              fontSize: '13px',
+              fontWeight: '600',
+              color: '#2563eb',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+            }}
+          >
+            {showAllergens ? '▼' : '▶'} Allergen Preferences ({userAllergens.length})
+          </button>
+          {showAllergens && (
+            <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {commonAllergens.map((allergen) => (
+                <label key={allergen} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <input
+                    type="checkbox"
+                    checked={userAllergens.includes(allergen)}
+                    onChange={(e) => handleAllergenToggle(allergen, e.target.checked)}
+                  />
+                  <span style={{ fontSize: '13px', color: '#666' }}>{allergen}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Time Range */}

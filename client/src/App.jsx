@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from './context/AuthContext';
 import { Login } from './components/Login';
 import { RecipeSearch } from './components/RecipeSearch';
+import { Favorites } from './components/Favorites';
 import './index.css';
 
 function App() {
@@ -78,11 +79,7 @@ function App() {
       {/* Content */}
       <main style={{ padding: '24px 16px' }}>
         {currentPage === 'search' && <RecipeSearch />}
-        {currentPage === 'favorites' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px', textAlign: 'center', color: '#999' }}>
-            Favorites feature coming soon...
-          </div>
-        )}
+        {currentPage === 'favorites' && <Favorites />}
       </main>
     </div>
   );

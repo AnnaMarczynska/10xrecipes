@@ -6,6 +6,7 @@ import com.example._x_recipes.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,22 @@ public class AllergenController {
     private final AllergenService allergenService;
     private final AuthService authService;
 
+    private static final List<String> COMMON_ALLERGENS = Arrays.asList(
+        "peanuts", "tree nuts", "milk", "eggs", "fish", "shellfish", "soy", "wheat",
+        "sesame", "mustard", "celery", "sulfites"
+    );
+
     public AllergenController(AllergenService allergenService, AuthService authService) {
         this.allergenService = allergenService;
         this.authService = authService;
+    }
+
+    @GetMapping("/common")
+    public ResponseEntity<?> getCommonAllergens() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", Map.of("allergens", COMMON_ALLERGENS));
+        response.put("status", 200);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
