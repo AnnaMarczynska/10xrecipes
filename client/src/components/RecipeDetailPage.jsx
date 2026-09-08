@@ -5,31 +5,53 @@ import { recipeAPI, favoriteAPI } from '../services/api';
 export function RecipeDetailPage({ recipe, onBack }) {
   const { token } = useContext(AuthContext);
   const [fullRecipe, setFullRecipe] = useState(recipe);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!recipe) return null;
+  if (!recipe) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>No recipe selected</p>
+      </div>
+    );
+  }
 
   // Fetch full recipe details on mount
   useEffect(() => {
     const fetchDetails = async () => {
       try {
+        console.log('Fetching recipe details for ID:', recipe.id);
         setLoading(true);
         const response = await recipeAPI.getDetails(recipe.id, token);
-        // API returns recipe data directly in response.data
-        const recipeData = response.data || recipe;
-        console.log('Fetched recipe data:', recipeData);
-        setFullRecipe(recipeData);
+        console.log('Full recipe response:', response);
+        console.log('Response data:', response.data);
+        console.log('Response data keys:', response.data ? Object.keys(response.data) : 'no data');
+
+        if (response && response.data) {
+          console.log('Ingredients in response:', response.data.ingredients);
+          console.log('Instructions in response:', response.data.instructions);
+          setFullRecipe(response.data);
+          console.log('Set fullRecipe to:', response.data);
+        } else {
+          console.warn('No data in response, using original recipe');
+          setFullRecipe(recipe);
+        }
       } catch (err) {
         console.error('Failed to fetch recipe details:', err);
+        setError(`Error loading recipe: ${err.message}`);
         setFullRecipe(recipe);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDetails();
+    if (recipe && recipe.id) {
+      fetchDetails();
+    } else {
+      console.warn('Recipe or recipe.id missing:', recipe);
+      setLoading(false);
+    }
   }, [recipe.id, token]);
 
   const handleAddFavorite = async () => {
@@ -40,6 +62,22 @@ export function RecipeDetailPage({ recipe, onBack }) {
       setError(`Failed to add favorite: ${err.message}`);
     }
   };
+
+  // Use fullRecipe if available, fallback to recipe prop
+  const displayRecipe = fullRecipe || recipe;
+
+  if (!displayRecipe) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafb' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: '16px', color: '#666' }}>No recipe data available</p>
+          <button onClick={onBack} style={{ marginTop: '20px', padding: '8px 16px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', paddingBottom: '40px' }}>
@@ -84,11 +122,18 @@ export function RecipeDetailPage({ recipe, onBack }) {
           </div>
         )}
 
+        {/* Loading indicator */}
+        {loading && (
+          <div style={{ padding: '12px 16px', backgroundColor: '#dbeafe', border: '1px solid #93c5fd', color: '#1e40af', borderRadius: '6px', marginBottom: '16px', fontSize: '13px' }}>
+            ⏳ Loading full recipe details...
+          </div>
+        )}
+
         {/* Recipe Image */}
-        {fullRecipe.image && (
+        {displayRecipe.image && (
           <img
-            src={fullRecipe.image}
-            alt={fullRecipe.name}
+            src={displayRecipe.image}
+            alt={displayRecipe.name}
             style={{
               width: '100%',
               height: 'auto',
@@ -103,7 +148,7 @@ export function RecipeDetailPage({ recipe, onBack }) {
         {/* Recipe Name */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px', gap: '16px' }}>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333', margin: 0 }}>
-            {fullRecipe.name}
+            {displayRecipe.name}
           </h1>
           <button
             onClick={handleAddFavorite}
@@ -135,23 +180,23 @@ export function RecipeDetailPage({ recipe, onBack }) {
           borderRadius: '8px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}>
-          {fullRecipe.cookTime && (
+          {displayRecipe.cookTime && (
             <div>
               <p style={{ fontSize: '12px', color: '#666', marginBottom: '8px', fontWeight: '600' }}>
                 COOKING TIME
               </p>
               <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
-                ⏱️ {fullRecipe.cookTime} min
+                ⏱️ {displayRecipe.cookTime} min
               </p>
             </div>
           )}
-          {fullRecipe.matchPercentage && (
+          {displayRecipe.matchPercentage && (
             <div>
               <p style={{ fontSize: '12px', color: '#666', marginBottom: '8px', fontWeight: '600' }}>
                 INGREDIENT MATCH
               </p>
               <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#2563eb' }}>
-                {fullRecipe.matchPercentage}%
+                {displayRecipe.matchPercentage}%
               </p>
             </div>
           )}
@@ -176,18 +221,18 @@ export function RecipeDetailPage({ recipe, onBack }) {
             borderRadius: '8px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}>
-            {fullRecipe.ingredients && fullRecipe.ingredients.length > 0 ? (
-              fullRecipe.ingredients.map((ingredient, index) => (
+            {displayRecipe.ingredients && displayRecipe.ingredients.length > 0 ? (
+              displayRecipe.ingredients.map((ingredient, index) => (
                 <li
                   key={index}
                   style={{
                     padding: '12px 0',
                     color: '#666',
-                    borderBottom: index < fullRecipe.ingredients.length - 1 ? '1px solid #eee' : 'none',
+                    borderBottom: index < displayRecipe.ingredients.length - 1 ? '1px solid #eee' : 'none',
                     fontSize: '15px',
                   }}
                 >
-                  ✓ {ingredient}
+                  ✓ {ingredient.name || ingredient}
                 </li>
               ))
             ) : (
@@ -197,7 +242,7 @@ export function RecipeDetailPage({ recipe, onBack }) {
         </section>
 
         {/* Instructions */}
-        {fullRecipe.instructions && (
+        {displayRecipe.instructions && (
           <section>
             <h2 style={{
               fontSize: '22px',
@@ -219,7 +264,7 @@ export function RecipeDetailPage({ recipe, onBack }) {
               whiteSpace: 'pre-wrap',
               fontSize: '15px',
             }}>
-              {fullRecipe.instructions}
+              {displayRecipe.instructions}
             </div>
           </section>
         )}
