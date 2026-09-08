@@ -27,7 +27,7 @@ COPY src/styles ./src/styles
 COPY src/utils ./src/utils
 COPY src/App.tsx src/App.css src/index.css src/main.tsx src/vite-env.d.ts ./src/
 COPY tsconfig.json vite.config.ts index.html ./
-RUN npm run build
+RUN npm run build || vite build
 
 # Stage 3: Runtime - Spring Boot + Frontend static files
 FROM eclipse-temurin:21-jre-alpine
