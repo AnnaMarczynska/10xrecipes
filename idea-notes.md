@@ -8,7 +8,6 @@ forcing to order more expansive and less healthy food.
 ### MVP
 - selecting products based on available list
 - selecting time to prepare meal based on available list
-- selecting meal type based on available options
 - searching through list of available recipes
 - adding favourite recipes
 - adding, editing and deleting notes for favourite recipes
