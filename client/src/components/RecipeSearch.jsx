@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { recipeAPI, favoriteAPI, ingredientAPI, allergenAPI } from '../services/api';
 import { RecipeCard } from './RecipeCard';
+import { RecipeDetail } from './RecipeDetail';
 
 const TIME_RANGES = ['<15', '15-30', '30-60', '60+'];
 
@@ -19,6 +20,7 @@ export function RecipeSearch() {
   const [userAllergens, setUserAllergens] = useState([]);
   const [commonAllergens, setCommonAllergens] = useState([]);
   const [showAllergens, setShowAllergens] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   // Load common allergens on mount
   useEffect(() => {
@@ -118,6 +120,9 @@ export function RecipeSearch() {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+      {/* Recipe Detail Modal */}
+      <RecipeDetail recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />
+
       {/* Search Panel */}
       <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', padding: '24px', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>Find Recipes</h2>
@@ -333,6 +338,7 @@ export function RecipeSearch() {
               recipe={recipe}
               isFavorite={favorites.has(recipe.id)}
               onAddFavorite={() => handleAddFavorite(recipe)}
+              onCardClick={() => setSelectedRecipe(recipe)}
             />
           ))}
         </div>

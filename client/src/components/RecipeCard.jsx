@@ -1,13 +1,21 @@
-export function RecipeCard({ recipe, isFavorite, onAddFavorite }) {
+export function RecipeCard({ recipe, isFavorite, onAddFavorite, onCardClick }) {
   return (
-    <div style={{
-      backgroundColor: 'white',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-      transition: 'box-shadow 0.2s',
-      cursor: 'pointer',
-    }}>
+    <div
+      onClick={() => onCardClick && onCardClick(recipe)}
+      style={{
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        overflow: 'hidden',
+        transition: 'box-shadow 0.2s',
+        cursor: 'pointer',
+        '&:hover': {
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        }
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)'}
+      onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'}
+    >
       {recipe.image && (
         <img
           src={recipe.image}
