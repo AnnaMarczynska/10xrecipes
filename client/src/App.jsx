@@ -47,7 +47,10 @@ function App() {
       <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '16px' }}>
           <button
-            onClick={() => setCurrentPage('search')}
+            onClick={() => {
+              setCurrentPage('search');
+              setSelectedRecipe(null);
+            }}
             style={{
               padding: '12px 16px',
               fontWeight: '600',
@@ -62,7 +65,10 @@ function App() {
             🔍 Search
           </button>
           <button
-            onClick={() => setCurrentPage('favorites')}
+            onClick={() => {
+              setCurrentPage('favorites');
+              setSelectedRecipe(null);
+            }}
             style={{
               padding: '12px 16px',
               fontWeight: '600',
