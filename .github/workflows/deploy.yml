@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: tenx-recipes
   REGION: us-central1
-  SERVICE_NAME: 10x-recipes-api
+  SERVICE_NAME: recipes-api
   REGISTRY: us-central1-docker.pkg.dev
   REPOSITORY: recipes-docker
   IMAGE: 10x-recipes
