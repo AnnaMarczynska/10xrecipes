@@ -1,7 +1,12 @@
 export function RecipeCard({ recipe, isFavorite, onAddFavorite, onCardClick }) {
   return (
     <div
-      onClick={() => onCardClick && onCardClick(recipe)}
+      onClick={(e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          console.log('Card clicked, opening recipe details');
+          onCardClick && onCardClick(recipe);
+        }
+      }}
       style={{
         backgroundColor: 'white',
         borderRadius: '8px',
@@ -60,7 +65,10 @@ export function RecipeCard({ recipe, isFavorite, onAddFavorite, onCardClick }) {
         )}
 
         <button
-          onClick={onAddFavorite}
+          onClick={(e) => {
+            console.log('Favorite button clicked');
+            onAddFavorite();
+          }}
           disabled={isFavorite}
           style={{
             width: '100%',
