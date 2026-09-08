@@ -1,88 +1,6 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #fed7aa 0%, #fecaca 100%)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '16px',
-  },
-  card: {
-    background: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-    padding: '32px',
-    width: '100%',
-    maxWidth: '400px',
-  },
-  title: {
-    fontSize: '28px',
-    fontWeight: 'bold',
-    color: '#ea580c',
-    marginBottom: '8px',
-  },
-  subtitle: {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '24px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  label: {
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: '8px',
-  },
-  input: {
-    width: '100%',
-    padding: '10px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-  },
-  button: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#ea580c',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    fontSize: '14px',
-  },
-  buttonHover: {
-    backgroundColor: '#c2410c',
-  },
-  toggleButton: {
-    width: '100%',
-    marginTop: '16px',
-    padding: '10px',
-    background: 'none',
-    border: 'none',
-    color: '#ea580c',
-    fontWeight: '600',
-    cursor: 'pointer',
-    fontSize: '14px',
-  },
-  error: {
-    background: '#fee2e2',
-    border: '1px solid #fecaca',
-    color: '#991b1b',
-    padding: '12px 16px',
-    borderRadius: '8px',
-    fontSize: '13px',
-  },
-};
-
 export function Login() {
   const { login, register, loading, error } = useContext(AuthContext);
   const [email, setEmail] = useState('');
@@ -105,38 +23,38 @@ export function Login() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>🍽️ 10xRecipes</h1>
-        <p style={styles.subtitle}>Find recipes that match your needs</p>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h1 className="text-3xl font-bold text-orange-600 mb-2">🍽️ 10xRecipes</h1>
+        <p className="text-gray-600 mb-6">Find recipes that match your needs</p>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label style={styles.label}>Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={styles.input}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="you@example.com"
               required
             />
           </div>
 
           <div>
-            <label style={styles.label}>Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="••••••••"
               required
             />
           </div>
 
           {(error || localError) && (
-            <div style={styles.error}>
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
               {error || localError}
             </div>
           )}
@@ -144,11 +62,7 @@ export function Login() {
           <button
             type="submit"
             disabled={loading}
-            style={{
-              ...styles.button,
-              opacity: loading ? 0.5 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }}
+            className="w-full bg-orange-600 text-white py-2 rounded-lg font-medium hover:bg-orange-700 disabled:opacity-50"
           >
             {loading ? 'Loading...' : isRegister ? 'Register' : 'Login'}
           </button>
@@ -156,7 +70,7 @@ export function Login() {
 
         <button
           onClick={() => setIsRegister(!isRegister)}
-          style={styles.toggleButton}
+          className="w-full mt-4 text-orange-600 hover:text-orange-700 font-medium"
         >
           {isRegister ? 'Have an account? Login' : "Don't have an account? Register"}
         </button>

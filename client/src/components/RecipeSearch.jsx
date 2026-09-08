@@ -54,71 +54,40 @@ export function RecipeSearch() {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+    <div className="max-w-6xl mx-auto p-4">
       {/* Search Panel */}
-      <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', padding: '24px', marginBottom: '24px' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>Find Recipes</h2>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Find Recipes</h2>
 
         {/* Ingredients */}
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '8px' }}>Ingredients</label>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Ingredients</label>
+          <div className="flex gap-2 mb-2">
             <input
               type="text"
               value={currentIngredient}
               onChange={(e) => setCurrentIngredient(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addIngredient()}
-              style={{
-                flex: 1,
-                padding: '10px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '14px',
-                fontFamily: 'inherit',
-              }}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
               placeholder="e.g., chicken, pasta..."
             />
             <button
               onClick={addIngredient}
-              style={{
-                padding: '10px 16px',
-                backgroundColor: '#ea580c',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
+              className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
             >
               Add
             </button>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="flex flex-wrap gap-2">
             {ingredients.map((ing) => (
               <div
                 key={ing}
-                style={{
-                  backgroundColor: '#fed7aa',
-                  color: '#9a3412',
-                  padding: '6px 12px',
-                  borderRadius: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
+                className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full flex items-center gap-2"
               >
                 {ing}
                 <button
                   onClick={() => removeIngredient(ing)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#9a3412',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    fontSize: '18px',
-                  }}
+                  className="hover:text-orange-900 font-bold"
                 >
                   ×
                 </button>
@@ -128,23 +97,18 @@ export function RecipeSearch() {
         </div>
 
         {/* Time Range */}
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '8px' }}>Cooking Time</label>
-          <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Cooking Time</label>
+          <div className="flex gap-2">
             {TIME_RANGES.map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
-                style={{
-                  padding: '10px 16px',
-                  borderRadius: '6px',
-                  fontWeight: '600',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: timeRange === range ? '#ea580c' : '#e5e7eb',
-                  color: timeRange === range ? 'white' : '#333',
-                  fontSize: '13px',
-                }}
+                className={`px-4 py-2 rounded-lg font-medium transition ${
+                  timeRange === range
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                }`}
               >
                 {range === '<15' ? '<15min' : range === '60+' ? '60+min' : range + 'min'}
               </button>
@@ -153,15 +117,7 @@ export function RecipeSearch() {
         </div>
 
         {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            border: '1px solid #fecaca',
-            color: '#991b1b',
-            padding: '12px 16px',
-            borderRadius: '6px',
-            marginBottom: '16px',
-            fontSize: '13px',
-          }}>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
@@ -169,18 +125,7 @@ export function RecipeSearch() {
         <button
           onClick={handleSearch}
           disabled={loading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#ea580c',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontWeight: '600',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.5 : 1,
-            fontSize: '14px',
-          }}
+          className="w-full bg-orange-600 text-white py-3 rounded-lg font-medium hover:bg-orange-700 disabled:opacity-50"
         >
           {loading ? 'Searching...' : 'Search Recipes'}
         </button>
@@ -188,14 +133,10 @@ export function RecipeSearch() {
 
       {/* Results */}
       <div>
-        <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>
+        <h3 className="text-xl font-bold text-gray-800 mb-4">
           Results ({results.length})
         </h3>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '16px',
-        }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {results.map((recipe) => (
             <RecipeCard
               key={recipe.id}
@@ -206,7 +147,7 @@ export function RecipeSearch() {
           ))}
         </div>
         {results.length === 0 && !loading && (
-          <div style={{ textAlign: 'center', color: '#999', padding: '32px' }}>
+          <div className="text-center text-gray-500 py-8">
             No recipes found. Try different ingredients or cooking time.
           </div>
         )}

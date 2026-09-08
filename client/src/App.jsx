@@ -13,25 +13,16 @@ function App() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header style={{ backgroundColor: '#ea580c', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>🍽️ 10xRecipes</h1>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            <span style={{ fontSize: '14px' }}>{email}</span>
+      <header className="bg-orange-600 text-white shadow-md">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">🍽️ 10xRecipes</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm">{email}</span>
             <button
               onClick={logout}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#c2410c',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
+              className="px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-medium transition"
             >
               Logout
             </button>
@@ -40,35 +31,25 @@ function App() {
       </header>
 
       {/* Navigation */}
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '16px' }}>
+      <nav className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-4 flex gap-4">
           <button
             onClick={() => setCurrentPage('search')}
-            style={{
-              padding: '12px 16px',
-              fontWeight: '600',
-              borderBottom: currentPage === 'search' ? '2px solid #ea580c' : '2px solid transparent',
-              backgroundColor: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: currentPage === 'search' ? '#ea580c' : '#666',
-              fontSize: '14px',
-            }}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              currentPage === 'search'
+                ? 'border-orange-600 text-orange-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
           >
             🔍 Search
           </button>
           <button
             onClick={() => setCurrentPage('favorites')}
-            style={{
-              padding: '12px 16px',
-              fontWeight: '600',
-              borderBottom: currentPage === 'favorites' ? '2px solid #ea580c' : '2px solid transparent',
-              backgroundColor: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: currentPage === 'favorites' ? '#ea580c' : '#666',
-              fontSize: '14px',
-            }}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              currentPage === 'favorites'
+                ? 'border-orange-600 text-orange-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
           >
             ⭐ Favorites
           </button>
@@ -76,10 +57,10 @@ function App() {
       </nav>
 
       {/* Content */}
-      <main style={{ padding: '24px 16px' }}>
+      <main className="py-6">
         {currentPage === 'search' && <RecipeSearch />}
         {currentPage === 'favorites' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px', textAlign: 'center', color: '#999' }}>
+          <div className="max-w-6xl mx-auto p-4 text-center text-gray-500">
             Favorites feature coming soon...
           </div>
         )}
