@@ -5,14 +5,14 @@ import { RecipeCard } from './RecipeCard';
 
 const TIME_RANGES = ['<15', '15-30', '30-60', '60+'];
 
-export function RecipeSearch({ onRecipeClick }) {
+export function RecipeSearch({ onRecipeClick, previousResults, previousParams, onSearch }) {
   const { token } = useContext(AuthContext);
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState(previousParams?.ingredients || []);
   const [currentIngredient, setCurrentIngredient] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [timeRange, setTimeRange] = useState('30-60');
-  const [results, setResults] = useState([]);
+  const [timeRange, setTimeRange] = useState(previousParams?.timeRange || '30-60');
+  const [results, setResults] = useState(previousResults || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState(new Set());
@@ -135,7 +135,10 @@ export function RecipeSearch({ onRecipeClick }) {
     setError(null);
     try {
       const response = await recipeAPI.search(ingredients, timeRange, token);
-      setResults(response.data?.results || []);
+      const results = response.data?.results || [];
+      setResults(results);
+      // Save search results and params for back navigation
+      onSearch?.(results, { ingredients, timeRange });
     } catch (err) {
       setError(err.message);
     } finally {

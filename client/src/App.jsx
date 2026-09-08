@@ -11,6 +11,8 @@ function App() {
   const [currentPage, setCurrentPage] = useState('search');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [lastSearchResults, setLastSearchResults] = useState([]);
+  const [lastSearchParams, setLastSearchParams] = useState(null);
 
   if (!token) {
     return <Login />;
@@ -101,7 +103,15 @@ function App() {
             }}
           />
         ) : currentPage === 'search' ? (
-          <RecipeSearch onRecipeClick={setSelectedRecipe} />
+          <RecipeSearch
+            onRecipeClick={setSelectedRecipe}
+            previousResults={lastSearchResults}
+            previousParams={lastSearchParams}
+            onSearch={(results, params) => {
+              setLastSearchResults(results);
+              setLastSearchParams(params);
+            }}
+          />
         ) : (
           <Favorites onRecipeClick={setSelectedRecipe} />
         )}
