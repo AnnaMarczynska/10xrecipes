@@ -2,12 +2,13 @@ import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { recipeAPI, favoriteAPI } from '../services/api';
 
-export function RecipeDetailPage({ recipe, onBack }) {
+export function RecipeDetailPage({ recipe, onBack, isFavorited, onFavoriteChange }) {
   const { token } = useContext(AuthContext);
   const [fullRecipe, setFullRecipe] = useState(recipe);
   const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(isFavorited || false);
   const [error, setError] = useState(null);
+  const [favoriteId, setFavoriteId] = useState(null);
 
   if (!recipe) {
     return (
@@ -25,14 +26,11 @@ export function RecipeDetailPage({ recipe, onBack }) {
         setLoading(true);
         const response = await recipeAPI.getDetails(recipe.id, token);
         console.log('Full recipe response:', response);
-        console.log('Response data:', response.data);
-        console.log('Response data keys:', response.data ? Object.keys(response.data) : 'no data');
 
         if (response && response.data) {
           console.log('Ingredients in response:', response.data.ingredients);
           console.log('Instructions in response:', response.data.instructions);
           setFullRecipe(response.data);
-          console.log('Set fullRecipe to:', response.data);
         } else {
           console.warn('No data in response, using original recipe');
           setFullRecipe(recipe);
@@ -54,12 +52,49 @@ export function RecipeDetailPage({ recipe, onBack }) {
     }
   }, [recipe.id, token]);
 
-  const handleAddFavorite = async () => {
+  // Fetch favorite ID if this recipe is favorited
+  useEffect(() => {
+    const fetchFavoriteId = async () => {
+      if (isFavorited && recipe.id) {
+        try {
+          const response = await favoriteAPI.getAll(token);
+          const fav = response.data?.favorites?.find(f => f.recipeId === recipe.id);
+          if (fav) {
+            setFavoriteId(fav.id);
+            console.log('Found favorite ID:', fav.id);
+          }
+        } catch (err) {
+          console.error('Failed to fetch favorite ID:', err);
+        }
+      }
+    };
+
+    fetchFavoriteId();
+  }, [isFavorited, recipe.id, token]);
+
+  const handleFavoriteClick = async () => {
     try {
-      await favoriteAPI.add(recipe.id, recipe.name, token);
-      setIsFavorite(true);
+      if (isFavorite) {
+        // Remove from favorites
+        if (!favoriteId) {
+          setError('Cannot remove: favorite ID not found');
+          return;
+        }
+        console.log('Removing favorite with ID:', favoriteId);
+        await favoriteAPI.remove(favoriteId, token);
+        setIsFavorite(false);
+        setFavoriteId(null);
+        onFavoriteChange?.(recipe.id, false);
+      } else {
+        // Add to favorites
+        console.log('Adding to favorites:', recipe.id, recipe.name);
+        await favoriteAPI.add(recipe.id, recipe.name, token);
+        setIsFavorite(true);
+        onFavoriteChange?.(recipe.id, true);
+      }
     } catch (err) {
-      setError(`Failed to add favorite: ${err.message}`);
+      console.error('Favorite error:', err);
+      setError(`Failed to update favorite: ${err.message}`);
     }
   };
 
@@ -151,21 +186,20 @@ export function RecipeDetailPage({ recipe, onBack }) {
             {displayRecipe.name}
           </h1>
           <button
-            onClick={handleAddFavorite}
-            disabled={isFavorite}
+            onClick={handleFavoriteClick}
             style={{
               padding: '12px 20px',
-              backgroundColor: isFavorite ? '#e5e7eb' : '#2563eb',
-              color: isFavorite ? '#999' : 'white',
+              backgroundColor: isFavorite ? '#fee2e2' : '#2563eb',
+              color: isFavorite ? '#991b1b' : 'white',
               border: 'none',
               borderRadius: '8px',
               fontWeight: '600',
-              cursor: isFavorite ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               fontSize: '14px',
               whiteSpace: 'nowrap',
             }}
           >
-            {isFavorite ? '★ Favorited' : '☆ Add to Favorites'}
+            {isFavorite ? '★ Remove from Favorites' : '☆ Add to Favorites'}
           </button>
         </div>
 

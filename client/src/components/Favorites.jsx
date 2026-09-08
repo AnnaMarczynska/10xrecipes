@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { favoriteAPI } from '../services/api';
+import { favoriteAPI, recipeAPI } from '../services/api';
 
-export function Favorites() {
+export function Favorites({ onRecipeClick }) {
   const { token } = useContext(AuthContext);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,25 @@ export function Favorites() {
     try {
       setLoading(true);
       const response = await favoriteAPI.getAll(token);
-      setFavorites(response.data?.favorites || []);
+      const favs = response.data?.favorites || [];
+
+      // Fetch recipe details (including image) for each favorite
+      const enrichedFavs = await Promise.all(
+        favs.map(async (fav) => {
+          try {
+            const recipeDetails = await recipeAPI.getDetails(fav.recipeId, token);
+            return {
+              ...fav,
+              image: recipeDetails.data?.image || null,
+            };
+          } catch (err) {
+            // If fetch fails, return favorite without image
+            return fav;
+          }
+        })
+      );
+
+      setFavorites(enrichedFavs);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -89,7 +107,12 @@ export function Favorites() {
           No favorites yet. Find some recipes!
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '16px',
+          marginBottom: '24px',
+        }}>
           {favorites.map((fav) => (
             <div
               key={fav.id}
@@ -97,27 +120,70 @@ export function Favorites() {
                 backgroundColor: 'white',
                 borderRadius: '8px',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                padding: '16px',
+                overflow: 'hidden',
                 display: 'flex',
-                gap: '16px',
-                alignItems: 'flex-start',
+                flexDirection: 'column',
               }}
             >
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+              {/* Image Section - Clickable */}
+              {fav.image && (
+                <div
+                  onClick={() => onRecipeClick && onRecipeClick({
+                    id: fav.recipeId,
+                    name: fav.recipeName,
+                    image: fav.image
+                  })}
+                  style={{
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    backgroundColor: '#f0f0f0',
+                    transition: 'transform 0.2s',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                >
+                  <img
+                    src={fav.image}
+                    alt={fav.recipeName}
+                    style={{
+                      width: '100%',
+                      height: '192px',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Content Section */}
+              <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3
+                  onClick={() => onRecipeClick && onRecipeClick({
+                    id: fav.recipeId,
+                    name: fav.recipeName,
+                    image: fav.image
+                  })}
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#333',
+                    marginBottom: '8px',
+                    cursor: 'pointer',
+                  }}
+                >
                   {fav.recipeName}
                 </h3>
-                <div style={{ marginBottom: '12px' }}>
+
+                <div style={{ marginBottom: '12px', flex: 1 }}>
                   <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#666', marginBottom: '4px' }}>
                     Notes
                   </label>
                   {editingId === fav.id ? (
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '4px', flexDirection: 'column' }}>
                       <textarea
                         value={editingNotes}
                         onChange={(e) => setEditingNotes(e.target.value)}
                         style={{
-                          flex: 1,
                           padding: '8px 12px',
                           border: '1px solid #d1d5db',
                           borderRadius: '6px',
@@ -127,11 +193,12 @@ export function Favorites() {
                         }}
                         placeholder="Add notes..."
                       />
-                      <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', gap: '4px' }}>
                         <button
                           onClick={() => handleSaveNotes(fav)}
                           style={{
-                            padding: '8px 12px',
+                            flex: 1,
+                            padding: '6px 12px',
                             backgroundColor: '#2563eb',
                             color: 'white',
                             border: 'none',
@@ -146,7 +213,8 @@ export function Favorites() {
                         <button
                           onClick={() => setEditingId(null)}
                           style={{
-                            padding: '8px 12px',
+                            flex: 1,
+                            padding: '6px 12px',
                             backgroundColor: '#e5e7eb',
                             color: '#333',
                             border: 'none',
@@ -178,26 +246,28 @@ export function Favorites() {
                     </div>
                   )}
                 </div>
-                <div style={{ fontSize: '12px', color: '#666' }}>
-                  Added: {new Date(fav.createdAt || Date.now()).toLocaleDateString()}
+
+                <div style={{ fontSize: '11px', color: '#999', marginBottom: '12px' }}>
+                  {new Date(fav.createdAt || Date.now()).toLocaleDateString()}
                 </div>
+
+                <button
+                  onClick={() => handleRemove(fav)}
+                  style={{
+                    padding: '8px 12px',
+                    backgroundColor: '#fee2e2',
+                    color: '#991b1b',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    width: '100%',
+                  }}
+                >
+                  Remove
+                </button>
               </div>
-              <button
-                onClick={() => handleRemove(fav)}
-                style={{
-                  padding: '8px 12px',
-                  backgroundColor: '#fee2e2',
-                  color: '#991b1b',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Remove
-              </button>
             </div>
           ))}
         </div>

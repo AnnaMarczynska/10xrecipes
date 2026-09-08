@@ -10,6 +10,7 @@ function App() {
   const { token, email, logout } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState('search');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [favoriteIds, setFavoriteIds] = useState(new Set());
 
   if (!token) {
     return <Login />;
@@ -81,11 +82,22 @@ function App() {
       {/* Content */}
       <main style={{ padding: currentPage === 'search' && selectedRecipe ? '0' : '24px 16px' }}>
         {selectedRecipe ? (
-          <RecipeDetailPage recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} />
+          <RecipeDetailPage
+            recipe={selectedRecipe}
+            onBack={() => setSelectedRecipe(null)}
+            isFavorited={favoriteIds.has(selectedRecipe.id)}
+            onFavoriteChange={(recipeId, isFavorited) => {
+              if (isFavorited) {
+                setFavoriteIds(new Set([...favoriteIds, recipeId]));
+              } else {
+                setFavoriteIds(new Set([...favoriteIds].filter(id => id !== recipeId)));
+              }
+            }}
+          />
         ) : currentPage === 'search' ? (
           <RecipeSearch onRecipeClick={setSelectedRecipe} />
         ) : (
-          <Favorites />
+          <Favorites onRecipeClick={setSelectedRecipe} />
         )}
       </main>
     </div>
