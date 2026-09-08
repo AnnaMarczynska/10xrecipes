@@ -2,70 +2,38 @@
 # Stage 1: Build backend JAR
 FROM maven:3.9-eclipse-temurin-21-alpine AS backend-builder
 WORKDIR /build
-
-# Copy Maven files and source
 COPY pom.xml ./
 COPY src src
-
-# Build JAR
 RUN mvn clean package -DskipTests -e
 
-# Stage 2: Build frontend
-FROM node:20-alpine AS frontend-builder
-WORKDIR /build
-
-# Copy package files
-COPY package.json package-lock.json ./
-RUN npm ci
-
-# Copy frontend source only (TypeScript/React files)
-COPY src/api ./src/api
-COPY src/components ./src/components
-COPY src/context ./src/context
-COPY src/pages ./src/pages
-COPY src/styles ./src/styles
-COPY src/utils ./src/utils
-COPY src/App.tsx src/App.css src/index.css src/main.tsx src/vite-env.d.ts ./src/
-COPY tsconfig.json vite.config.ts index.html ./
-RUN npm run build || vite build
-
-# Stage 3: Runtime - Spring Boot + Frontend static files
+# Stage 2: Runtime - Spring Boot + Frontend static files
 FROM eclipse-temurin:21-jre-alpine
 
-# Metadata
 LABEL maintainer="10xRecipes Team"
 LABEL description="10xRecipes MVP - Recipe search API with frontend"
 
-# Install curl for health checks
 RUN apk add --no-cache curl
 
-# Create app user for security (don't run as root)
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
 
 WORKDIR /app
 
-# Copy backend JAR from builder
+# Copy backend JAR
 COPY --from=backend-builder /build/target/*.jar app.jar
 
-# Copy frontend dist to serve as static files
-COPY --from=frontend-builder /build/dist ./public/
+# Copy pre-built frontend dist
+COPY dist ./public/
 
-# Set ownership
 RUN chown -R appuser:appgroup /app
 
-# Switch to non-root user
 USER appuser
 
-# Expose port (Cloud Run reads LISTEN_PORT or defaults to 8080)
 EXPOSE 8080
 
-# Health check (Spring Boot actuator endpoint)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-# Start Spring Boot with optimized flags for containers
-# Cloud Run passes environment variables at runtime
 ENTRYPOINT ["java", \
   "-XX:+UseContainerSupport", \
   "-XX:MaxRAMPercentage=75.0", \
