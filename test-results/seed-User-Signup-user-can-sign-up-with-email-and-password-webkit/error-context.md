@@ -14,33 +14,26 @@
 ```
 Error: expect(locator).toBeVisible() failed
 
-Locator: getByText(/account created|logged in/i)
+Locator: getByRole('heading', { name: /sign up/i })
 Expected: visible
-Error: strict mode violation: getByText(/account created|logged in/i) resolved to 2 elements:
-    1) <h1>Account Created!</h1> aka getByRole('heading', { name: 'Account Created!' })
-    2) <p class="success-message">You are logged in. Welcome to 10xRecipes!</p> aka getByText('You are logged in. Welcome to')
+Timeout: 5000ms
+Error: element(s) not found
 
 Call log:
-  - Expect "toBeVisible" with timeout 5000ms
-  - waiting for getByText(/account created|logged in/i)
+  - Expect "toBeVisible" getByRole('heading', { name: /sign up/i }) with timeout 5000ms
+  - waiting for getByRole('heading', { name: /sign up/i })
 
 ```
 
-# Page snapshot
-
 ```yaml
-- generic [ref=e2]:
-  - banner [ref=e3]:
-    - navigation [ref=e4]:
-      - link "Recipe Search" [ref=e6]:
-        - /url: /
-      - generic [ref=e7]:
-        - generic [ref=e8]: user-1788339864021@example.com
-        - button "Logout" [ref=e9] [cursor=pointer]
-  - generic [ref=e11]:
-    - heading "Account Created!" [level=1] [ref=e12]
-    - paragraph [ref=e13]: You are logged in. Welcome to 10xRecipes!
-    - button "Go to recipes now" [ref=e14] [cursor=pointer]
+- heading "🍽️ 10xRecipes" [level=1]
+- paragraph: Find recipes that match your needs
+- text: Email
+- textbox "you@example.com"
+- text: Password
+- textbox "••••••••"
+- button "Login"
+- button "Don't have an account? Register"
 ```
 
 # Test source
@@ -62,7 +55,8 @@ Call log:
   14 |     await page.goto('/signup');
   15 | 
   16 |     // Assert: form is visible before interaction
-  17 |     await expect(page.getByRole('heading', { name: /sign up/i })).toBeVisible();
+> 17 |     await expect(page.getByRole('heading', { name: /sign up/i })).toBeVisible();
+     |                                                                   ^ Error: expect(locator).toBeVisible() failed
   18 | 
   19 |     // Action: fill form with test data
   20 |     await page.getByLabel(/email/i).fill(testEmail);
@@ -72,8 +66,7 @@ Call log:
   24 |     await page.getByRole('button', { name: /sign up/i }).click();
   25 | 
   26 |     // Assert: success message appears (wait for state, not time)
-> 27 |     await expect(page.getByText(/account created|logged in/i)).toBeVisible();
-     |                                                                ^ Error: expect(locator).toBeVisible() failed
+  27 |     await expect(page.getByText(/account created|logged in/i)).toBeVisible();
   28 | 
   29 |     // Assert: token is stored in localStorage
   30 |     const token = await page.evaluate(() => localStorage.getItem('auth_token'));

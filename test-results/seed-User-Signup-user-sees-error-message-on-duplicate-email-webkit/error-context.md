@@ -12,35 +12,31 @@
 # Error details
 
 ```
-Error: expect(locator).toBeVisible() failed
+Test timeout of 30000ms exceeded.
+```
 
-Locator: getByText(/account created|logged in/i)
-Expected: visible
-Error: strict mode violation: getByText(/account created|logged in/i) resolved to 2 elements:
-    1) <h1>Account Created!</h1> aka getByRole('heading', { name: 'Account Created!' })
-    2) <p class="success-message">You are logged in. Welcome to 10xRecipes!</p> aka getByText('You are logged in. Welcome to')
-
+```
+Error: locator.fill: Test timeout of 30000ms exceeded.
 Call log:
-  - Expect "toBeVisible" with timeout 5000ms
-  - waiting for getByText(/account created|logged in/i)
+  - waiting for getByLabel(/email/i)
 
 ```
 
 # Page snapshot
 
 ```yaml
-- generic [ref=e2]:
-  - banner [ref=e3]:
-    - navigation [ref=e4]:
-      - link "Recipe Search" [ref=e6]:
-        - /url: /
-      - generic [ref=e7]:
-        - generic [ref=e8]: user-1788339864667@example.com
-        - button "Logout" [ref=e9] [cursor=pointer]
-  - generic [ref=e11]:
-    - heading "Account Created!" [level=1] [ref=e12]
-    - paragraph [ref=e13]: You are logged in. Welcome to 10xRecipes!
-    - button "Go to recipes now" [ref=e14] [cursor=pointer]
+- generic [ref=e4]:
+  - heading "🍽️ 10xRecipes" [level=1] [ref=e5]
+  - paragraph [ref=e6]: Find recipes that match your needs
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - text: Email
+      - textbox "you@example.com" [ref=e9]
+    - generic [ref=e10]:
+      - text: Password
+      - textbox "••••••••" [ref=e11]
+    - button "Login" [ref=e12] [cursor=pointer]
+  - button "Don't have an account? Register" [ref=e13] [cursor=pointer]
 ```
 
 # Test source
@@ -85,11 +81,11 @@ Call log:
   37 |   test('user sees error message on duplicate email', async ({ page }) => {
   38 |     // Setup: sign up once
   39 |     await page.goto('/signup');
-  40 |     await page.getByLabel(/email/i).fill(testEmail);
+> 40 |     await page.getByLabel(/email/i).fill(testEmail);
+     |                                     ^ Error: locator.fill: Test timeout of 30000ms exceeded.
   41 |     await page.getByLabel(/password/i).fill(testPassword);
   42 |     await page.getByRole('button', { name: /sign up/i }).click();
-> 43 |     await expect(page.getByText(/account created|logged in/i)).toBeVisible();
-     |                                                                ^ Error: expect(locator).toBeVisible() failed
+  43 |     await expect(page.getByText(/account created|logged in/i)).toBeVisible();
   44 | 
   45 |     // Setup: navigate back to signup for second attempt
   46 |     await page.goto('/signup');

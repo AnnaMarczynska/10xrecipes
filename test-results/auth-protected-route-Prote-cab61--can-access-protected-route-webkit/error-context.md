@@ -16,27 +16,27 @@ Test timeout of 30000ms exceeded.
 ```
 
 ```
-Error: locator.click: Test timeout of 30000ms exceeded.
+Error: locator.fill: Test timeout of 30000ms exceeded.
 Call log:
-  - waiting for getByRole('link', { name: /go to recipes/i })
+  - waiting for getByLabel(/email/i)
 
 ```
 
 # Page snapshot
 
 ```yaml
-- generic [ref=e2]:
-  - banner [ref=e3]:
-    - navigation [ref=e4]:
-      - link "Recipe Search" [ref=e6]:
-        - /url: /
-      - generic [ref=e7]:
-        - generic [ref=e8]: protected-1788339835819@example.com
-        - button "Logout" [ref=e9] [cursor=pointer]
-  - generic [ref=e11]:
-    - heading "Account Created!" [level=1] [ref=e12]
-    - paragraph [ref=e13]: You are logged in. Welcome to 10xRecipes!
-    - button "Go to recipes now" [ref=e14] [cursor=pointer]
+- generic [ref=e4]:
+  - heading "🍽️ 10xRecipes" [level=1] [ref=e5]
+  - paragraph [ref=e6]: Find recipes that match your needs
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - text: Email
+      - textbox "you@example.com" [ref=e9]
+    - generic [ref=e10]:
+      - text: Password
+      - textbox "••••••••" [ref=e11]
+    - button "Login" [ref=e12] [cursor=pointer]
+  - button "Don't have an account? Register" [ref=e13] [cursor=pointer]
 ```
 
 # Test source
@@ -69,14 +69,14 @@ Call log:
   25 | 
   26 |     // Setup: sign up and log in
   27 |     await page.goto('/signup');
-  28 |     await page.getByLabel(/email/i).fill(testEmail);
+> 28 |     await page.getByLabel(/email/i).fill(testEmail);
+     |                                     ^ Error: locator.fill: Test timeout of 30000ms exceeded.
   29 |     await page.getByLabel(/password/i).fill(testPassword);
   30 |     await page.getByRole('button', { name: /sign up/i }).click();
   31 |     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
   32 | 
   33 |     // Action: click "Go to recipes now" to proceed
-> 34 |     await page.getByRole('link', { name: /go to recipes/i }).click();
-     |                                                              ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  34 |     await page.getByRole('link', { name: /go to recipes/i }).click();
   35 |     await page.waitForURL('/');
   36 | 
   37 |     // Action: navigate to protected /favorites route

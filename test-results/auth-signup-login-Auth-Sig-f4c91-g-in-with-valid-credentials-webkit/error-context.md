@@ -12,42 +12,31 @@
 # Error details
 
 ```
-Error: expect(locator).toBeVisible() failed
+Test timeout of 30000ms exceeded.
+```
 
-Locator: getByRole('heading', { name: /account created/i })
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
+```
+Error: locator.fill: Test timeout of 30000ms exceeded.
 Call log:
-  - Expect "toBeVisible" with timeout 5000ms
-  - waiting for getByRole('heading', { name: /account created/i })
+  - waiting for getByLabel(/email/i)
 
 ```
 
+# Page snapshot
+
 ```yaml
-- banner:
-  - navigation:
-    - link "Recipe Search":
-      - /url: /
-    - link "Log In":
-      - /url: /login
-    - link "Sign Up":
-      - /url: /signup
-- heading "Sign Up" [level=1]
-- text: Email
-- textbox "Email":
-  - /placeholder: you@example.com
-  - text: test-1788339856225@example.com
-- alert: Email already registered
-- text: Password
-- textbox "Password":
-  - /placeholder: At least 6 characters
-  - text: SecurePass123
-- button "Sign Up"
-- text: Already have an account?
-- link "Log in":
-  - /url: /login
+- generic [ref=e4]:
+  - heading "🍽️ 10xRecipes" [level=1] [ref=e5]
+  - paragraph [ref=e6]: Find recipes that match your needs
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - text: Email
+      - textbox "you@example.com" [ref=e9]
+    - generic [ref=e10]:
+      - text: Password
+      - textbox "••••••••" [ref=e11]
+    - button "Login" [ref=e12] [cursor=pointer]
+  - button "Don't have an account? Register" [ref=e13] [cursor=pointer]
 ```
 
 # Test source
@@ -96,11 +85,11 @@ Call log:
   41  |     // Setup: Pre-create account via signup (happy path preparation)
   42  |     // We reuse uniqueEmail from above to test login with the same account just created
   43  |     await page.goto('/signup');
-  44  |     await page.getByLabel(/email/i).fill(uniqueEmail);
+> 44  |     await page.getByLabel(/email/i).fill(uniqueEmail);
+      |                                     ^ Error: locator.fill: Test timeout of 30000ms exceeded.
   45  |     await page.getByLabel(/password/i).fill(testPassword);
   46  |     await page.getByRole('button', { name: /sign up/i }).click();
-> 47  |     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
-      |                                                                           ^ Error: expect(locator).toBeVisible() failed
+  47  |     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
   48  | 
   49  |     // Clear localStorage to simulate fresh login (logout)
   50  |     await page.evaluate(() => localStorage.clear());

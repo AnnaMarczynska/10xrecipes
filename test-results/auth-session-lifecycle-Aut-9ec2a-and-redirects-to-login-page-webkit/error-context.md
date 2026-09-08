@@ -16,27 +16,27 @@ Test timeout of 30000ms exceeded.
 ```
 
 ```
-Error: locator.click: Test timeout of 30000ms exceeded.
+Error: locator.fill: Test timeout of 30000ms exceeded.
 Call log:
-  - waiting for getByRole('link', { name: /go to recipes/i })
+  - waiting for getByLabel(/email/i)
 
 ```
 
 # Page snapshot
 
 ```yaml
-- generic [ref=e2]:
-  - banner [ref=e3]:
-    - navigation [ref=e4]:
-      - link "Recipe Search" [ref=e6]:
-        - /url: /
-      - generic [ref=e7]:
-        - generic [ref=e8]: logout-1788339855315@example.com
-        - button "Logout" [ref=e9] [cursor=pointer]
-  - generic [ref=e11]:
-    - heading "Account Created!" [level=1] [ref=e12]
-    - paragraph [ref=e13]: You are logged in. Welcome to 10xRecipes!
-    - button "Go to recipes now" [ref=e14] [cursor=pointer]
+- generic [ref=e4]:
+  - heading "🍽️ 10xRecipes" [level=1] [ref=e5]
+  - paragraph [ref=e6]: Find recipes that match your needs
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - text: Email
+      - textbox "you@example.com" [ref=e9]
+    - generic [ref=e10]:
+      - text: Password
+      - textbox "••••••••" [ref=e11]
+    - button "Login" [ref=e12] [cursor=pointer]
+  - button "Don't have an account? Register" [ref=e13] [cursor=pointer]
 ```
 
 # Test source
@@ -89,14 +89,14 @@ Call log:
   45  | 
   46  |     // Setup: create account and login
   47  |     await page.goto('/signup');
-  48  |     await page.getByLabel(/email/i).fill(logoutTestEmail);
+> 48  |     await page.getByLabel(/email/i).fill(logoutTestEmail);
+      |                                     ^ Error: locator.fill: Test timeout of 30000ms exceeded.
   49  |     await page.getByLabel(/password/i).fill(testPassword);
   50  |     await page.getByRole('button', { name: /sign up/i }).click();
   51  |     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
   52  | 
   53  |     // Action: click "Go to recipes now" to proceed
-> 54  |     await page.getByRole('link', { name: /go to recipes/i }).click();
-      |                                                              ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  54  |     await page.getByRole('link', { name: /go to recipes/i }).click();
   55  |     await page.waitForURL('/');
   56  | 
   57  |     // Assert: logout button visible

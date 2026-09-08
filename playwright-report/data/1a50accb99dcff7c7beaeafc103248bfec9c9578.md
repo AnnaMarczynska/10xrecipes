@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: auth-protected-route.spec.ts >> Protected Routes >> unauthenticated user trying to access protected route is redirected to login
-- Location: tests/e2e/auth-protected-route.spec.ts:8:3
+- Name: favorites.spec.ts >> Favorites Flow >> should persist favorites after logout and login
+- Location: tests/e2e/favorites.spec.ts:142:3
 
 # Error details
 

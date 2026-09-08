@@ -3,11 +3,13 @@ import { AuthContext } from './context/AuthContext';
 import { Login } from './components/Login';
 import { RecipeSearch } from './components/RecipeSearch';
 import { Favorites } from './components/Favorites';
+import { RecipeDetailPage } from './components/RecipeDetailPage';
 import './index.css';
 
 function App() {
   const { token, email, logout } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState('search');
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   if (!token) {
     return <Login />;
@@ -77,9 +79,14 @@ function App() {
       </nav>
 
       {/* Content */}
-      <main style={{ padding: '24px 16px' }}>
-        {currentPage === 'search' && <RecipeSearch />}
-        {currentPage === 'favorites' && <Favorites />}
+      <main style={{ padding: currentPage === 'search' && selectedRecipe ? '0' : '24px 16px' }}>
+        {selectedRecipe ? (
+          <RecipeDetailPage recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} />
+        ) : currentPage === 'search' ? (
+          <RecipeSearch onRecipeClick={setSelectedRecipe} />
+        ) : (
+          <Favorites />
+        )}
       </main>
     </div>
   );

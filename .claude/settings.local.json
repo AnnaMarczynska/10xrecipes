@@ -112,7 +112,8 @@
       "Bash(npm ls *)",
       "Bash(pkill -f \"npm run dev\")",
       "Bash(pkill -f \"python.*http.server\")",
-      "Bash(python3 -m http.server 8080)"
+      "Bash(python3 -m http.server 8080)",
+      "Bash(npx playwright *)"
     ]
   }
 }

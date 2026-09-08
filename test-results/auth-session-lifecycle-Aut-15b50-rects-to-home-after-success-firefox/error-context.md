@@ -16,32 +16,34 @@ Test timeout of 30000ms exceeded.
 ```
 
 ```
-Error: page.waitForURL: Test timeout of 30000ms exceeded.
-=========================== logs ===========================
-waiting for navigation to "/" until "load"
-============================================================
+Error: locator.fill: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for getByLabel(/email/i)
+
 ```
 
 # Page snapshot
 
 ```yaml
-- generic [ref=f1e2]:
-  - banner [ref=f1e3]:
-    - navigation [ref=f1e4]:
-      - link "Recipe Search" [ref=f1e6] [cursor=pointer]:
-        - /url: /
-      - generic [ref=f1e7]:
-        - generic [ref=f1e8]: fullflow-1788339825560@example.com
-        - button "Logout" [ref=f1e9] [cursor=pointer]
-  - generic [ref=f1e11]:
-    - heading "Welcome Back!" [level=1] [ref=f1e12]
-    - paragraph [ref=f1e13]: You are logged in.
-    - button "Go to recipes now" [ref=f1e14] [cursor=pointer]
+- generic [ref=e4]:
+  - heading "🍽️ 10xRecipes" [level=1] [ref=e5]
+  - paragraph [ref=e6]: Find recipes that match your needs
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - text: Email
+      - textbox "you@example.com" [ref=e9]
+    - generic [ref=e10]:
+      - text: Password
+      - textbox "••••••••" [ref=e11]
+    - button "Login" [ref=e12] [cursor=pointer]
+  - button "Don't have an account? Register" [ref=e13] [cursor=pointer]
 ```
 
 # Test source
 
 ```ts
+  1   | import { test, expect } from '@playwright/test';
+  2   | 
   3   | // Risk 3.8: Token persists after page reload (localStorage hydration)
   4   | // Risk 3.9: Logout clears token and redirects to login
   5   | // Risk 3.7: Full login flow with redirect
@@ -121,7 +123,8 @@ waiting for navigation to "/" until "load"
   79  | 
   80  |     // Setup: create account first
   81  |     await page.goto('/signup');
-  82  |     await page.getByLabel(/email/i).fill(fullFlowEmail);
+> 82  |     await page.getByLabel(/email/i).fill(fullFlowEmail);
+      |                                     ^ Error: locator.fill: Test timeout of 30000ms exceeded.
   83  |     await page.getByLabel(/password/i).fill(testPassword);
   84  |     await page.getByRole('button', { name: /sign up/i }).click();
   85  |     await expect(page.getByRole('heading', { name: /account created/i })).toBeVisible();
@@ -142,8 +145,7 @@ waiting for navigation to "/" until "load"
   100 |     await expect(page.getByText(/you are logged in/i)).toBeVisible();
   101 | 
   102 |     // Assert: redirect to home happens (URL and content match)
-> 103 |     await page.waitForURL('/');
-      |                ^ Error: page.waitForURL: Test timeout of 30000ms exceeded.
+  103 |     await page.waitForURL('/');
   104 |     await expect(page.getByRole('heading', { name: /recipe search/i })).toBeVisible();
   105 | 
   106 |     // Assert: user is logged in on home page (logout button visible)
