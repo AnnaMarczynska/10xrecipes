@@ -100,7 +100,8 @@ export function Login() {
         await login(email, password);
       }
     } catch (err) {
-      setLocalError(err.message);
+      console.error('Auth error:', err);
+      setLocalError(err.message || 'Authentication failed. Please try again.');
     }
   };
 

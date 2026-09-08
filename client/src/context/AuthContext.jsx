@@ -20,9 +20,14 @@ export const AuthProvider = ({ children }) => {
         setEmail(email);
         localStorage.setItem('token', token);
         localStorage.setItem('email', email);
+        setError(null);
+      } else {
+        throw new Error('No token received from server');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMsg = err.message || 'Login failed';
+      setError(errorMsg);
+      console.error('Login error:', errorMsg);
       throw err;
     } finally {
       setLoading(false);
@@ -40,9 +45,14 @@ export const AuthProvider = ({ children }) => {
         setEmail(email);
         localStorage.setItem('token', token);
         localStorage.setItem('email', email);
+        setError(null);
+      } else {
+        throw new Error('No token received from server');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMsg = err.message || 'Registration failed';
+      setError(errorMsg);
+      console.error('Registration error:', errorMsg);
       throw err;
     } finally {
       setLoading(false);
