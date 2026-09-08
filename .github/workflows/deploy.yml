@@ -12,8 +12,8 @@ on:
 env:
   REGISTRY: us-central1-docker.pkg.dev
   REPOSITORY: recipes-docker
-  IMAGE_NAME: 10x-recipes
-  SERVICE_NAME: 10x-recipes-api
+  IMAGE_NAME: "10x-recipes"
+  SERVICE_NAME: "10x-recipes-api"
   REGION: us-central1
   PROJECT_ID: tenx-recipes
 
