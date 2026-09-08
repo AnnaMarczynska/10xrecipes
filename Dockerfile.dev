@@ -1,0 +1,15 @@
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+
+RUN chmod +x mvnw
+
+COPY src src
+
+EXPOSE 9090
+
+CMD ["./mvnw", "spring-boot:run"]
