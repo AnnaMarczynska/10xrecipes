@@ -1,15 +1,14 @@
 # Multi-stage Dockerfile for 10xRecipes
 # Stage 1: Build backend JAR
-FROM eclipse-temurin:21-jdk-alpine AS backend-builder
+FROM maven:3.9-eclipse-temurin-21-alpine AS backend-builder
 WORKDIR /build
 
 # Copy Maven files and source
-COPY pom.xml mvnw ./
-COPY .mvn .mvn
+COPY pom.xml ./
 COPY src src
 
 # Build JAR
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests -e
 
 # Stage 2: Build frontend
 FROM node:20-alpine AS frontend-builder
