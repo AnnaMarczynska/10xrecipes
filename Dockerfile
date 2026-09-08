@@ -22,7 +22,6 @@ RUN npm ci
 COPY src/api ./src/api
 COPY src/components ./src/components
 COPY src/context ./src/context
-COPY src/hooks ./src/hooks
 COPY src/pages ./src/pages
 COPY src/styles ./src/styles
 COPY src/utils ./src/utils
