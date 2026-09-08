@@ -16,7 +16,7 @@ export function RecipeSearch({ onRecipeClick }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState(new Set());
-  const [userAllergens, setUserAllergens] = useState([]);
+  const [userAllergens, setUserAllergens] = useState([]); // Array of {id, name} objects
   const [commonAllergens, setCommonAllergens] = useState([]);
   const [showAllergens, setShowAllergens] = useState(false);
 
@@ -28,8 +28,16 @@ export function RecipeSearch({ onRecipeClick }) {
 
     if (token) {
       allergenAPI.getUserAllergens(token).then(res => {
-        setUserAllergens((res.allergens || []).map(a => a.id));
-      }).catch(() => {});
+        console.log('User allergens full response:', res);
+        console.log('Response keys:', Object.keys(res));
+        console.log('res.allergens:', res.allergens);
+        console.log('res.data:', res.data);
+        const allergens = res.allergens || res.data?.allergens || [];
+        console.log('Setting userAllergens to:', allergens);
+        setUserAllergens(allergens);
+      }).catch((err) => {
+        console.error('Failed to fetch user allergens:', err);
+      });
     }
   }, [token]);
 
@@ -39,9 +47,19 @@ export function RecipeSearch({ onRecipeClick }) {
     if (value.trim().length >= 2) {
       try {
         const response = await ingredientAPI.search(value);
-        setSuggestions(response.data?.suggestions || []);
+        const allSuggestions = response.data?.suggestions || [];
+        const allergenNames = userAllergens.map(a => a.allergen);
+        console.log('All suggestions:', allSuggestions);
+        console.log('User allergen names:', allergenNames);
+        // Filter out allergens from suggestions
+        const filtered = allSuggestions.filter(
+          suggestion => !allergenNames.includes(suggestion)
+        );
+        console.log('Filtered suggestions:', filtered);
+        setSuggestions(filtered);
         setShowSuggestions(true);
       } catch (err) {
+        console.error('Ingredient search error:', err);
         setSuggestions([]);
       }
     } else {
@@ -60,11 +78,18 @@ export function RecipeSearch({ onRecipeClick }) {
   };
 
   const addIngredient = () => {
-    if (currentIngredient.trim() && !ingredients.includes(currentIngredient)) {
-      setIngredients([...ingredients, currentIngredient]);
+    const trimmed = currentIngredient.trim();
+    if (trimmed && !ingredients.includes(trimmed)) {
+      const allergenNames = userAllergens.map(a => a.allergen);
+      if (allergenNames.includes(trimmed)) {
+        setError(`"${trimmed}" is in your allergen list and cannot be added as an ingredient`);
+        return;
+      }
+      setIngredients([...ingredients, trimmed]);
       setCurrentIngredient('');
       setSuggestions([]);
       setShowSuggestions(false);
+      setError(null);
     }
   };
 
@@ -75,16 +100,27 @@ export function RecipeSearch({ onRecipeClick }) {
   const handleAllergenToggle = async (allergen, isAdded) => {
     try {
       if (isAdded) {
-        await allergenAPI.add(allergen, token);
-        setUserAllergens([...userAllergens, allergen]);
+        console.log('Adding allergen:', allergen);
+        const addRes = await allergenAPI.add(allergen, token);
+        console.log('Add allergen response:', addRes);
+        // After adding, fetch updated allergen list
+        const res = await allergenAPI.getUserAllergens(token);
+        console.log('Updated allergens:', res);
+        const allergens = res.allergens || res.data?.allergens || [];
+        setUserAllergens(allergens);
+        setError(null);
       } else {
-        const allergenId = userAllergens.indexOf(allergen);
-        if (allergenId >= 0) {
-          await allergenAPI.remove(allergenId, token);
-          setUserAllergens(userAllergens.filter((_, i) => i !== allergenId));
+        // Find the allergen object with this name
+        const allergenObj = userAllergens.find(a => a.allergen === allergen);
+        if (allergenObj) {
+          console.log('Removing allergen with ID:', allergenObj.id);
+          await allergenAPI.remove(allergenObj.id, token);
+          setUserAllergens(userAllergens.filter(a => a.allergen !== allergen));
+          setError(null);
         }
       }
     } catch (err) {
+      console.error('Allergen toggle error:', err);
       setError(`Failed to update allergen: ${err.message}`);
     }
   };
@@ -248,7 +284,7 @@ export function RecipeSearch({ onRecipeClick }) {
                 <label key={allergen} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <input
                     type="checkbox"
-                    checked={userAllergens.includes(allergen)}
+                    checked={userAllergens.some(a => a.allergen === allergen)}
                     onChange={(e) => handleAllergenToggle(allergen, e.target.checked)}
                   />
                   <span style={{ fontSize: '13px', color: '#666' }}>{allergen}</span>
