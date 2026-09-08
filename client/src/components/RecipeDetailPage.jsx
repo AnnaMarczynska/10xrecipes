@@ -1,5 +1,42 @@
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { recipeAPI, favoriteAPI } from '../services/api';
+
 export function RecipeDetailPage({ recipe, onBack }) {
+  const { token } = useContext(AuthContext);
+  const [fullRecipe, setFullRecipe] = useState(recipe);
+  const [loading, setLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [error, setError] = useState(null);
+
   if (!recipe) return null;
+
+  // Fetch full recipe details on mount
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await recipeAPI.getDetails(recipe.id, token);
+        setFullRecipe(response.data?.recipe || recipe);
+      } catch (err) {
+        console.error('Failed to fetch recipe details:', err);
+        setFullRecipe(recipe);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [recipe.id, token]);
+
+  const handleAddFavorite = async () => {
+    try {
+      await favoriteAPI.add(recipe.id, recipe.name, token);
+      setIsFavorite(true);
+    } catch (err) {
+      setError(`Failed to add favorite: ${err.message}`);
+    }
+  };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', paddingBottom: '40px' }}>
@@ -29,11 +66,26 @@ export function RecipeDetailPage({ recipe, onBack }) {
 
       {/* Content */}
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px 16px' }}>
+        {/* Error message */}
+        {error && (
+          <div style={{
+            backgroundColor: '#dbeafe',
+            border: '1px solid #93c5fd',
+            color: '#1e40af',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            marginBottom: '16px',
+            fontSize: '13px',
+          }}>
+            {error}
+          </div>
+        )}
+
         {/* Recipe Image */}
-        {recipe.image && (
+        {fullRecipe.image && (
           <img
-            src={recipe.image}
-            alt={recipe.name}
+            src={fullRecipe.image}
+            alt={fullRecipe.name}
             style={{
               width: '100%',
               height: 'auto',
@@ -46,9 +98,28 @@ export function RecipeDetailPage({ recipe, onBack }) {
         )}
 
         {/* Recipe Name */}
-        <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>
-          {recipe.name}
-        </h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px', gap: '16px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#333', margin: 0 }}>
+            {fullRecipe.name}
+          </h1>
+          <button
+            onClick={handleAddFavorite}
+            disabled={isFavorite}
+            style={{
+              padding: '12px 20px',
+              backgroundColor: isFavorite ? '#e5e7eb' : '#2563eb',
+              color: isFavorite ? '#999' : 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: '600',
+              cursor: isFavorite ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {isFavorite ? '★ Favorited' : '☆ Add to Favorites'}
+          </button>
+        </div>
 
         {/* Quick Info */}
         <div style={{
@@ -61,23 +132,23 @@ export function RecipeDetailPage({ recipe, onBack }) {
           borderRadius: '8px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}>
-          {recipe.cookTime && (
+          {fullRecipe.cookTime && (
             <div>
               <p style={{ fontSize: '12px', color: '#666', marginBottom: '8px', fontWeight: '600' }}>
                 COOKING TIME
               </p>
               <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
-                ⏱️ {recipe.cookTime} min
+                ⏱️ {fullRecipe.cookTime} min
               </p>
             </div>
           )}
-          {recipe.matchPercentage && (
+          {fullRecipe.matchPercentage && (
             <div>
               <p style={{ fontSize: '12px', color: '#666', marginBottom: '8px', fontWeight: '600' }}>
                 INGREDIENT MATCH
               </p>
               <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#2563eb' }}>
-                {recipe.matchPercentage}%
+                {fullRecipe.matchPercentage}%
               </p>
             </div>
           )}
@@ -102,14 +173,14 @@ export function RecipeDetailPage({ recipe, onBack }) {
             borderRadius: '8px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}>
-            {recipe.ingredients && recipe.ingredients.length > 0 ? (
-              recipe.ingredients.map((ingredient, index) => (
+            {fullRecipe.ingredients && fullRecipe.ingredients.length > 0 ? (
+              fullRecipe.ingredients.map((ingredient, index) => (
                 <li
                   key={index}
                   style={{
                     padding: '12px 0',
                     color: '#666',
-                    borderBottom: index < recipe.ingredients.length - 1 ? '1px solid #eee' : 'none',
+                    borderBottom: index < fullRecipe.ingredients.length - 1 ? '1px solid #eee' : 'none',
                     fontSize: '15px',
                   }}
                 >
@@ -123,7 +194,7 @@ export function RecipeDetailPage({ recipe, onBack }) {
         </section>
 
         {/* Instructions */}
-        {recipe.instructions && (
+        {fullRecipe.instructions && (
           <section>
             <h2 style={{
               fontSize: '22px',
@@ -145,7 +216,7 @@ export function RecipeDetailPage({ recipe, onBack }) {
               whiteSpace: 'pre-wrap',
               fontSize: '15px',
             }}>
-              {recipe.instructions}
+              {fullRecipe.instructions}
             </div>
           </section>
         )}
