@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './context/AuthContext';
 import { Login } from './components/Login';
 import { RecipeSearch } from './components/RecipeSearch';
@@ -13,6 +13,12 @@ function App() {
   const [favoriteIds, setFavoriteIds] = useState(new Set());
   const [lastSearchResults, setLastSearchResults] = useState([]);
   const [lastSearchParams, setLastSearchParams] = useState(null);
+
+  // Clear search results on new login
+  useEffect(() => {
+    setLastSearchResults([]);
+    setLastSearchParams(null);
+  }, [token]);
 
   if (!token) {
     return <Login />;
