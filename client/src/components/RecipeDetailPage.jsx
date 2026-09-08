@@ -17,7 +17,10 @@ export function RecipeDetailPage({ recipe, onBack }) {
       try {
         setLoading(true);
         const response = await recipeAPI.getDetails(recipe.id, token);
-        setFullRecipe(response.data?.recipe || recipe);
+        // API returns recipe data directly in response.data
+        const recipeData = response.data || recipe;
+        console.log('Fetched recipe data:', recipeData);
+        setFullRecipe(recipeData);
       } catch (err) {
         console.error('Failed to fetch recipe details:', err);
         setFullRecipe(recipe);
