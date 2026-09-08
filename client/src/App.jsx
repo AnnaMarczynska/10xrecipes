@@ -14,10 +14,13 @@ function App() {
   const [lastSearchResults, setLastSearchResults] = useState([]);
   const [lastSearchParams, setLastSearchParams] = useState(null);
 
-  // Clear search results on new login
+  // Reset app state on new login
   useEffect(() => {
     setLastSearchResults([]);
     setLastSearchParams(null);
+    setSelectedRecipe(null);
+    setCurrentPage('search');
+    setFavoriteIds(new Set());
   }, [token]);
 
   if (!token) {
@@ -58,6 +61,8 @@ function App() {
             onClick={() => {
               setCurrentPage('search');
               setSelectedRecipe(null);
+              setLastSearchResults([]);
+              setLastSearchParams(null);
             }}
             style={{
               padding: '12px 16px',

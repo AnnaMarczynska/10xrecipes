@@ -20,6 +20,13 @@ export function RecipeSearch({ onRecipeClick, previousResults, previousParams, o
   const [commonAllergens, setCommonAllergens] = useState([]);
   const [showAllergens, setShowAllergens] = useState(false);
 
+  // Sync results and params from props
+  useEffect(() => {
+    setResults(previousResults || []);
+    setIngredients(previousParams?.ingredients || []);
+    setTimeRange(previousParams?.timeRange || '30-60');
+  }, [previousResults, previousParams]);
+
   // Load common allergens on mount
   useEffect(() => {
     allergenAPI.getCommon().then(res => {
