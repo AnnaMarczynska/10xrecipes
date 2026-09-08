@@ -9,7 +9,7 @@ COPY .mvn .mvn
 COPY src src
 
 # Build JAR
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests -q
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 # Stage 2: Build frontend
 FROM node:20-alpine AS frontend-builder
