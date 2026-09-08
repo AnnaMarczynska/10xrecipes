@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static java.util.Set.of;
 
 @DisplayName("AllergenFilterService - Allergen Safety Tests")
 class AllergenFilterServiceTest {
@@ -26,12 +27,12 @@ class AllergenFilterServiceTest {
         userWithAllergens.setId(1L);
         UserAllergen allergen = new UserAllergen();
         allergen.setAllergen("peanut");
-        userWithAllergens.setAllergens(List.of(allergen));
+        userWithAllergens.setAllergens(new HashSet<>(List.of(allergen)));
 
         // User with no allergens
         userWithoutAllergens = new User();
         userWithoutAllergens.setId(2L);
-        userWithoutAllergens.setAllergens(new ArrayList<>());
+        userWithoutAllergens.setAllergens(new HashSet<>());
     }
 
     @Test
@@ -100,7 +101,7 @@ class AllergenFilterServiceTest {
         allergen1.setAllergen("peanut");
         UserAllergen allergen2 = new UserAllergen();
         allergen2.setAllergen("milk");
-        userWithMultipleAllergens.setAllergens(Arrays.asList(allergen1, allergen2));
+        userWithMultipleAllergens.setAllergens(new HashSet<>(Arrays.asList(allergen1, allergen2)));
 
         Recipe recipe1 = new Recipe();
         recipe1.setName("Peanut Recipe");

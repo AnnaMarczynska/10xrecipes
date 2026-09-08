@@ -95,7 +95,16 @@
       "Bash(gcloud iam service-accounts keys *)",
       "Bash(gcloud run *)",
       "Bash(gh run *)",
-      "Bash(python3 -m py_compile .github/workflows/deploy.yml)"
+      "Bash(python3 -m py_compile .github/workflows/deploy.yml)",
+      "Bash(docker-compose up *)",
+      "Bash(docker compose up *)",
+      "Bash(/usr/bin/java *)",
+      "Bash(npx tailwindcss *)",
+      "Read(//usr/bin/**)",
+      "Read(//usr/libexec/**)",
+      "Bash(/usr/libexec/java_home -v 21)",
+      "Bash(brew list *)",
+      "Bash(export *)"
     ]
   }
 }

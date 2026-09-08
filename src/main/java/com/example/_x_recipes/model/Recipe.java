@@ -111,6 +111,37 @@ public class Recipe {
     public List<String> getAllergens() { return allergens; }
     public void setAllergens(List<String> allergens) { this.allergens = allergens; }
 
+    public void setIngredients(List<String> ingredients) {
+        for (int i = 0; i < Math.min(ingredients.size(), 20); i++) {
+            setIngredient(i + 1, ingredients.get(i));
+        }
+    }
+
+    private void setIngredient(int index, String value) {
+        switch (index) {
+            case 1: this.ingredient1 = value; break;
+            case 2: this.ingredient2 = value; break;
+            case 3: this.ingredient3 = value; break;
+            case 4: this.ingredient4 = value; break;
+            case 5: this.ingredient5 = value; break;
+            case 6: this.ingredient6 = value; break;
+            case 7: this.ingredient7 = value; break;
+            case 8: this.ingredient8 = value; break;
+            case 9: this.ingredient9 = value; break;
+            case 10: this.ingredient10 = value; break;
+            case 11: this.ingredient11 = value; break;
+            case 12: this.ingredient12 = value; break;
+            case 13: this.ingredient13 = value; break;
+            case 14: this.ingredient14 = value; break;
+            case 15: this.ingredient15 = value; break;
+            case 16: this.ingredient16 = value; break;
+            case 17: this.ingredient17 = value; break;
+            case 18: this.ingredient18 = value; break;
+            case 19: this.ingredient19 = value; break;
+            case 20: this.ingredient20 = value; break;
+        }
+    }
+
     public void setIngredient1(String ingredient1) { this.ingredient1 = ingredient1; }
     public void setIngredient2(String ingredient2) { this.ingredient2 = ingredient2; }
     public void setIngredient3(String ingredient3) { this.ingredient3 = ingredient3; }
