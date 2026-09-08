@@ -62,7 +62,7 @@ jobs:
             --cpu 1 \
             --timeout 300 \
             --max-instances 100 \
-            --set-env-vars SPRING_DATASOURCE_URL="jdbc:postgresql://$(gcloud sql instances describe recipes-db --format='value(ipAddresses[0].ipAddress)'):5432/recipes_db",SPRING_DATASOURCE_USERNAME=recipes_user,SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQL10Dialect \
+            --set-env-vars SPRING_PROFILES_ACTIVE=cloud,SPRING_DATASOURCE_URL="jdbc:postgresql://$(gcloud sql instances describe recipes-db --format='value(ipAddresses[0].ipAddress)'):5432/recipes_db",SPRING_DATASOURCE_USERNAME=recipes_user,SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQL10Dialect \
             --set-secrets SPRING_DATASOURCE_PASSWORD=db-password:latest,JWT_SECRET=jwt-secret:latest
 
       - name: Verify deployment
