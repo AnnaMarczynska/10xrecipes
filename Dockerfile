@@ -3,14 +3,13 @@
 FROM eclipse-temurin:21-jdk-alpine AS backend-builder
 WORKDIR /build
 
-# Copy Maven files and download dependencies (layer caching)
+# Copy Maven files and source
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
-RUN chmod +x mvnw && ./mvnw dependency:go-offline
-
-# Copy source and build JAR
 COPY src src
-RUN ./mvnw clean package -DskipTests -q
+
+# Build JAR
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests -q
 
 # Stage 2: Build frontend
 FROM node:20-alpine AS frontend-builder
