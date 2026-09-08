@@ -36,7 +36,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Build JAR
-        run: ./mvnw clean package -DskipTests -q
+        run: ./mvnw clean package -DskipTests
+
+      - name: Verify JAR exists
+        run: ls -la target/*.jar
 
       - name: Configure Docker
         run: gcloud auth configure-docker ${{ env.REGISTRY }}
