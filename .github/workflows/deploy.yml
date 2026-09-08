@@ -9,9 +9,6 @@ env:
   PROJECT_ID: tenx-recipes
   REGION: us-central1
   SERVICE_NAME: 10x-recipes-api
-  REGISTRY: us-central1-docker.pkg.dev
-  REPOSITORY: recipes-docker
-  IMAGE: 10x-recipes
 
 jobs:
   build-and-deploy:
@@ -31,23 +28,19 @@ jobs:
         with:
           install_components: "gke-gcloud-auth-plugin"
 
-      - name: Configure Docker
-        run: gcloud auth configure-docker ${{ env.REGISTRY }}
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-                       -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest .
-
-      - name: Push to Artifact Registry
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
+      - name: Build JAR with Maven
+        run: ./mvnw clean package -DskipTests -q
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+            --source . \
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
